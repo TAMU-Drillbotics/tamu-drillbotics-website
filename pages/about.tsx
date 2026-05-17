@@ -1,0 +1,668 @@
+import Link from "next/link";
+import { motion } from "framer-motion";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
+import { TeamExplorer } from "@/components/team-explorer";
+
+const REVEAL = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.5, ease: "easeOut" as const },
+};
+
+/* ═══════════════════════════════════════════════════════
+   CONFIG ARRAYS — edit data here, not layout code
+   ═══════════════════════════════════════════════════════ */
+
+const teams = [
+  {
+    name: "Mechanical",
+    subteams: [
+      { name: "Drillstring", focus: "Hydraulics, bit manufacturing" },
+      { name: "Safety", focus: "Plexiglass enclosure, safety report, activation light, hydraulic systems, E-stop" },
+      { name: "Frame", focus: "Dolly frame, structural assembly" },
+    ],
+  },
+  {
+    name: "Electrical",
+    subteams: [
+      { name: "Electronics", focus: "Sensors, motors/drivers, electronics box" },
+      { name: "Software", focus: "Embedded C firmware (STM32), ML interfacing, PID control algorithms" },
+    ],
+  },
+  {
+    name: "Algorithm",
+    subteams: [
+      { name: "GPU", focus: "Dedicated ML compute hardware, CUDA pipeline" },
+      { name: "Data", focus: "Sensor fusion, analytics" },
+      { name: "ML", focus: "Model development (PyTorch, TensorFlow)" },
+    ],
+  },
+  {
+    name: "Marketing",
+    subteams: [
+      { name: "TBD", focus: "Scope to be defined" },
+    ],
+  },
+];
+
+const president = {
+  name: "Jacob Pekala",
+  role: "President & Mechanical Lead",
+  bio:
+    "I joined Drillbotics because I wanted to build something that actually works — not a simulation, not a paper, a machine that drills into rock. My goal for this team is simple: every member walks away with proof they can ship a real engineering system. We’re building a competition rig, but what we’re really building is engineers who can own a problem from first sketch to final test.",
+};
+
+const teamLeads: Array<{ name: string; role: string; tbd?: boolean; photo?: string }> = [
+  { name: "TBD",             role: "Vice President",              tbd: true },
+  { name: "Andres Gumucio",  role: "Embedded Software Lead",      photo: "/people/andres-gumucio.jpg" },
+  { name: "Tej Nagasamudra", role: "Electronics Co-Lead" },
+  { name: "Ayden Alvarez",   role: "Electronics Co-Lead",         photo: "/people/ayden-alvarez.jpg" },
+  { name: "Sammy",           role: "Treasury & Relations Chair" },
+  { name: "Shivam",          role: "Algorithm Lead" },
+  { name: "TBD",             role: "Marketing Lead",              tbd: true },
+];
+
+/* ═══════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════ */
+
+
+function CrossMark({ className, light }: { className: string; light?: boolean }) {
+  const bar = light ? "bg-[#ffffff30]" : "bg-ink-4";
+  return (
+    <span className={`absolute w-3.5 h-3.5 ${className}`} aria-hidden="true">
+      <span className={`absolute left-0 right-0 top-1/2 h-px ${bar}`} />
+      <span className={`absolute top-0 bottom-0 left-1/2 w-px ${bar}`} />
+    </span>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   PAGE
+   ═══════════════════════════════════════════════════════ */
+
+export default function About() {
+  return (
+    <div className="flex flex-col">
+      <Nav />
+
+      {/* ══════════ § 01 — ABOUT ══════════ */}
+      <section className="relative bg-ink">
+        <div className="max-w-[1440px] mx-auto px-14 pt-16 pb-24 relative">
+          <CrossMark className="left-[42px] top-6" light />
+          <CrossMark className="right-[42px] top-6" light />
+          <CrossMark className="left-[42px] bottom-8" light />
+          <CrossMark className="right-[42px] bottom-8" light />
+
+          {/* Section bar */}
+          <div className="flex items-center gap-[18px] pb-[14px] font-mono text-[10px] tracking-[.18em] uppercase mb-14">
+            <span className="text-[#FAFAFA]">&sect; <span className="text-maroon">01</span> &middot; ABOUT</span>
+            <span className="flex-1 h-px bg-[#FAFAFA]/30" />
+          </div>
+
+          {/* About top: title + TOC */}
+          <header className="grid grid-cols-2 gap-x-16 items-end pb-10 border-b border-[#FAFAFA]/20">
+            <div>
+              <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA]/70 mb-6">
+                <span className="w-[7px] h-[7px] rounded-full bg-maroon" style={{ boxShadow: "0 0 0 3px rgba(80,0,0,0.4)" }} />
+                <span>What we do</span>
+              </div>
+              <h1 className="font-heading font-semibold text-[96px] leading-[.9] tracking-[-.025em] m-0 text-[#FAFAFA]">
+                The competition,<br />and our role in it<span className="text-maroon">.</span>
+              </h1>
+            </div>
+            <ul className="list-none m-0 p-0 ml-auto max-w-[420px] mb-1.5" aria-label="About sections">
+              {[
+                { idx: "01", label: "The Competition", href: "#competition" },
+                { idx: "02", label: "What We Do", href: "#what-we-do" },
+                { idx: "03", label: "The Team", href: "#team" },
+                { idx: "04", label: "Our Team", href: "#our-team" },
+              ].map((item, i) => (
+                <motion.li
+                  key={item.idx}
+                  className={`flex items-baseline justify-between gap-3.5 py-2.5 border-t border-dashed border-[#FAFAFA]/15 font-mono text-[11px] tracking-[.16em] uppercase text-[#FAFAFA]/55 ${
+                    i === 3 ? "border-b" : ""
+                  }`}
+                  // Matches the home-page StatusPanel subsystem stagger
+                  // (initial { opacity: 0, y: 10 } → 0.22s easeOut, 0.16s interval).
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.22, delay: i * 0.16, ease: "easeOut" }}
+                >
+                  <span className="text-[#FAFAFA]/30">{item.idx}</span>
+                  <a
+                    href={item.href}
+                    className={`no-underline font-medium tracking-[.14em] ${
+                      i === 0 ? "text-amber hover:text-amber" : "text-[#FAFAFA] hover:text-maroon"
+                    }`}
+                  >
+                    {item.label}
+                  </a>
+                </motion.li>
+              ))}
+            </ul>
+          </header>
+
+          {/* Two-column body */}
+          <div className="mt-16 grid grid-cols-[1fr_1px_1fr]">
+            {/* ── LEFT: The Competition ── */}
+            <article className="pr-12 scroll-mt-20" id="competition">
+              <div className="flex items-baseline justify-between gap-3.5 pb-3.5 border-b border-[#FAFAFA]/20 mb-7">
+                <span className="font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA] font-medium">
+                  <span className="text-maroon">01</span>
+                  <span className="text-[#FAFAFA]/30 mx-1.5">/</span>
+                  The Competition
+                </span>
+                <span className="font-mono text-[10.5px] tracking-[.16em] uppercase text-[#FAFAFA]/35">
+                  External &middot; SPE / DSATS
+                </span>
+              </div>
+
+              <h2 className="font-heading font-semibold text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
+                An international student drilling-rig competition<span className="text-maroon">.</span>
+              </h2>
+              <p className="text-[18px] leading-[1.55] text-[#FAFAFA]/80 m-0 mb-7">
+                <strong className="text-[#FAFAFA] font-semibold">SPE Drillbotics</strong> &mdash; run by the Society of Petroleum
+                Engineers&apos; DSATS committee &mdash; challenges university teams to design,
+                build, and operate a miniature autonomous drilling rig from scratch.
+              </p>
+
+              <div className="text-[15.5px] leading-[1.65] text-[#FAFAFA]/80">
+                <p className="m-0 mb-4">
+                  Teams must drill a{" "}
+                  <em className="not-italic text-[#FAFAFA] font-semibold" style={{ boxShadow: "inset 0 -2px 0 rgba(255,255,255,0.25)", paddingBottom: 1 }}>
+                    directional well
+                  </em>{" "}
+                  through a sealed rock sample with no human intervention. The rig is required to interpret surface
+                  and downhole measurements in real time and use them to make trajectory
+                  and weight-on-bit decisions on the fly.
+                </p>
+                <a
+                  href="https://drillbotics.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2.5 mt-1.5 font-heading text-[12.5px] tracking-[.14em] uppercase font-medium text-[#FAFAFA] no-underline border-b border-[#FAFAFA]/30 pb-1 hover:text-maroon hover:border-[#f2e4cc]"
+                >
+                  View the full competition
+                  <span className="inline-block w-3.5 h-px bg-current relative">
+                    <span className="absolute right-0 -top-[3px] w-1.5 h-1.5 border-t border-r border-current rotate-45" />
+                  </span>
+                </a>
+              </div>
+
+              {/* Keyline: Competition format */}
+              <div className="mt-9 pt-[18px] border-t border-[#FAFAFA]/15">
+                <div className="flex items-baseline justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#FAFAFA]/35 mb-2">
+                  <span>Competition &middot; Format</span>
+                </div>
+                <ul className="list-none m-0 p-0">
+                  {[
+                    { n: "01", k: "Autonomous Operation", sub: "No human input from spud to TD.", v: "Required" },
+                    { n: "02", k: "Directional Well", sub: "Pre-set target, scored on path accuracy.", v: "Scored" },
+                    { n: "03", k: "Real-Time Sensing", sub: "Surface + downhole feedback into control loop.", v: "Required" },
+                    { n: "04", k: "Multidisciplinary Team", sub: "PETE · MECH · ELEN · CSCE · DATA.", v: "Encouraged" },
+                  ].map((item) => (
+                    <li key={item.n} className="grid grid-cols-[22px_1fr_auto] items-baseline gap-3.5 py-[13px] border-b border-dashed border-[#FAFAFA]/15">
+                      <span className="font-mono text-[10.5px] tracking-[.16em] text-[#FAFAFA]/35">{item.n}</span>
+                      <span className="font-heading font-medium text-[15px] text-[#FAFAFA] tracking-[.01em]">
+                        {item.k}
+                        <small className="block font-body font-normal text-[13px] text-[#FAFAFA]/55 mt-[3px] tracking-normal normal-case">
+                          {item.sub}
+                        </small>
+                      </span>
+                      <span className="font-mono text-[10.5px] tracking-[.16em] uppercase text-[#FAFAFA]/50 text-right">{item.v}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Timeline placeholder */}
+              <div className="mt-9 border border-[#FAFAFA]/15 bg-[#111111] p-[22px] pb-5 relative" role="note" aria-label="Competition timeline placeholder">
+                <div className="flex items-baseline justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#FAFAFA]/55 mb-3.5">
+                  <span>2026 &ndash; 27 Timeline</span>
+                  <span className="inline-flex items-center gap-1.5 text-[#FAFAFA]/70">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber inline-block" />
+                    Awaiting Schedule
+                  </span>
+                </div>
+                <div
+                  className="h-1.5 relative"
+                  style={{
+                    background: "rgba(255,255,255,0.07)",
+                    backgroundImage: "repeating-linear-gradient(to right, transparent 0, transparent 7px, rgba(255,255,255,0.12) 7px, rgba(255,255,255,0.12) 8px)",
+                  }}
+                >
+                  <span className="absolute left-[6%] top-[-4px] bottom-[-4px] w-0.5 bg-amber" />
+                </div>
+                <div className="mt-3 flex items-baseline justify-between font-mono text-[10px] tracking-[.16em] uppercase text-[#FAFAFA]/35">
+                  <span className="font-heading text-[13px] font-semibold text-[#FAFAFA] tracking-[.04em]">
+                    TBD <span className="text-[#FAFAFA]/50 font-normal ml-1.5">/ confirmed in fall semester</span>
+                  </span>
+                  <span>Kickoff &middot; Design Review &middot; Build &middot; Competition</span>
+                </div>
+                <p className="mt-3.5 pt-3 border-t border-dashed border-[#FAFAFA]/15 text-[13.5px] leading-[1.55] text-[#FAFAFA]/55 m-0">
+                  Phase dates, design-review deadlines, and the on-site competition
+                  window are published by SPE / DSATS each fall. This block will be
+                  populated once the official 2026&ndash;27 schedule is released.
+                </p>
+              </div>
+            </article>
+
+            {/* ── CENTER DIVIDER ── */}
+            <div className="relative bg-[#FAFAFA]/15" aria-hidden="true">
+              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-[9px] h-[9px] bg-ink z-[1]">
+                <span className="absolute left-0 right-0 top-1/2 h-px bg-[#FAFAFA]/30" />
+                <span className="absolute top-0 bottom-0 left-1/2 w-px bg-[#FAFAFA]/30" />
+              </span>
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[9px] h-[9px] bg-ink z-[1]">
+                <span className="absolute left-0 right-0 top-1/2 h-px bg-[#FAFAFA]/30" />
+                <span className="absolute top-0 bottom-0 left-1/2 w-px bg-[#FAFAFA]/30" />
+              </span>
+            </div>
+
+            {/* ── RIGHT: What We Do ── */}
+            <article className="pl-12 scroll-mt-20" id="what-we-do">
+              <div className="flex items-baseline justify-between gap-3.5 pb-3.5 border-b border-[#FAFAFA]/20 mb-7">
+                <span className="font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA] font-medium">
+                  <span className="text-maroon">02</span>
+                  <span className="text-[#FAFAFA]/30 mx-1.5">/</span>
+                  What We Do
+                </span>
+                <span className="font-mono text-[10.5px] tracking-[.16em] uppercase text-[#FAFAFA]/35">
+                  Internal &middot; TAMU Drillbotics
+                </span>
+              </div>
+
+              <h2 className="font-heading font-semibold text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
+                We build the rig (nearly) end to end.
+              </h2>
+              <p className="text-[18px] leading-[1.55] text-[#FAFAFA]/80 m-0 mb-7">
+                While we outsource the machining and components, the research, assembly, and testing happen right here at A&amp;M.
+              </p>
+
+              <div className="text-[15.5px] leading-[1.65] text-[#FAFAFA]/80">
+                <p className="m-0 mb-4">
+                  Our team is built to be interdisciplinary. Mechanical engineers handle the frame, drillstring, and hydraulics. The electrical team manages the sensor stack and firmware. Our algorithms team runs the machine learning and control systems that tie the whole rig together.
+                </p>
+                <p className="m-0 mb-4">
+                  Keeping the core work on campus means we can iterate quickly. We troubleshoot issues together in person, which helps us refine the hardware and software in real time.
+                </p>
+                <p className="m-0 mb-4">
+                  We are training a new group of engineers who understand how autonomy, data, and hardware work together in the oil and gas industry. Our members graduate with hands-on experience across all three fields.
+                </p>
+              </div>
+
+              {/* Keyline: Subsystems */}
+              <div className="mt-9 pt-[18px] border-t border-[#FAFAFA]/15">
+                <div className="flex items-baseline justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#FAFAFA]/35 mb-2">
+                  <span>Build &middot; Subsystems</span>
+                  <span>Owned In-House</span>
+                </div>
+                <ul className="list-none m-0 p-0">
+                  {teams.map((group, i) => (
+                    <li key={group.name} className="grid grid-cols-[22px_1fr_auto] items-baseline gap-3.5 py-[13px] border-b border-dashed border-[#FAFAFA]/15">
+                      <span className="font-mono text-[10.5px] tracking-[.16em] text-[#FAFAFA]/35">
+                        {String.fromCharCode(65 + i)}
+                      </span>
+                      <span className="font-heading font-medium text-[15px] text-[#FAFAFA] tracking-[.01em]">
+                        {group.name}
+                        <small className="block font-body font-normal text-[13px] text-[#FAFAFA]/55 mt-[3px] tracking-normal normal-case">
+                          {group.subteams.map((s) => s.focus).join(". ")}.
+                        </small>
+                      </span>
+                      <span className="font-mono text-[10.5px] tracking-[.16em] uppercase text-[#FAFAFA]/50 text-right">
+                        {group.subteams.length} sub-team{group.subteams.length !== 1 ? "s" : ""}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Posture block */}
+              <div className="mt-9 border border-[#FAFAFA]/15 bg-[#111111] p-[22px] pb-5">
+                <div className="flex items-baseline justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#FAFAFA]/55 mb-3.5">
+                  <span>Posture &middot; 2026 Season</span>
+                  <span className="inline-flex items-center gap-1.5 text-amber">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber inline-block" />
+                    In Build
+                  </span>
+                </div>
+                <p className="text-[13.5px] leading-[1.55] text-[#FAFAFA]/55 m-0 pt-3 border-t border-dashed border-[#FAFAFA]/15">
+                  The rig is mid-cycle. The hoist / elevator subsystem is operational;
+                  drivetrain bring-up is next. Sensor array, control software, and the
+                  autonomy stack are tracking against the 2026&ndash;27 competition window.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ § 02 — TEAM EXPLORER ══════════ */}
+      <motion.section {...REVEAL} className="relative border-t border-rule-strong scroll-mt-20" id="team">
+        <div className="max-w-[1440px] mx-auto px-14 py-24">
+          <TeamExplorer />
+        </div>
+      </motion.section>
+
+      {/* ══════════ § 03 — OUR TEAM ══════════ */}
+      <motion.section {...REVEAL} className="relative scroll-mt-20 bg-white" id="our-team">
+        <div className="max-w-[1440px] mx-auto px-14 pt-16 pb-[120px] relative">
+          <CrossMark className="left-14 top-6" />
+          <CrossMark className="right-14 top-6" />
+
+          {/* Section bar */}
+          <div className="flex items-center gap-[18px] pb-[14px] font-mono text-[10px] tracking-[.18em] uppercase mb-14">
+            <span className="text-ink">&sect; <span className="text-maroon">03</span> &middot; OUR TEAM</span>
+            <span className="flex-1 h-px bg-ink" />
+          </div>
+
+          {/* Pitch */}
+          <div className="grid grid-cols-[1.1fr_1.5fr] gap-16 mb-20 items-start">
+            <div>
+              <div
+                className="text-[10px] tracking-[.18em] text-ink-3 uppercase mb-3.5"
+                style={{ fontFamily: "var(--font-space-grotesk)", fontWeight: 300, letterSpacing: "0.15em" }}
+              >
+                LEADERSHIP
+              </div>
+              <h3
+                className="text-[48px] leading-[1.05] tracking-[-0.01em] m-0"
+                style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, color: "#0A0A0A" }}
+              >
+                The people behind the rig<span className="text-maroon">.</span>
+              </h3>
+            </div>
+            <div className="pt-1">
+              <p
+                className="m-0"
+                style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 400, fontSize: "15px", lineHeight: 1.65, color: "#333333" }}
+              >
+                Meet the leads driving design, fabrication, software, and operations for the 2025&ndash;26 competition season.
+              </p>
+            </div>
+          </div>
+
+          {/* ── President spotlight ── */}
+          <div className="grid grid-cols-1 md:grid-cols-[340px_1fr] gap-12 md:gap-16 items-start mb-[88px]">
+            {/* Portrait frame */}
+            <div className="relative w-full max-w-[340px] mx-auto md:mx-0">
+              <span
+                className="absolute -bottom-2.5 -left-2.5 w-full h-full pointer-events-none"
+                style={{ backgroundColor: "rgba(80,0,0,0.10)" }}
+                aria-hidden="true"
+              />
+              <div
+                className="relative aspect-[3/4] flex items-center justify-center"
+                style={{
+                  backgroundColor: "#E8E4E0",
+                  border: "1px solid rgba(80,0,0,0.30)",
+                }}
+              >
+                <span
+                  className="uppercase"
+                  style={{
+                    fontFamily: "var(--font-space-grotesk)",
+                    fontWeight: 400,
+                    fontSize: "11px",
+                    letterSpacing: "0.18em",
+                    color: "#AAAAAA",
+                  }}
+                >
+                  Photo
+                </span>
+                <span
+                  className="absolute left-0 right-0 bottom-0 h-[2px]"
+                  style={{ backgroundColor: "#500000" }}
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+
+            {/* Text block */}
+            <div className="max-w-[550px]">
+              <div
+                style={{
+                  fontFamily: "var(--font-space-grotesk)",
+                  fontWeight: 600,
+                  fontSize: "1.65rem",
+                  lineHeight: 1.15,
+                  letterSpacing: "-0.01em",
+                  color: "#0A0A0A",
+                }}
+              >
+                {president.name}
+              </div>
+              <div
+                className="mt-2"
+                style={{
+                  fontFamily: "var(--font-dm-sans)",
+                  fontWeight: 400,
+                  fontSize: "0.95rem",
+                  letterSpacing: "0.01em",
+                  color: "#500000",
+                }}
+              >
+                {president.role}
+              </div>
+              <span
+                className="block mt-5 mb-6"
+                style={{ width: 40, height: 2, backgroundColor: "#500000" }}
+                aria-hidden="true"
+              />
+              <p
+                className="m-0"
+                style={{
+                  fontFamily: "var(--font-dm-sans)",
+                  fontWeight: 400,
+                  fontSize: "0.975rem",
+                  lineHeight: 1.6,
+                  color: "#333333",
+                }}
+              >
+                {president.bio}
+              </p>
+            </div>
+          </div>
+
+          {/* ── Team leads grid ── */}
+          <div
+            className="mb-7"
+            style={{
+              fontFamily: "var(--font-space-grotesk)",
+              fontWeight: 300,
+              fontSize: "11px",
+              letterSpacing: "0.15em",
+              color: "#999999",
+              textTransform: "uppercase",
+            }}
+          >
+            Team Leads
+          </div>
+
+          <ul className="list-none m-0 p-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
+            {teamLeads.map(({ name, role, tbd, photo }, i) => {
+              const isTbd = !!tbd;
+              return (
+                <li key={`${name}-${role}-${i}`} className="group">
+                  {/* Portrait frame */}
+                  <div className="relative w-full">
+                    <span
+                      className="absolute -bottom-2 -left-2 w-full h-full pointer-events-none transition-opacity duration-300 group-hover:opacity-100"
+                      style={{ backgroundColor: "rgba(80,0,0,0.10)", opacity: 0.7 }}
+                      aria-hidden="true"
+                    />
+                    <div
+                      className="relative aspect-[3/4] flex items-center justify-center overflow-hidden transition-shadow duration-300 group-hover:shadow-[0_0_0_1px_rgba(80,0,0,0.55),0_12px_30px_-12px_rgba(80,0,0,0.25)]"
+                      style={{
+                        backgroundColor: "#E8E4E0",
+                        border: "1px solid rgba(80,0,0,0.30)",
+                      }}
+                    >
+                      {photo ? (
+                        <img
+                          src={photo}
+                          alt={name}
+                          loading="lazy"
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span
+                          className="uppercase"
+                          style={{
+                            fontFamily: "var(--font-space-grotesk)",
+                            fontWeight: 400,
+                            fontSize: "10.5px",
+                            letterSpacing: "0.18em",
+                            color: "#AAAAAA",
+                          }}
+                        >
+                          Photo
+                        </span>
+                      )}
+                      <span
+                        className="absolute left-0 right-0 bottom-0 h-[2px] transition-all duration-300 group-hover:h-[3px]"
+                        style={{ backgroundColor: "#500000" }}
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Name + role */}
+                  <div className="mt-5">
+                    <div
+                      className="transition-colors duration-300"
+                      style={{
+                        fontFamily: "var(--font-space-grotesk)",
+                        fontWeight: 600,
+                        fontSize: "1.05rem",
+                        lineHeight: 1.2,
+                        letterSpacing: "-0.005em",
+                        color: isTbd ? "#AAAAAA" : "#0A0A0A",
+                      }}
+                    >
+                      <span className={isTbd ? "" : "group-hover:text-maroon"}>{name}</span>
+                    </div>
+                    <div
+                      className="mt-1.5"
+                      style={{
+                        fontFamily: "var(--font-dm-sans)",
+                        fontWeight: 400,
+                        fontSize: "0.85rem",
+                        lineHeight: 1.45,
+                        color: "#555555",
+                      }}
+                    >
+                      {role}
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Total member count */}
+          <div className="mt-14 pt-6 border-t border-[#1a1a1a14] flex items-baseline justify-between">
+            <span
+              className="uppercase"
+              style={{
+                fontFamily: "var(--font-space-grotesk)",
+                fontWeight: 300,
+                fontSize: "11px",
+                letterSpacing: "0.15em",
+                color: "#999999",
+              }}
+            >
+              Total Members
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--font-outfit)",
+                fontWeight: 700,
+                fontSize: "28px",
+                lineHeight: 1,
+                letterSpacing: "-0.01em",
+                color: "#0A0A0A",
+              }}
+            >
+              17
+              <span className="text-maroon">.</span>
+            </span>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* ══════════ § 04 — CTA ══════════ */}
+      <motion.section {...REVEAL} className="bg-[#1A1A1A] text-[#FAFAFA]">
+        {/* Header bar */}
+        <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[10px] tracking-[.18em] uppercase">
+          <span className="text-[#FAFAFA] font-medium">&sect; <span className="text-amber">04</span> &middot; NEXT STEPS</span>
+          <span className="flex-1 h-px bg-[#ffffff1f]" />
+        </div>
+
+        <div className="max-w-[1440px] mx-auto px-14 py-24 pb-[104px]">
+          <div className="grid grid-cols-2 gap-6">
+            {/* Card 1 — maroon */}
+            <Link
+              href="/engineering"
+              className="p-14 pb-12 flex flex-col text-[#FAFAFA] no-underline min-h-[320px] bg-maroon border border-[#ffffff1f] group"
+              style={{
+                backgroundImage: "linear-gradient(to right, #ffffff08 1px, transparent 1px), linear-gradient(to bottom, #ffffff08 1px, transparent 1px)",
+                backgroundSize: "80px 80px",
+              }}
+            >
+              <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a] mb-10">
+                <span className="font-heading text-sm text-[#FAFAFA] tracking-[.04em] font-medium">01</span>
+                <span>The Rig</span>
+              </div>
+              <h3 className="font-heading font-semibold text-[40px] leading-[1.02] tracking-[-.012em] m-0 mb-4 text-[#FAFAFA]">
+                See what we&apos;re building<span className="text-amber">.</span>
+              </h3>
+              <p className="text-[16px] leading-[1.55] text-[#ffffffbf] m-0 mb-9 max-w-[400px]">
+                Full system breakdown. Mechanical, electrical, software, and ML &mdash; every subsystem documented.
+              </p>
+              <span className="oct-clip mt-auto self-start font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold px-[22px] py-3.5 bg-[#FAFAFA] text-maroon border border-[#FAFAFA] inline-flex items-center gap-3.5 group-hover:bg-amber group-hover:border-amber group-hover:text-ink">
+                See the Rig
+                <span className="inline-block w-[22px] h-px bg-current relative">
+                  <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
+                </span>
+              </span>
+            </Link>
+
+            {/* Card 2 — dark */}
+            <Link
+              href="/apply#apply-form"
+              className="p-14 pb-12 flex flex-col text-[#FAFAFA] no-underline min-h-[320px] bg-[#222] border border-[#ffffff1f] group"
+              style={{
+                backgroundImage: "linear-gradient(to right, #ffffff08 1px, transparent 1px), linear-gradient(to bottom, #ffffff08 1px, transparent 1px)",
+                backgroundSize: "80px 80px",
+              }}
+            >
+              <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a] mb-10">
+                <span className="font-heading text-sm text-[#FAFAFA] tracking-[.04em] font-medium">02</span>
+                <span>The Team</span>
+              </div>
+              <h3 className="font-heading font-semibold text-[40px] leading-[1.02] tracking-[-.012em] m-0 mb-4 text-[#FAFAFA]">
+                Ready to build<span className="text-amber">?</span>
+              </h3>
+              <p className="text-[16px] leading-[1.55] text-[#ffffffbf] m-0 mb-9 max-w-[400px]">
+                Applications for the 2026&ndash;27 cycle are open. Find your sub-team and start contributing.
+              </p>
+              <span className="oct-outline-light mt-auto self-start font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold px-[22px] py-3.5 text-[#FAFAFA] inline-flex items-center gap-3.5 group-hover:text-ink">
+                Apply Now
+                <span className="inline-block w-[22px] h-px bg-current relative">
+                  <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
+                </span>
+              </span>
+            </Link>
+          </div>
+        </div>
+      </motion.section>
+
+      <Footer />
+    </div>
+  );
+}

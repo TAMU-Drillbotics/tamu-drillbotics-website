@@ -1,0 +1,1181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>TAMU Drillbotics — Sponsors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAFAFA;
+    --ink:#1A1A1A;
+    --ink-2:#3a3a3a;
+    --ink-3:#6b6b6b;
+    --ink-4:#a5a5a5;
+    --rule:#1a1a1a14;
+    --rule-strong:#1a1a1a26;
+    --maroon:#500000;
+    --maroon-ink:#3a0000;
+    --amber:#C8963E;
+    --grid:#1a1a1a09;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);}
+  body{
+    font-family:'Barlow', system-ui, sans-serif;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    min-height:100vh;
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size:80px 80px;
+    background-position:-1px -1px;
+  }
+
+  /* ────────── HEADER ────────── */
+  header.nav{
+    border-bottom:1px solid var(--rule-strong);
+    background:rgba(250,250,250,.85);
+    backdrop-filter:blur(6px);
+  }
+  .nav-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:18px 56px;
+    display:flex; align-items:center; gap:48px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    letter-spacing:.04em;
+    font-size:14px;
+    text-transform:uppercase;
+  }
+  .brand-mark{
+    width:22px; height:22px;
+    background:var(--maroon);
+    position:relative;
+    flex-shrink:0;
+  }
+  .brand-mark::after{
+    content:""; position:absolute; inset:5px;
+    border:1.5px solid #FAFAFA;
+  }
+  .brand-mark::before{
+    content:""; position:absolute; left:50%; top:0; bottom:0;
+    width:1.5px; background:#FAFAFA; transform:translateX(-50%);
+  }
+  .brand .slash{ color:var(--ink-4); font-weight:400; margin:0 2px; }
+  .brand .sub{ color:var(--ink-3); font-weight:400; letter-spacing:.08em; }
+
+  nav.links{
+    display:flex; gap:32px;
+    margin-left:24px;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:500;
+  }
+  nav.links a{
+    color:var(--ink-2);
+    text-decoration:none;
+    position:relative;
+    padding:6px 0;
+  }
+  nav.links a:hover{ color:var(--maroon); }
+  nav.links a.active{ color:var(--ink); }
+  nav.links a.active::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:-19px;
+    height:2px; background:var(--maroon);
+  }
+
+  .nav-right{
+    margin-left:auto;
+    display:flex; align-items:center; gap:24px;
+  }
+  .nav-meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--ink-3);
+    letter-spacing:.04em;
+  }
+  .nav-meta .dot{
+    display:inline-block;
+    width:6px; height:6px; border-radius:50%;
+    background:var(--amber);
+    margin-right:6px;
+    transform:translateY(-1px);
+  }
+  .btn-ghost{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:500;
+    padding:10px 18px;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    background:transparent;
+    cursor:pointer;
+    transition:all .15s ease;
+    text-decoration:none;
+    display:inline-block;
+  }
+  .btn-ghost:hover{ background:var(--ink); color:var(--bg); }
+
+  /* ────────── shared bits ────────── */
+  .reg{
+    position:absolute;
+    width:14px; height:14px;
+    color:var(--ink-4);
+  }
+  .reg::before, .reg::after{ content:""; position:absolute; background:currentColor; }
+  .reg::before{ left:0; right:0; top:50%; height:1px; }
+  .reg::after{ top:0; bottom:0; left:50%; width:1px; }
+  .reg.tl{ left:42px; top:42px; }
+  .reg.tr{ right:42px; top:42px; }
+  .reg.bl{ left:42px; bottom:42px; }
+  .reg.br{ right:42px; bottom:42px; }
+
+  /* section header bar */
+  .sec-head{
+    border-bottom:1px solid var(--rule-strong);
+    background:rgba(250,250,250,.85);
+  }
+  .sh-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:14px 56px;
+    display:flex; align-items:center; gap:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .sh-tag{
+    display:inline-flex; align-items:baseline; gap:10px;
+    color:var(--ink);
+    font-weight:500;
+  }
+  .sh-sec{ color:var(--maroon); font-weight:500; }
+  .sh-rule{ flex:1; height:1px; background:var(--rule-strong); }
+  .sh-mid{ color:var(--ink-2); }
+  .sh-end{ color:var(--ink-4); }
+
+  /* slice watermark */
+  .slice-no{
+    position:absolute;
+    right:56px;
+    top:32px;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.4em;
+    color:var(--ink-4);
+    pointer-events:none;
+  }
+
+  /* ────────── SECTION 01 — TIERS ────────── */
+  .tiers-section{
+    position:relative;
+    border-top:1px solid var(--rule-strong);
+  }
+  .tiers-body{
+    max-width:1440px;
+    margin:0 auto;
+    padding:80px 56px 96px;
+    position:relative;
+  }
+
+  .tiers-intro{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap:64px;
+    align-items:end;
+    padding-bottom:56px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .tiers-eyebrow{
+    grid-column:1;
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin-bottom:24px;
+  }
+  .tiers-eyebrow .pulse{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--maroon);
+    box-shadow:0 0 0 3px #50000020;
+  }
+  .tiers-title{
+    grid-column:1;
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:84px;
+    line-height:.92;
+    letter-spacing:-.022em;
+    margin:0;
+    color:var(--ink);
+  }
+  .tiers-title .period{ color:var(--maroon); }
+  .tiers-sub{
+    grid-column:2;
+    font-size:17px;
+    line-height:1.55;
+    color:var(--ink-2);
+    max-width:460px;
+    margin:0 0 8px auto;
+  }
+
+  /* tier rows */
+  .tier-list{
+    list-style:none; margin:0; padding:0;
+  }
+  .tier{
+    display:grid;
+    grid-template-columns: 260px 1fr;
+    column-gap:64px;
+    padding:56px 0;
+    border-bottom:1px dashed var(--rule-strong);
+    position:relative;
+  }
+  .tier:last-child{ border-bottom:none; padding-bottom:8px; }
+
+  /* LEFT rail — spec block */
+  .t-rail{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:14px;
+    position:relative;
+  }
+  .t-rank{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+  }
+  .t-name{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    letter-spacing:.02em;
+    color:var(--ink);
+    text-transform:uppercase;
+    line-height:.9;
+  }
+  /* tier weight bar — thicker for higher tiers */
+  .t-weight{
+    display:block;
+    background:var(--ink);
+    margin-top:4px;
+  }
+  .t-meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    line-height:1.7;
+  }
+  .t-meta b{ color:var(--ink); font-weight:500; letter-spacing:.04em; }
+  .t-count{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:13px;
+    color:var(--ink-2);
+    letter-spacing:.06em;
+    font-weight:500;
+  }
+
+  /* RIGHT — logo grid */
+  .t-logos{
+    display:flex;
+    flex-wrap:wrap;
+    gap:24px;
+    align-items:flex-end;
+  }
+
+  /* logo placeholder card */
+  .logo-card{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:14px;
+  }
+  .logo-mark{
+    background:#1a1a1a14;
+    position:relative;
+    flex-shrink:0;
+  }
+  .logo-mark::before,
+  .logo-mark::after{
+    content:"";
+    position:absolute;
+    width:5px; height:5px;
+    border:1px solid #1a1a1a1f;
+  }
+  .logo-mark::before{ left:-3px; top:-3px; border-right:none; border-bottom:none; }
+  .logo-mark::after{ right:-3px; bottom:-3px; border-left:none; border-top:none; }
+  /* tiny "LOGO / TBD" mark inside the placeholder */
+  .logo-mark > .lm-tag{
+    position:absolute;
+    left:14px; bottom:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:#1a1a1a52;
+  }
+  .logo-mark > .lm-cross{
+    position:absolute;
+    left:14px; top:12px;
+    width:10px; height:10px;
+    color:#1a1a1a3a;
+  }
+  .logo-mark > .lm-cross::before,
+  .logo-mark > .lm-cross::after{
+    content:""; position:absolute; background:currentColor;
+  }
+  .logo-mark > .lm-cross::before{ left:0; right:0; top:50%; height:1px; }
+  .logo-mark > .lm-cross::after{ top:0; bottom:0; left:50%; width:1px; }
+
+  .logo-meta{
+    display:flex; flex-direction:column; gap:2px;
+  }
+  .logo-name{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink);
+  }
+  .logo-sub{
+    font-family:'JetBrains Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+  }
+
+  /* Per-tier sizing — weight indicator + logo box sizes */
+  .tier.platinum .t-name{ font-size:48px; }
+  .tier.platinum .t-weight{ width:120px; height:8px; }
+  .tier.platinum .logo-mark{ width:300px; height:120px; }
+
+  .tier.gold .t-name{ font-size:40px; }
+  .tier.gold .t-weight{ width:96px; height:6px; background:var(--ink); }
+  .tier.gold .logo-mark{ width:240px; height:96px; }
+
+  .tier.silver .t-name{ font-size:32px; color:var(--ink-2); }
+  .tier.silver .t-weight{ width:72px; height:4px; background:var(--ink-2); }
+  .tier.silver .logo-mark{ width:200px; height:78px; }
+
+  .tier.bronze .t-name{ font-size:26px; color:var(--ink-3); }
+  .tier.bronze .t-weight{ width:56px; height:3px; background:var(--ink-3); }
+  .tier.bronze .logo-mark{ width:170px; height:64px; }
+  .tier.bronze .logo-name{ font-size:10.5px; color:var(--ink-2); }
+
+  /* ────────── SECTION 02 — VALUE ────────── */
+  .value-section{
+    position:relative;
+    border-top:1px solid var(--rule-strong);
+  }
+  .value-body{
+    max-width:1440px;
+    margin:0 auto;
+    padding:80px 56px 96px;
+    position:relative;
+  }
+
+  .value-intro{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap:64px;
+    align-items:end;
+    padding-bottom:48px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .value-eyebrow{
+    grid-column:1;
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin-bottom:24px;
+  }
+  .value-eyebrow .pulse{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--maroon);
+    box-shadow:0 0 0 3px #50000020;
+  }
+  .value-title{
+    grid-column:1;
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:64px;
+    line-height:.94;
+    letter-spacing:-.02em;
+    margin:0;
+    color:var(--ink);
+  }
+  .value-title .period{ color:var(--maroon); }
+  .value-sub{
+    grid-column:2;
+    font-size:17px;
+    line-height:1.55;
+    color:var(--ink-2);
+    max-width:460px;
+    margin:0 0 8px auto;
+  }
+
+  .value-grid{
+    margin-top:0;
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    border-top:none;
+  }
+  .value-card{
+    padding:48px 40px 40px;
+    border-bottom:1px dashed var(--rule-strong);
+    border-right:1px dashed var(--rule-strong);
+    position:relative;
+    display:flex; flex-direction:column;
+    gap:18px;
+    min-height:260px;
+  }
+  .value-card:nth-child(2n){ border-right:none; }
+  .value-card:nth-last-child(-n+2){ border-bottom:none; }
+
+  .v-head{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .v-num{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:14px;
+    color:var(--ink);
+    font-weight:600;
+    letter-spacing:.04em;
+  }
+  .v-label{
+    color:var(--maroon);
+    font-weight:500;
+  }
+  .v-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:28px;
+    line-height:1.1;
+    letter-spacing:-.01em;
+    margin:8px 0 0;
+    color:var(--ink);
+    max-width:440px;
+  }
+  .v-title .period{ color:var(--maroon); }
+  .v-body{
+    font-size:16px;
+    line-height:1.55;
+    color:var(--ink-2);
+    margin:0;
+    max-width:480px;
+  }
+  .v-foot{
+    margin-top:auto;
+    padding-top:18px;
+    display:flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+  }
+  .v-foot .chip{
+    border:1px solid var(--rule-strong);
+    padding:4px 9px;
+    color:var(--ink-2);
+    background:#fff;
+    letter-spacing:.16em;
+  }
+
+  /* ────────── SECTION 03 — CONTACT CTA ────────── */
+  .contact-section{
+    position:relative;
+    background:#1A1A1A;
+    color:#FAFAFA;
+    border-top:1px solid var(--rule-strong);
+    background-image:
+      linear-gradient(to right, #ffffff0a 1px, transparent 1px),
+      linear-gradient(to bottom, #ffffff0a 1px, transparent 1px);
+    background-size:80px 80px;
+    background-position:-1px -1px;
+  }
+  .contact-head{
+    border-bottom:1px solid #ffffff1f;
+  }
+  .ch-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:14px 56px;
+    display:flex; align-items:center; gap:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffffa8;
+  }
+  .ch-tag{ color:#FAFAFA; font-weight:500; display:inline-flex; align-items:baseline; gap:10px; }
+  .ch-sec{ color:var(--amber); font-weight:500; }
+  .ch-rule{ flex:1; height:1px; background:#ffffff26; }
+  .ch-mid{ color:#ffffffd0; }
+  .ch-end{ color:#ffffff8a; }
+
+  .contact-body{
+    max-width:1440px;
+    margin:0 auto;
+    padding:64px 56px 64px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap:64px;
+    align-items:center;
+    position:relative;
+  }
+  .contact-body .reg{ color:#ffffff6e; }
+  .reg.contact-tl{ left:32px; top:24px; }
+  .reg.contact-tr{ right:32px; top:24px; }
+  .reg.contact-bl{ left:32px; bottom:24px; }
+  .reg.contact-br{ right:32px; bottom:24px; }
+
+  .contact-left .c-eyebrow{
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffffc4;
+    margin-bottom:24px;
+  }
+  .contact-left .c-eyebrow .pulse{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 0 3px #C8963E30;
+  }
+  .contact-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:60px;
+    line-height:.96;
+    letter-spacing:-.02em;
+    margin:0;
+    color:#FAFAFA;
+    max-width:540px;
+  }
+  .contact-title .period{ color:var(--amber); }
+  .contact-sub{
+    margin-top:22px;
+    max-width:520px;
+    font-size:17px;
+    line-height:1.55;
+    color:#ffffffc8;
+  }
+
+  .contact-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border:1px solid #ffffff1f;
+  }
+  .c-card{
+    padding:30px 28px 28px;
+    color:#FAFAFA;
+    text-decoration:none;
+    display:flex; flex-direction:column;
+    transition:background .18s ease;
+    min-height:240px;
+    position:relative;
+  }
+  .c-card + .c-card{ border-left:1px solid #ffffff1f; }
+  .c-card:hover{ background:#0d0d0d; }
+
+  .cc-head{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffff8a;
+    margin-bottom:30px;
+  }
+  .cc-head .num{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:14px;
+    color:#FAFAFA;
+    letter-spacing:.04em;
+    font-weight:500;
+  }
+  .cc-kind{ color:var(--amber); }
+  .cc-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:26px;
+    line-height:1.05;
+    letter-spacing:-.01em;
+    margin:0 0 10px;
+    color:#FAFAFA;
+  }
+  .cc-sub{
+    font-size:14.5px;
+    line-height:1.5;
+    color:#ffffffb0;
+    margin:0;
+    max-width:280px;
+  }
+  .cc-btn{
+    margin-top:auto;
+    align-self:flex-start;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:13px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:600;
+    padding:14px 22px;
+    display:inline-flex; align-items:center; gap:14px;
+    transition:all .15s ease;
+    cursor:pointer;
+    border:1px solid #FAFAFA;
+    color:#FAFAFA;
+    background:transparent;
+  }
+  .cc-btn .arrow{
+    display:inline-block;
+    width:22px; height:1px;
+    background:currentColor;
+    position:relative;
+  }
+  .cc-btn .arrow::after{
+    content:""; position:absolute; right:0; top:-3px;
+    width:7px; height:7px;
+    border-top:1px solid currentColor;
+    border-right:1px solid currentColor;
+    transform:rotate(45deg);
+  }
+  .c-card:hover .cc-btn{
+    background:var(--amber); border-color:var(--amber); color:#1A1A1A;
+  }
+  /* the second card uses solid amber to differentiate */
+  .c-card.amber .cc-btn{
+    background:var(--amber); border-color:var(--amber); color:#1A1A1A;
+  }
+  .c-card.amber:hover .cc-btn{
+    background:#FAFAFA; border-color:#FAFAFA; color:#1A1A1A;
+  }
+
+  /* ────────── FOOTER ────────── */
+  .site-footer{
+    background:#141414;
+    color:#ffffffa8;
+    border-top:1px solid #ffffff14;
+  }
+  .sf-top{
+    max-width:1440px;
+    margin:0 auto;
+    padding:36px 56px 28px;
+    display:grid;
+    grid-template-columns: 1fr auto auto;
+    align-items:center;
+    gap:48px;
+  }
+  .sf-brand{
+    display:flex; align-items:center; gap:12px;
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    letter-spacing:.04em;
+    font-size:14px;
+    text-transform:uppercase;
+    color:#FAFAFA;
+  }
+  .sf-brand .sf-mark{
+    width:18px; height:18px;
+    background:var(--maroon);
+    position:relative;
+    flex-shrink:0;
+  }
+  .sf-brand .sf-mark::after{
+    content:""; position:absolute; inset:4px; border:1.5px solid #141414;
+  }
+  .sf-brand .sf-mark::before{
+    content:""; position:absolute; left:50%; top:0; bottom:0;
+    width:1.5px; background:#141414; transform:translateX(-50%);
+  }
+  .sf-brand .slash{ color:#ffffff52; font-weight:400; margin:0 2px; }
+  .sf-brand .sub{ color:#ffffff7a; font-weight:400; letter-spacing:.08em; }
+
+  .sf-nav{
+    display:flex; gap:28px;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:500;
+  }
+  .sf-nav a{
+    color:#ffffffc4;
+    text-decoration:none;
+    transition:color .15s ease;
+  }
+  .sf-nav a:hover{ color:#FAFAFA; }
+
+  .sf-social{
+    display:flex; gap:8px;
+  }
+  .sf-social a{
+    width:34px; height:34px;
+    display:inline-flex; align-items:center; justify-content:center;
+    color:#ffffffc4;
+    text-decoration:none;
+    border:1px solid #ffffff1f;
+    transition:all .15s ease;
+  }
+  .sf-social a:hover{ color:#FAFAFA; border-color:#ffffff4a; background:#1f1f1f; }
+  .sf-social svg{ width:14px; height:14px; display:block; }
+
+  .sf-rule{
+    max-width:1440px;
+    margin:0 auto;
+    height:1px;
+    background:#ffffff14;
+  }
+
+  .sf-bot{
+    max-width:1440px;
+    margin:0 auto;
+    padding:22px 56px 28px;
+    display:grid;
+    grid-template-columns: auto 1fr auto;
+    align-items:start;
+    gap:48px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#ffffff7a;
+    line-height:1.6;
+  }
+  .sf-bot .copy{ color:#ffffffbf; }
+  .sf-bot .tm{ max-width:560px; }
+  .sf-bot .tm b{ color:#ffffffbf; font-weight:500; letter-spacing:.12em; }
+  .sf-bot .tm .disclaimer{
+    display:block;
+    margin-top:6px;
+    color:#ffffff5a;
+    letter-spacing:.14em;
+  }
+  .sf-bot .meta{ text-align:right; color:#ffffff5a; }
+  .sf-bot .meta .v{ color:#ffffffa8; }
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="nav" data-screen-label="Sponsors / Header">
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>TAMU Drillbotics</span>
+        <span class="slash">/</span>
+        <span class="sub">Engineering</span>
+      </div>
+      <nav class="links">
+        <a href="Hero.html">Home</a>
+        <a href="About.html">About</a>
+        <a href="#">The Rig</a>
+        <a href="Apply.html">Apply</a>
+        <a href="Sponsors.html" class="active">Sponsors</a>
+      </nav>
+      <div class="nav-right">
+        <span class="nav-meta"><span class="dot"></span>2026 Season · Active</span>
+        <a class="btn-ghost" href="#contact">Become a Sponsor</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════ 01 — TIER DISPLAY ══════════ -->
+  <section class="tiers-section" data-screen-label="Sponsors / Tiers">
+    <div class="sec-head">
+      <div class="sh-inner">
+        <span class="sh-tag"><span class="sh-sec">§ 01</span> Sponsors</span>
+        <span class="sh-rule"></span>
+        <span class="sh-mid">Industry Partners · 2025–26</span>
+        <span class="sh-rule"></span>
+        <span class="sh-end">
+</span>
+      </div>
+    </div>
+
+    <div class="tiers-body">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <header class="tiers-intro">
+        <div class="tiers-eyebrow">
+          <span class="pulse"></span>
+          <span>Partners of record</span>
+        </div>
+        <h1 class="tiers-title">Backed by<br/>industry<span class="period">.</span></h1>
+        <p class="tiers-sub">
+          Our partners provide funding, mentorship, and real-world engineering
+          context. Their support makes this program possible.
+        </p>
+      </header>
+
+      <ol class="tier-list">
+
+        <!-- PLATINUM -->
+        <li class="tier platinum">
+          <div class="t-rail">
+            <span class="t-rank">Tier · 01 / 04</span>
+            <span class="t-name">Platinum</span>
+            <span class="t-weight" aria-hidden="true"></span>
+            <span class="t-meta">
+</span>
+          </div>
+          <div class="t-logos">
+            <div class="logo-card">
+              <span class="logo-mark">
+                <span class="lm-cross" aria-hidden="true"></span>
+                <span class="lm-tag">LOGO / TBD</span>
+              </span>
+              <span class="logo-meta">
+                <span class="logo-name">Sabine Oil &amp; Gas</span>
+                <span class="logo-sub">PLATINUM</span>
+              </span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-mark">
+                <span class="lm-cross" aria-hidden="true"></span>
+                <span class="lm-tag">LOGO / TBD</span>
+              </span>
+              <span class="logo-meta">
+                <span class="logo-name">Diamondback Energy</span>
+                <span class="logo-sub">PLATINUM</span>
+              </span>
+            </div>
+          </div>
+        </li>
+
+        <!-- GOLD -->
+        <li class="tier gold">
+          <div class="t-rail">
+            <span class="t-rank">Tier · 02 / 04</span>
+            <span class="t-name">Gold</span>
+            <span class="t-weight" aria-hidden="true"></span>
+            <span class="t-meta">
+</span>
+          </div>
+          <div class="t-logos">
+            <div class="logo-card">
+              <span class="logo-mark">
+                <span class="lm-cross" aria-hidden="true"></span>
+                <span class="lm-tag">LOGO / TBD</span>
+              </span>
+              <span class="logo-meta">
+                <span class="logo-name">Scandrill</span>
+                <span class="logo-sub">GOLD</span>
+              </span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-mark">
+                <span class="lm-cross" aria-hidden="true"></span>
+                <span class="lm-tag">LOGO / TBD</span>
+              </span>
+              <span class="logo-meta">
+                <span class="logo-name">Nabors</span>
+                <span class="logo-sub">GOLD</span>
+              </span>
+            </div>
+          </div>
+        </li>
+
+        <!-- SILVER -->
+        <li class="tier silver">
+          <div class="t-rail">
+            <span class="t-rank">Tier · 03 / 04</span>
+            <span class="t-name">Silver</span>
+            <span class="t-weight" aria-hidden="true"></span>
+            <span class="t-meta">
+</span>
+          </div>
+          <div class="t-logos">
+            <div class="logo-card">
+              <span class="logo-mark">
+                <span class="lm-cross" aria-hidden="true"></span>
+                <span class="lm-tag">LOGO / TBD</span>
+              </span>
+              <span class="logo-meta">
+                <span class="logo-name">Patterson-UTI</span>
+                <span class="logo-sub">Silver</span>
+              </span>
+            </div>
+          </div>
+        </li>
+
+        <!-- BRONZE -->
+        <li class="tier bronze">
+          <div class="t-rail">
+            <span class="t-rank">Tier · 04 / 04</span>
+            <span class="t-name">Bronze</span>
+            <span class="t-weight" aria-hidden="true"></span>
+            <span class="t-meta">
+</span>
+          </div>
+          <div class="t-logos">
+            <div class="logo-card">
+              <span class="logo-mark">
+                <span class="lm-cross" aria-hidden="true"></span>
+                <span class="lm-tag">LOGO / TBD</span>
+              </span>
+              <span class="logo-meta">
+                <span class="logo-name">Hibernia Resources</span>
+                <span class="logo-sub">Bronze</span>
+              </span>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="slice-no">SEC · 01 / 03 — TIERS</div>
+    </div>
+  </section>
+
+  <!-- ══════════ 02 — VALUE ══════════ -->
+  <section class="value-section" data-screen-label="Sponsors / Value">
+    <div class="sec-head">
+      <div class="sh-inner">
+        <span class="sh-tag"><span class="sh-sec">§ 02</span> Value</span>
+        <span class="sh-rule"></span>
+        <span class="sh-mid">Partnership Benefits</span>
+        <span class="sh-rule"></span>
+        <span class="sh-end">04 Items</span>
+      </div>
+    </div>
+
+    <div class="value-body">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <header class="value-intro">
+        <div class="value-eyebrow">
+          <span class="pulse"></span>
+          <span>What sponsorship returns</span>
+        </div>
+        <h2 class="value-title">Why partner<br/>with us<span class="period">.</span></h2>
+        <p class="value-sub">
+          A measured exchange. Sponsors gain visibility, recruitment access,
+          and a direct line into student R&amp;D — and support a working
+          STEM program at Texas A&amp;M.
+        </p>
+      </header>
+
+      <div class="value-grid">
+        <article class="value-card">
+          <div class="v-head">
+            <span class="v-num">01</span>
+            <span class="v-label">Brand Placement</span>
+          </div>
+          <h3 class="v-title">Logo on every surface we produce<span class="period">.</span></h3>
+          <p class="v-body">
+            Team materials, website, technical reports, and competition
+            deliverables carry sponsor identification at the tier level you
+            select.
+          </p>
+          <div class="v-foot">
+            <span class="chip">WEB</span>
+            <span class="chip">PRINT</span>
+            <span class="chip">REPORTS</span>
+            <span class="chip">RIG</span>
+          </div>
+        </article>
+
+        <article class="value-card">
+          <div class="v-head">
+            <span class="v-num">02</span>
+            <span class="v-label">Talent Pipeline</span>
+          </div>
+          <h3 class="v-title">Direct access to recruiting-ready engineers<span class="period">.</span></h3>
+          <p class="v-body">
+            A multi-disciplinary pool spanning mechanical, electrical,
+            computer science, and data science — students with hands-on
+            experience shipping a full system end-to-end.
+          </p>
+          <div class="v-foot">
+            <span class="chip">MECH</span>
+            <span class="chip">EE</span>
+            <span class="chip">CS</span>
+            <span class="chip">DATA</span>
+          </div>
+        </article>
+
+        <article class="value-card">
+          <div class="v-head">
+            <span class="v-num">03</span>
+            <span class="v-label">R&amp;D Exposure</span>
+          </div>
+          <h3 class="v-title">See how students approach autonomous drilling<span class="period">.</span></h3>
+          <p class="v-body">
+            Modern ML and control systems applied to a scaled rig.
+            Sponsors receive technical briefings and access to our
+            engineering documentation throughout the season.
+          </p>
+          <div class="v-foot">
+            <span class="chip">CONTROL</span>
+            <span class="chip">SENSOR FUSION</span>
+            <span class="chip">ML</span>
+          </div>
+        </article>
+
+        <article class="value-card">
+          <div class="v-head">
+            <span class="v-num">04</span>
+            <span class="v-label">STEM Support</span>
+          </div>
+          <h3 class="v-title">Tax-deductible contribution to STEM at Texas A&amp;M<span class="period">.</span></h3>
+          <p class="v-body">
+            Sponsorships flow through the university and qualify as
+            charitable contributions. Documentation provided for your
+            records and reporting needs.
+          </p>
+          <div class="v-foot">
+            <span class="chip">501(C)(3)</span>
+            <span class="chip">TAMU FOUNDATION</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="slice-no">SEC · 02 / 03 — VALUE</div>
+    </div>
+  </section>
+
+  <!-- ══════════ 03 — CONTACT CTA ══════════ -->
+  <section class="contact-section" id="contact" data-screen-label="Sponsors / Contact">
+    <div class="contact-head">
+      <div class="ch-inner">
+        <span class="ch-tag"><span class="ch-sec">§ 03</span> Contact</span>
+        <span class="ch-rule"></span>
+        <span class="ch-mid">Partnership Inquiries</span>
+        <span class="ch-rule"></span>
+        <span class="ch-end">2026 Season</span>
+      </div>
+    </div>
+
+    <div class="contact-body">
+      <span class="reg contact-tl"></span>
+      <span class="reg contact-tr"></span>
+      <span class="reg contact-bl"></span>
+      <span class="reg contact-br"></span>
+
+      <div class="contact-left">
+        <div class="c-eyebrow">
+          <span class="pulse"></span>
+          <span>Sponsorship inquiries</span>
+        </div>
+        <h2 class="contact-title">Interested in partnering<span class="period">?</span></h2>
+        <p class="contact-sub">
+          Reach out to discuss sponsorship tiers, in-kind contributions, or
+          custom partnership structures. We&rsquo;ll send a packet and a calendar
+          link within two business days.
+        </p>
+      </div>
+
+      <div class="contact-actions">
+        <a class="c-card" href="mailto:sponsors@tamudrillbotics.org">
+          <div class="cc-head">
+            <span class="num">01</span>
+            <span class="cc-kind">Email</span>
+          </div>
+          <h3 class="cc-title">sponsors@<br/>tamudrillbotics.org</h3>
+          <p class="cc-sub">Direct line to the sponsorship lead. Response within two business days.</p>
+          <span class="cc-btn">Email Us <span class="arrow"></span></span>
+        </a>
+
+        <a class="c-card amber" href="#" aria-label="Download sponsorship packet (PDF)">
+          <div class="cc-head">
+            <span class="num">02</span>
+            <span class="cc-kind">PDF · 2026</span>
+          </div>
+          <h3 class="cc-title">Sponsorship Packet</h3>
+          <p class="cc-sub">Tier breakdown, deliverables, prior-year report, and contribution instructions.</p>
+          <span class="cc-btn">Download Packet <span class="arrow"></span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="site-footer" data-screen-label="Sponsors / Footer">
+    <div class="sf-top">
+      <div class="sf-brand">
+        <span class="sf-mark" aria-hidden="true"></span>
+        <span>TAMU Drillbotics</span>
+        <span class="slash">/</span>
+        <span class="sub">Engineering</span>
+      </div>
+      <nav class="sf-nav" aria-label="Footer">
+        <a href="Hero.html">Home</a>
+        <a href="About.html">About</a>
+        <a href="#">The Rig</a>
+        <a href="Apply.html">Apply</a>
+        <a href="Sponsors.html">Sponsors</a>
+      </nav>
+      <div class="sf-social">
+        <a href="#" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5.001 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-1 1.83-2.05 3.76-2.05 4.02 0 4.76 2.65 4.76 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.86V21h-3.99V9z"/>
+          </svg>
+        </a>
+        <a href="#" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+            <circle cx="12" cy="12" r="4"></circle>
+            <circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"></circle>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="sf-rule"></div>
+
+    <div class="sf-bot">
+      <span class="copy">© 2025 TAMU Drillbotics</span>
+      <span class="tm">
+        <b>Drillbotics®</b> is a registered trademark of Rig Operations, LLC.
+        <span class="disclaimer">[ Texas A&amp;M University trademark disclaimer · TBD ]</span>
+      </span>
+      <span class="meta">
+        College Station · TX &nbsp;·&nbsp; <span class="v">v0.6 / 2026</span>
+      </span>
+    </div>
+  </footer>
+
+</body>
+</html>

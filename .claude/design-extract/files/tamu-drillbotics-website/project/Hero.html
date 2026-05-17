@@ -1,0 +1,1629 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>TAMU Drillbotics — Hero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAFAFA;
+    --ink:#1A1A1A;
+    --ink-2:#3a3a3a;
+    --ink-3:#6b6b6b;
+    --ink-4:#a5a5a5;
+    --rule:#1a1a1a14;
+    --rule-strong:#1a1a1a26;
+    --maroon:#500000;
+    --maroon-ink:#3a0000;
+    --amber:#C8963E;
+    --grid:#1a1a1a09;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);}
+  body{
+    font-family:'Barlow', system-ui, sans-serif;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    min-height:100vh;
+    /* engineering-doc grid — continues through all sections */
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size:80px 80px;
+    background-position:-1px -1px;
+  }
+
+  .page{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+
+  /* ────────── HEADER ────────── */
+  header.nav{
+    border-bottom:1px solid var(--rule-strong);
+    background:rgba(250,250,250,.85);
+    backdrop-filter:blur(6px);
+  }
+  .nav-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:18px 56px;
+    display:flex;
+    align-items:center;
+    gap:48px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    letter-spacing:.04em;
+    font-size:14px;
+    text-transform:uppercase;
+  }
+  .brand-mark{
+    width:22px; height:22px;
+    background:var(--maroon);
+    position:relative;
+    flex-shrink:0;
+  }
+  .brand-mark::after{
+    content:"";
+    position:absolute; inset:5px;
+    border:1.5px solid #FAFAFA;
+  }
+  .brand-mark::before{
+    content:"";
+    position:absolute; left:50%; top:0; bottom:0;
+    width:1.5px; background:#FAFAFA; transform:translateX(-50%);
+  }
+  .brand .slash{ color:var(--ink-4); font-weight:400; margin:0 2px; }
+  .brand .sub{ color:var(--ink-3); font-weight:400; letter-spacing:.08em; }
+
+  nav.links{
+    display:flex; gap:32px;
+    margin-left:24px;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:500;
+  }
+  nav.links a{
+    color:var(--ink-2);
+    text-decoration:none;
+    position:relative;
+    padding:6px 0;
+  }
+  nav.links a:hover{ color:var(--maroon); }
+  nav.links a.active{ color:var(--ink); }
+  nav.links a.active::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:-19px;
+    height:2px; background:var(--maroon);
+  }
+
+  .nav-right{
+    margin-left:auto;
+    display:flex; align-items:center; gap:24px;
+  }
+  .nav-meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--ink-3);
+    letter-spacing:.04em;
+  }
+  .nav-meta .dot{
+    display:inline-block;
+    width:6px; height:6px; border-radius:50%;
+    background:var(--amber);
+    margin-right:6px;
+    transform:translateY(-1px);
+  }
+  .btn-ghost{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:500;
+    padding:10px 18px;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    background:transparent;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .btn-ghost:hover{ background:var(--ink); color:var(--bg); }
+
+  /* ────────── HERO ────────── */
+  main.hero{
+    flex:1;
+    max-width:1440px;
+    margin:0 auto;
+    width:100%;
+    padding:56px 56px 36px;
+    display:grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    column-gap:64px;
+    align-items:stretch;
+    position:relative;
+  }
+
+  /* corner registration marks */
+  .reg{
+    position:absolute;
+    width:14px; height:14px;
+    color:var(--ink-4);
+  }
+  .reg::before, .reg::after{
+    content:""; position:absolute; background:currentColor;
+  }
+  .reg::before{ left:0; right:0; top:50%; height:1px; }
+  .reg::after{ top:0; bottom:0; left:50%; width:1px; }
+  .reg.tl{ left:42px; top:42px; }
+  .reg.tr{ right:42px; top:42px; }
+  .reg.bl{ left:42px; bottom:42px; }
+  .reg.br{ right:42px; bottom:42px; }
+
+  /* LEFT column */
+  .left{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:24px;
+    min-width:0;
+  }
+
+  .eyebrow{
+    display:flex; align-items:center; gap:14px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin-bottom:44px;
+  }
+  .eyebrow .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--rule-strong);
+    padding:5px 10px;
+    background:#fff;
+  }
+  .eyebrow .pulse{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--maroon);
+    box-shadow:0 0 0 3px #50000020;
+  }
+  .eyebrow .sep{ color:var(--ink-4); }
+
+  h1.wordmark{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:700;
+    font-size:148px;
+    line-height:.86;
+    letter-spacing:-.025em;
+    margin:0;
+    color:var(--ink);
+    text-transform:uppercase;
+  }
+  h1.wordmark .row{
+    display:flex;
+    align-items:baseline;
+    gap:18px;
+  }
+  h1.wordmark .tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    font-weight:400;
+    letter-spacing:.12em;
+    color:var(--ink-3);
+    text-transform:uppercase;
+    transform:translateY(-90px);
+    border-left:1px solid var(--rule-strong);
+    padding-left:14px;
+    line-height:1.5;
+    white-space:nowrap;
+  }
+  h1.wordmark .tag b{ color:var(--ink); font-weight:500; display:block; }
+  h1.wordmark .accent{ color:var(--maroon); }
+  h1.wordmark .period{ color:var(--maroon); }
+
+  .lede{
+    margin-top:40px;
+    max-width:580px;
+    font-size:19px;
+    line-height:1.55;
+    color:var(--ink-2);
+    font-weight:400;
+  }
+  .lede strong{
+    color:var(--ink);
+    font-weight:600;
+  }
+
+  .ctas{
+    margin-top:44px;
+    display:flex; align-items:center; gap:14px;
+  }
+  .btn-primary{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:14px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:600;
+    padding:18px 28px;
+    background:var(--maroon);
+    color:#FAFAFA;
+    border:1px solid var(--maroon);
+    cursor:pointer;
+    display:inline-flex; align-items:center; gap:14px;
+    transition:all .15s ease;
+  }
+  .btn-primary:hover{ background:var(--maroon-ink); border-color:var(--maroon-ink); }
+  .btn-primary .arrow{
+    display:inline-block;
+    width:22px; height:1px;
+    background:#FAFAFA;
+    position:relative;
+  }
+  .btn-primary .arrow::after{
+    content:""; position:absolute; right:0; top:-3px;
+    width:7px; height:7px;
+    border-top:1px solid #FAFAFA;
+    border-right:1px solid #FAFAFA;
+    transform:rotate(45deg);
+  }
+  .btn-secondary{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:14px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:600;
+    padding:18px 22px;
+    background:transparent;
+    color:var(--ink);
+    border:none;
+    cursor:pointer;
+    text-decoration:none;
+    border-bottom:1px solid var(--ink);
+    display:inline-flex; align-items:center; gap:10px;
+    transition:all .15s ease;
+  }
+  .btn-secondary:hover{ color:var(--maroon); border-color:var(--maroon); }
+
+  /* RIGHT column — rig status panel */
+  .right{
+    display:flex;
+    flex-direction:column;
+    border-left:1px solid var(--rule-strong);
+    padding:24px 0 24px 32px;
+    position:relative;
+  }
+  .panel-head{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding-bottom:14px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .panel-head .id{ color:var(--ink); font-weight:500; }
+  .panel-head .live{
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .panel-head .live::before{
+    content:""; width:6px; height:6px; border-radius:50%;
+    background:var(--maroon);
+  }
+
+  /* Build phase block */
+  .phase{
+    padding:18px 0 20px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .phase-row{
+    display:flex; align-items:baseline; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .phase-label{ color:var(--ink-2); }
+  .phase-count{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:22px;
+    font-weight:600;
+    color:var(--ink);
+    letter-spacing:.02em;
+  }
+  .phase-track{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:6px;
+    margin:14px 0 12px;
+  }
+  .phase-track .seg{
+    height:6px;
+    background:#1a1a1a12;
+  }
+  .phase-track .seg.done{ background:var(--ink); }
+  .phase-track .seg.active{
+    background:var(--maroon);
+    position:relative;
+  }
+  .phase-track .seg.active::after{
+    content:""; position:absolute; right:0; top:-2px; bottom:-2px;
+    width:2px; background:var(--maroon);
+  }
+  .phase-row.meta{
+    color:var(--ink-2);
+    font-size:10px;
+  }
+  .phase-row.meta .next{ color:var(--ink-3); }
+
+  /* Subsystems list */
+  .subs-head{
+    display:flex; justify-content:space-between;
+    padding:18px 0 10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .subs{
+    list-style:none; margin:0; padding:0;
+  }
+  .subs li{
+    display:grid;
+    grid-template-columns: 1fr 64px auto;
+    align-items:center;
+    gap:14px;
+    padding:13px 0;
+    border-bottom:1px dashed var(--rule-strong);
+  }
+  .subs .name{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:500;
+    font-size:14px;
+    color:var(--ink);
+    letter-spacing:.01em;
+  }
+  .subs .bar{
+    height:4px;
+    background:#1a1a1a14;
+    position:relative;
+    overflow:hidden;
+  }
+  .subs .bar i{
+    position:absolute; left:0; top:0; bottom:0;
+    background:var(--ink);
+  }
+  .subs li:nth-child(1) .bar i{ background:var(--maroon); }
+  .subs .state{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    min-width:88px;
+    text-align:right;
+  }
+  .subs .state.ok{ color:var(--maroon); }
+
+  .panel-foot{
+    margin-top:auto;
+    padding-top:18px;
+    border-top:1px solid var(--rule-strong);
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .panel-foot .ok{ color:var(--ink); }
+
+  /* ────────── FOOT STRIP ────────── */
+  footer.strip{
+    border-top:1px solid var(--rule);
+    background:rgba(250,250,250,.7);
+  }
+  .strip-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:8px 56px;
+    display:flex; align-items:center; gap:24px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+  }
+  .strip-inner .item{
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .strip-inner .item b{ color:var(--ink-2); font-weight:500; letter-spacing:.12em; }
+  .strip-inner .sep{
+    width:1px; height:9px; background:var(--rule);
+  }
+  .strip-inner .right-side{ margin-left:auto; display:flex; align-items:center; gap:24px; }
+  .strip-inner .scroll-hint{
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--ink-3);
+  }
+  .strip-inner .scroll-hint .line{
+    width:22px; height:1px; background:var(--ink-4);
+  }
+
+  /* ────────── MISSION ────────── */
+  .mission{
+    position:relative;
+    border-top:1px solid var(--rule-strong);
+  }
+
+  /* section header bar — mirrors the doc-tag treatment from the hero */
+  .mission-head{
+    border-bottom:1px solid var(--rule-strong);
+    background:rgba(250,250,250,.85);
+  }
+  .mh-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:14px 56px;
+    display:flex; align-items:center; gap:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .mh-tag{
+    display:inline-flex; align-items:baseline; gap:10px;
+    color:var(--ink);
+    font-weight:500;
+  }
+  .mh-sec{
+    color:var(--maroon);
+    font-weight:500;
+  }
+  .mh-rule{
+    flex:1; height:1px; background:var(--rule-strong);
+  }
+  .mh-mid{ color:var(--ink-2); }
+  .mh-end{ color:var(--ink-4); }
+
+  .mission-body{
+    max-width:1440px;
+    margin:0 auto;
+    padding:80px 56px 96px;
+    position:relative;
+  }
+
+  /* intro block */
+  .mission-intro{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap:64px;
+    align-items:end;
+    padding-bottom:48px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .mission-eyebrow{
+    grid-column:1;
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin-bottom:24px;
+  }
+  .mission-eyebrow .pulse{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--maroon);
+    box-shadow:0 0 0 3px #50000020;
+  }
+  .mission-title{
+    grid-column:1;
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:72px;
+    line-height:.94;
+    letter-spacing:-.02em;
+    margin:0;
+    color:var(--ink);
+  }
+  .mission-title .period{ color:var(--maroon); }
+  .mission-sub{
+    grid-column:2;
+    font-size:17px;
+    line-height:1.55;
+    color:var(--ink-2);
+    max-width:460px;
+    margin:0 0 8px auto;
+  }
+
+  /* pillars */
+  .pillars{
+    list-style:none; margin:0; padding:0;
+    counter-reset:pillar;
+  }
+  .pillar{
+    display:grid;
+    grid-template-columns: 220px 1fr;
+    column-gap:64px;
+    padding:56px 0;
+    border-bottom:1px dashed var(--rule-strong);
+    position:relative;
+  }
+  .pillar:last-child{ border-bottom:none; padding-bottom:0; }
+
+  .p-rail{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:14px;
+    position:relative;
+  }
+  .p-num{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:84px;
+    line-height:.85;
+    letter-spacing:-.02em;
+    color:var(--ink);
+  }
+  .pillar:nth-child(2) .p-num{ color:var(--maroon); }
+  .p-tick{
+    display:block;
+    width:36px; height:2px;
+    background:var(--ink);
+    margin-top:6px;
+  }
+  .pillar:nth-child(2) .p-tick{ background:var(--maroon); }
+  .p-vec{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+
+  .p-content{
+    max-width:760px;
+    padding-top:6px;
+  }
+  .p-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:40px;
+    line-height:1.05;
+    letter-spacing:-.012em;
+    margin:0 0 22px;
+    color:var(--ink);
+  }
+  .p-title .period{ color:var(--maroon); }
+  .p-body{
+    font-size:19px;
+    line-height:1.55;
+    color:var(--ink-2);
+    margin:0;
+    font-weight:400;
+    max-width:680px;
+  }
+  .p-body em{
+    font-style:normal;
+    color:var(--ink);
+    font-weight:600;
+    /* subtle underline keyed off maroon */
+    box-shadow:inset 0 -2px 0 #50000026;
+    padding-bottom:1px;
+  }
+  .p-meta{
+    margin-top:28px;
+    display:flex; align-items:center; gap:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+  }
+  .p-meta .chips{
+    display:flex; gap:8px; flex-wrap:wrap;
+  }
+  .p-meta .chip{
+    border:1px solid var(--rule-strong);
+    padding:4px 9px;
+    color:var(--ink-2);
+    background:#fff;
+    letter-spacing:.16em;
+  }
+
+  .slice-no--mission{
+    top:auto; bottom:32px; right:56px;
+    transform:rotate(180deg);
+  }
+
+  /* ────────── SPONSORS ────────── */
+  .sponsors{
+    position:relative;
+    border-top:1px solid var(--rule-strong);
+  }
+  .sponsors-head{
+    border-bottom:1px solid var(--rule-strong);
+    background:rgba(250,250,250,.85);
+  }
+  .sh-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:14px 56px;
+    display:flex; align-items:center; gap:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .sh-tag{
+    display:inline-flex; align-items:baseline; gap:10px;
+    color:var(--ink);
+    font-weight:500;
+  }
+  .sh-tag .sh-sec{ color:var(--maroon); font-weight:500; }
+  .sh-rule{ flex:1; height:1px; background:var(--rule-strong); }
+  .sh-mid{ color:var(--ink-2); }
+  .sh-end{ color:var(--ink-4); }
+
+  .sponsors-body{
+    max-width:1440px;
+    margin:0 auto;
+    padding:44px 56px 44px;
+  }
+  .sponsor-row{
+    display:grid;
+    grid-template-columns:repeat(6, 1fr);
+    border-top:1px solid var(--rule-strong);
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .sponsor{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    padding:32px 16px 28px;
+    border-right:1px dashed var(--rule-strong);
+    position:relative;
+    background:transparent;
+    transition:background .18s ease;
+    text-decoration:none;
+  }
+  .sponsor:last-child{ border-right:none; }
+  .sponsor .mark{
+    width:118px;
+    height:38px;
+    background:#1a1a1a14;
+    transition:background .18s ease, transform .18s ease;
+    position:relative;
+  }
+  /* tiny corner registration mark on each placeholder */
+  .sponsor .mark::before,
+  .sponsor .mark::after{
+    content:"";
+    position:absolute;
+    width:5px; height:5px;
+    border:1px solid #1a1a1a1f;
+    transition:border-color .18s ease;
+  }
+  .sponsor .mark::before{ left:-3px; top:-3px; border-right:none; border-bottom:none; }
+  .sponsor .mark::after{ right:-3px; bottom:-3px; border-left:none; border-top:none; }
+
+  .sponsor .name{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+    transition:color .18s ease;
+    text-align:center;
+    white-space:nowrap;
+  }
+  .sponsor:hover{ background:#fff; }
+  .sponsor:hover .mark{ background:var(--maroon); }
+  .sponsor:hover .mark::before,
+  .sponsor:hover .mark::after{ border-color:var(--maroon); }
+  .sponsor:hover .name{ color:var(--ink); }
+
+  .sponsors-foot{
+    margin-top:18px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+  }
+  .sponsors-foot .count b{ color:var(--ink-2); font-weight:500; }
+  .sponsors-link{
+    color:var(--ink-2);
+    text-decoration:none;
+    display:inline-flex; align-items:center; gap:10px;
+    border-bottom:1px solid var(--rule-strong);
+    padding-bottom:2px;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .sponsors-link:hover{ color:var(--maroon); border-color:var(--maroon); }
+  .sponsors-link .arrow{
+    display:inline-block; width:14px; height:1px; background:currentColor; position:relative;
+  }
+  .sponsors-link .arrow::after{
+    content:""; position:absolute; right:0; top:-3px;
+    width:6px; height:6px;
+    border-top:1px solid currentColor; border-right:1px solid currentColor;
+    transform:rotate(45deg);
+  }
+
+  /* ────────── CTA ────────── */
+  .cta{
+    background:var(--maroon);
+    color:#FAFAFA;
+    position:relative;
+    border-top:1px solid var(--rule-strong);
+    /* lighter grid overlay on maroon for continuity */
+    background-image:
+      linear-gradient(var(--maroon), var(--maroon)),
+      linear-gradient(to right, #ffffff0a 1px, transparent 1px),
+      linear-gradient(to bottom, #ffffff0a 1px, transparent 1px);
+    background-size:auto, 80px 80px, 80px 80px;
+    background-position:0 0, -1px -1px, -1px -1px;
+    background-blend-mode:normal;
+  }
+  /* simpler maroon grid — the overlay above is brittle; use a single approach */
+  .cta{
+    background:#500000;
+    background-image:
+      linear-gradient(to right, #ffffff0d 1px, transparent 1px),
+      linear-gradient(to bottom, #ffffff0d 1px, transparent 1px);
+    background-size:80px 80px;
+    background-position:-1px -1px;
+  }
+
+  .cta-head{
+    border-bottom:1px solid #ffffff1f;
+  }
+  .ch-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:14px 56px;
+    display:flex; align-items:center; gap:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffffa8;
+  }
+  .ch-tag{ color:#FAFAFA; font-weight:500; display:inline-flex; align-items:baseline; gap:10px; }
+  .ch-sec{ color:var(--amber); font-weight:500; }
+  .ch-rule{ flex:1; height:1px; background:#ffffff26; }
+  .ch-mid{ color:#ffffffd0; }
+  .ch-end{ color:#ffffff8a; }
+
+  .cta-body{
+    max-width:1440px;
+    margin:0 auto;
+    padding:88px 56px 96px;
+    display:grid;
+    grid-template-columns: 1.45fr 1fr;
+    column-gap:64px;
+    position:relative;
+  }
+  /* corner registration marks — light on maroon */
+  .cta-body .reg{ color:#ffffff6e; }
+
+  .cta-left{ min-width:0; }
+  .cta-eyebrow{
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffffc4;
+    margin-bottom:28px;
+  }
+  .cta-eyebrow .pulse{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 0 3px #C8963E30;
+  }
+  .cta-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:104px;
+    line-height:.9;
+    letter-spacing:-.025em;
+    margin:0;
+    color:#FAFAFA;
+  }
+  .cta-title .period{ color:var(--amber); }
+  .cta-sub{
+    margin-top:28px;
+    max-width:520px;
+    font-size:18px;
+    line-height:1.55;
+    color:#ffffffd0;
+  }
+
+  .cta-cards{
+    margin-top:64px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border:1px solid #ffffff1f;
+  }
+  .cta-card{
+    padding:32px 32px 32px;
+    display:flex; flex-direction:column;
+    color:#FAFAFA;
+    text-decoration:none;
+    position:relative;
+    background:transparent;
+    transition:background .18s ease;
+    min-height:280px;
+  }
+  .cta-card + .cta-card{ border-left:1px solid #ffffff1f; }
+  /* differentiate the two cards: card 2 sits on a black slab */
+  .cta-card.dark{
+    background:#1A1A1A;
+  }
+  .cta-card:hover{ background:#3a0000; }
+  .cta-card.dark:hover{ background:#0d0d0d; }
+
+  .cc-row{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffff8a;
+    margin-bottom:36px;
+  }
+  .cc-row .num{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:14px;
+    color:#FAFAFA;
+    letter-spacing:.04em;
+    font-weight:500;
+  }
+  .cc-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:38px;
+    line-height:1.02;
+    letter-spacing:-.012em;
+    margin:0 0 14px;
+    color:#FAFAFA;
+  }
+  .cc-title .period{ color:var(--amber); }
+  .cc-sub{
+    font-size:15.5px;
+    line-height:1.5;
+    color:#ffffffbf;
+    margin:0 0 28px;
+    max-width:340px;
+  }
+  .cc-btn{
+    margin-top:auto;
+    align-self:flex-start;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:13px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:600;
+    padding:14px 22px;
+    display:inline-flex; align-items:center; gap:14px;
+    transition:all .15s ease;
+    cursor:pointer;
+  }
+  /* primary — solid white pill on maroon card */
+  .cc-btn.solid{
+    background:#FAFAFA;
+    color:var(--maroon);
+    border:1px solid #FAFAFA;
+  }
+  .cc-btn.solid .arrow{ background:var(--maroon); }
+  .cc-btn.solid .arrow::after{ border-color:var(--maroon); }
+  .cta-card:hover .cc-btn.solid{ background:var(--amber); border-color:var(--amber); color:#1A1A1A; }
+  .cta-card:hover .cc-btn.solid .arrow{ background:#1A1A1A; }
+  .cta-card:hover .cc-btn.solid .arrow::after{ border-color:#1A1A1A; }
+
+  /* secondary — outline on black card */
+  .cc-btn.outline{
+    background:transparent;
+    color:#FAFAFA;
+    border:1px solid #FAFAFA;
+  }
+  .cc-btn.outline .arrow{ background:#FAFAFA; }
+  .cc-btn.outline .arrow::after{ border-color:#FAFAFA; }
+  .cta-card.dark:hover .cc-btn.outline{ background:#FAFAFA; color:#1A1A1A; }
+  .cta-card.dark:hover .cc-btn.outline .arrow{ background:#1A1A1A; }
+  .cta-card.dark:hover .cc-btn.outline .arrow::after{ border-color:#1A1A1A; }
+
+  .cc-btn .arrow{
+    display:inline-block;
+    width:22px; height:1px;
+    position:relative;
+  }
+  .cc-btn .arrow::after{
+    content:""; position:absolute; right:0; top:-3px;
+    width:7px; height:7px;
+    border-top:1px solid currentColor;
+    border-right:1px solid currentColor;
+    transform:rotate(45deg);
+  }
+
+  /* RIGHT — visual element placeholder */
+  .visual-slot{
+    background:#1A1A1A;
+    border:1px solid #ffffff1f;
+    position:relative;
+    min-height:560px;
+    overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .vs-head{
+    padding:14px 18px;
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid #ffffff1a;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffff8a;
+  }
+  .vs-head .vs-id{ color:#FAFAFA; }
+  .vs-head .vs-live{ display:inline-flex; align-items:center; gap:6px; }
+  .vs-head .vs-live::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--amber); }
+
+  .vs-stage{
+    flex:1;
+    position:relative;
+    background-image:
+      linear-gradient(to right, #ffffff0a 1px, transparent 1px),
+      linear-gradient(to bottom, #ffffff0a 1px, transparent 1px);
+    background-size:40px 40px;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  /* dashed placeholder frame */
+  .vs-frame{
+    position:absolute; inset:24px;
+    border:1px dashed #ffffff33;
+  }
+  /* corner registration marks inside slot */
+  .vs-stage .vs-corner{
+    position:absolute; width:12px; height:12px; color:#ffffff7a;
+  }
+  .vs-stage .vs-corner::before, .vs-stage .vs-corner::after{ content:""; position:absolute; background:currentColor; }
+  .vs-stage .vs-corner::before{ left:0; right:0; top:50%; height:1px; }
+  .vs-stage .vs-corner::after{ top:0; bottom:0; left:50%; width:1px; }
+  .vs-stage .vs-corner.tl{ left:10px; top:10px; }
+  .vs-stage .vs-corner.tr{ right:10px; top:10px; }
+  .vs-stage .vs-corner.bl{ left:10px; bottom:10px; }
+  .vs-stage .vs-corner.br{ right:10px; bottom:10px; }
+
+  /* centerpiece label */
+  .vs-label{
+    position:relative;
+    text-align:center;
+    color:#ffffffe6;
+    z-index:2;
+  }
+  .vs-label .vs-cross{
+    width:48px; height:48px;
+    margin:0 auto 18px;
+    color:#ffffff8a;
+    position:relative;
+  }
+  .vs-label .vs-cross::before, .vs-label .vs-cross::after{
+    content:""; position:absolute; background:currentColor;
+  }
+  .vs-label .vs-cross::before{ left:0; right:0; top:50%; height:1px; }
+  .vs-label .vs-cross::after{ top:0; bottom:0; left:50%; width:1px; }
+  .vs-label .vs-kind{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:500;
+    font-size:18px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:#FAFAFA;
+    margin:0 0 6px;
+  }
+  .vs-label .vs-tbd{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:#ffffff7a;
+  }
+  .vs-label .vs-hint{
+    margin-top:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:#ffffff5a;
+  }
+
+  .vs-foot{
+    padding:12px 18px;
+    border-top:1px solid #ffffff1a;
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffff6e;
+  }
+  .vs-foot .ok{ color:#ffffffbf; }
+
+  /* ────────── FOOTER ────────── */
+  .site-footer{
+    background:#141414;
+    color:#ffffffa8;
+    border-top:1px solid #ffffff14;
+  }
+  .sf-top{
+    max-width:1440px;
+    margin:0 auto;
+    padding:36px 56px 28px;
+    display:grid;
+    grid-template-columns: 1fr auto auto;
+    align-items:center;
+    gap:48px;
+  }
+  .sf-brand{
+    display:flex; align-items:center; gap:12px;
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    letter-spacing:.04em;
+    font-size:14px;
+    text-transform:uppercase;
+    color:#FAFAFA;
+  }
+  .sf-brand .sf-mark{
+    width:18px; height:18px;
+    background:var(--maroon);
+    position:relative;
+    flex-shrink:0;
+  }
+  .sf-brand .sf-mark::after{
+    content:""; position:absolute; inset:4px; border:1.5px solid #141414;
+  }
+  .sf-brand .sf-mark::before{
+    content:""; position:absolute; left:50%; top:0; bottom:0;
+    width:1.5px; background:#141414; transform:translateX(-50%);
+  }
+  .sf-brand .slash{ color:#ffffff52; font-weight:400; margin:0 2px; }
+  .sf-brand .sub{ color:#ffffff7a; font-weight:400; letter-spacing:.08em; }
+
+  .sf-nav{
+    display:flex; gap:28px;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:500;
+  }
+  .sf-nav a{
+    color:#ffffffc4;
+    text-decoration:none;
+    transition:color .15s ease;
+  }
+  .sf-nav a:hover{ color:#FAFAFA; }
+
+  .sf-social{
+    display:flex; gap:8px;
+  }
+  .sf-social a{
+    width:34px; height:34px;
+    display:inline-flex; align-items:center; justify-content:center;
+    color:#ffffffc4;
+    text-decoration:none;
+    border:1px solid #ffffff1f;
+    transition:all .15s ease;
+  }
+  .sf-social a:hover{ color:#FAFAFA; border-color:#ffffff4a; background:#1f1f1f; }
+  .sf-social svg{ width:14px; height:14px; display:block; }
+
+  .sf-rule{
+    max-width:1440px;
+    margin:0 auto;
+    height:1px;
+    background:#ffffff14;
+  }
+
+  .sf-bot{
+    max-width:1440px;
+    margin:0 auto;
+    padding:22px 56px 28px;
+    display:grid;
+    grid-template-columns: auto 1fr auto;
+    align-items:start;
+    gap:48px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#ffffff7a;
+    line-height:1.6;
+  }
+  .sf-bot .copy{ color:#ffffffbf; }
+  .sf-bot .tm{ max-width:560px; }
+  .sf-bot .tm b{ color:#ffffffbf; font-weight:500; letter-spacing:.12em; }
+  .sf-bot .tm .disclaimer{
+    display:block;
+    margin-top:6px;
+    color:#ffffff5a;
+    letter-spacing:.14em;
+  }
+  .sf-bot .meta{ text-align:right; color:#ffffff5a; }
+  .sf-bot .meta .v{ color:#ffffffa8; }
+
+  /* big watermark slice number behind wordmark */
+  .slice-no{
+    position:absolute;
+    right:56px;
+    top:50%;
+    transform:translateY(-50%) rotate(180deg);
+    writing-mode:vertical-rl;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.4em;
+    color:var(--ink-4);
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- HEADER -->
+    <header class="nav" data-screen-label="Hero / Header">
+      <div class="nav-inner">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>TAMU Drillbotics</span>
+          <span class="slash">/</span>
+          <span class="sub">Engineering</span>
+        </div>
+        <nav class="links">
+          <a href="#" class="active">Home</a>
+          <a href="#">About</a>
+          <a href="#">The Rig</a>
+          <a href="#">Apply</a>
+          <a href="#">Sponsors</a>
+        </nav>
+        <div class="nav-right">
+          <span class="nav-meta"><span class="dot"></span>2026 Season · Active</span>
+          <button class="btn-ghost">Join the Team</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <main class="hero" data-screen-label="Hero / Main">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <!-- LEFT -->
+      <section class="left">
+        <div class="eyebrow">
+          <span class="pill">RIG-02 · BUILD CYCLE 1</span>
+          <span class="sep">/</span>
+          <span>SPE Drillbotics® Competition 2026</span>
+        </div>
+
+        <h1 class="wordmark">
+          <span class="row">
+            <span>Tamu</span>
+            <span class="tag">Texas A&amp;M University<b>College Station, TX</b></span>
+          </span>
+          <span class="row">
+            <span>Drillbotics<span class="period">.</span></span>
+          </span>
+        </h1>
+
+        <p class="lede">
+          We <strong>design, build, and program</strong> autonomous drilling rigs.
+          Steel, sensors, and machine learning — backed by industry.
+        </p>
+
+        <div class="ctas">
+          <button class="btn-primary">See the Rig <span class="arrow"></span></button>
+          <a class="btn-secondary" href="#">Join the Team</a>
+        </div>
+      </section>
+
+      <!-- RIGHT -->
+      <aside class="right" aria-label="Project status">
+        <div class="panel-head">
+          <span class="id">Project Status · 2026</span>
+          <span class="live">In Build</span>
+        </div>
+
+        <!-- Build phase indicator -->
+        <div class="phase">
+          <div class="phase-row">
+            <span class="phase-label">Build Phase</span>
+            <span class="phase-count">02 / 04</span>
+          </div>
+          <div class="phase-track">
+            <span class="seg done"></span>
+            <span class="seg active"></span>
+            <span class="seg"></span>
+            <span class="seg"></span>
+          </div>
+          <div class="phase-row meta">
+            <span>Subsystem Integration</span>
+            <span class="next">Next · Drivetrain bring-up</span>
+          </div>
+        </div>
+
+        <div class="subs-head">
+          <span>Subsystems</span>
+          <span>Progress</span>
+        </div>
+
+        <ul class="subs">
+          <li>
+            <span class="name">Hoist / Elevator</span>
+            <span class="bar"><i style="width:92%"></i></span>
+            <span class="state ok">Operational</span>
+          </li>
+          <li>
+            <span class="name">Drivetrain</span>
+            <span class="bar"><i style="width:48%"></i></span>
+            <span class="state">In Build</span>
+          </li>
+          <li>
+            <span class="name">Sensor Array</span>
+            <span class="bar"><i style="width:28%"></i></span>
+            <span class="state">In Design</span>
+          </li>
+          <li>
+            <span class="name">Control S/W</span>
+            <span class="bar"><i style="width:36%"></i></span>
+            <span class="state">Prototyping</span>
+          </li>
+          <li>
+            <span class="name">Autonomy / ML</span>
+            <span class="bar"><i style="width:14%"></i></span>
+            <span class="state">Research</span>
+          </li>
+        </ul>
+
+        <div class="panel-foot">
+          <span>Last update · <span class="ok">05 / 10 / 26</span></span>
+          <span>Wk 14 / 32</span>
+        </div>
+      </aside>
+
+      <div class="slice-no">SEC · 01 / 06 — HERO</div>
+    </main>
+
+    <!-- FOOT STRIP -->
+    <footer class="strip">
+      <div class="strip-inner">
+        <span class="item"><b>30.6280°N</b> 96.3344°W</span>
+        <span class="sep"></span>
+        <span class="item">College Station · TX</span>
+        <span class="sep"></span>
+        <span class="item">EST. <b>2015</b></span>
+        <span class="right-side">
+          <span class="item">Industry-Backed Research Program</span>
+          <span class="sep"></span>
+          <span class="scroll-hint"><span>Scroll</span><span class="line"></span></span>
+        </span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ══════════ MISSION ══════════ -->
+  <section class="mission" data-screen-label="Mission / Pillars">
+    <!-- Section header bar -->
+    <div class="mission-head">
+      <div class="mh-inner">
+        <span class="mh-tag"><span class="mh-sec">§ 02</span> Mission</span>
+        <span class="mh-rule"></span>
+        <span class="mh-mid">OUR VALUES</span>
+        <span class="mh-rule"></span>
+        <span class="mh-end">
+</span>
+      </div>
+    </div>
+
+    <div class="mission-body">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <!-- Section overline + headline -->
+      <header class="mission-intro">
+        <div class="mission-eyebrow">
+          <span class="pulse"></span>
+          <span>What we are building toward</span>
+        </div>
+        <h2 class="mission-title">
+          A program, not a club<span class="period">.</span>
+        </h2>
+        <p class="mission-sub">A year-long engineering effort, three commitments. These shape every decision we make on the rig and in the lab.</p>
+      </header>
+
+      <!-- Pillars -->
+      <ol class="pillars">
+        <li class="pillar">
+          <div class="p-rail">
+            <span class="p-num">01</span>
+            <span class="p-tick"></span>
+            <span class="p-vec">EDUCATION
+</span>
+          </div>
+          <div class="p-content">
+            <h3 class="p-title">Build full-stack engineers<span class="period">.</span></h3>
+            <p class="p-body">
+              Students who understand mechanical design, embedded systems, edge
+              computing, and machine learning <em>not as separate disciplines</em>,
+              but as complementing fields that the industry increasingly demands together.
+            </p>
+            <div class="p-meta">
+              <span>Disciplines</span>
+              <span class="chips">
+                <span class="chip">MECH</span>
+                <span class="chip">EMBEDDED</span>
+                <span class="chip">EDGE</span>
+                <span class="chip">ML</span>
+              </span>
+            </div>
+          </div>
+        </li>
+
+        <li class="pillar">
+          <div class="p-rail">
+            <span class="p-num">02</span>
+            <span class="p-tick"></span>
+            <span class="p-vec">INDUSTRY</span>
+          </div>
+          <div class="p-content">
+            <h3 class="p-title">Bring autonomy to oil &amp; gas<span class="period">.</span></h3>
+            <p class="p-body">
+              The industry runs on some of the most complex and dangerous operations
+              on earth. We&rsquo;re building the next generation of engineers who automate them.
+            </p>
+            <div class="p-meta">
+              <span>Domain</span>
+              <span class="chips">
+                <span class="chip">UPSTREAM</span>
+                <span class="chip">DRILLING</span>
+                <span class="chip">SAFETY-CRITICAL</span>
+              </span>
+            </div>
+          </div>
+        </li>
+
+        <li class="pillar">
+          <div class="p-rail">
+            <span class="p-num">03</span>
+            <span class="p-tick"></span>
+            <span class="p-vec">ENGINEERING</span>
+          </div>
+          <div class="p-content">
+            <h3 class="p-title">Start small, think at scale<span class="period">.</span></h3>
+            <p class="p-body">
+              Our rig is scaled-down, but the control systems, sensor fusion, and
+              ML pipelines we develop mirror what&rsquo;s being deployed in the field today.
+            </p>
+            <div class="p-meta">
+              <span>Stack</span>
+              <span class="chips">
+                <span class="chip">CONTROL</span>
+                <span class="chip">SENSOR FUSION</span>
+                <span class="chip">ML PIPELINES</span>
+              </span>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="slice-no slice-no--mission">SEC · 02 / 06 — MISSION</div>
+    </div>
+  </section>
+
+  <!-- ══════════ SPONSORS ══════════ -->
+  <section class="sponsors" data-screen-label="Sponsors / Strip">
+    <div class="sponsors-head">
+      <div class="sh-inner">
+        <span class="sh-tag"><span class="sh-sec">§ 03</span> Partners</span>
+        <span class="sh-rule"></span>
+        <span class="sh-mid">Industry Backers · 2025–26</span>
+        <span class="sh-rule"></span>
+        <span class="sh-end"></span>
+      </div>
+    </div>
+
+    <div class="sponsors-body">
+      <div class="sponsor-row">
+        <a class="sponsor" href="/sponsors" aria-label="Diamondback Energy">
+          <span class="mark"></span>
+          <span class="name">Diamondback Energy</span>
+        </a>
+        <a class="sponsor" href="/sponsors" aria-label="Nabors">
+          <span class="mark"></span>
+          <span class="name">Nabors</span>
+        </a>
+        <a class="sponsor" href="/sponsors" aria-label="Sabine Oil &amp; Gas">
+          <span class="mark"></span>
+          <span class="name">Sabine Oil &amp; Gas</span>
+        </a>
+        <a class="sponsor" href="/sponsors" aria-label="Scandrill">
+          <span class="mark"></span>
+          <span class="name">Scandrill</span>
+        </a>
+        <a class="sponsor" href="/sponsors" aria-label="Patterson-UTI">
+          <span class="mark"></span>
+          <span class="name">Patterson-UTI</span>
+        </a>
+        <a class="sponsor" href="/sponsors" aria-label="Hibernia Resources">
+          <span class="mark"></span>
+          <span class="name">Hibernia Resources</span>
+        </a>
+      </div>
+
+      <div class="sponsors-foot">
+        <span class="count"><b>06</b> &nbsp;/ &nbsp;Active partners</span>
+        <a class="sponsors-link" href="/sponsors">Become a sponsor <span class="arrow"></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ CTA ══════════ -->
+  <section class="cta" data-screen-label="CTA / Two Paths">
+    <div class="cta-head">
+      <div class="ch-inner">
+        <span class="ch-tag"><span class="ch-sec">§ 04</span> CTA</span>
+        <span class="ch-rule"></span>
+        <span class="ch-mid">TWO PATHS</span>
+        <span class="ch-rule"></span>
+        <span class="ch-end">2026 Season</span>
+      </div>
+    </div>
+
+    <div class="cta-body">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <div class="cta-left">
+        <div class="cta-eyebrow">
+          <span class="pulse"></span>
+          <span>What&rsquo;s next</span>
+        </div>
+        <h2 class="cta-title">Two ways<br/>in<span class="period">.</span></h2>
+        <p class="cta-sub">
+          Look under the hood, or pick up a torque wrench. Either route starts here.
+        </p>
+
+        <div class="cta-cards">
+          <a class="cta-card" href="/project">
+            <div class="cc-row">
+              <span class="num">01</span>
+              <span>The Rig</span>
+            </div>
+            <h3 class="cc-title">See the rig<span class="period">.</span></h3>
+            <p class="cc-sub">
+              Technical deep-dive: system architecture, sensor stack, control loop, and the rig itself.
+            </p>
+            <span class="cc-btn solid">See the Rig <span class="arrow"></span></span>
+          </a>
+
+          <a class="cta-card dark" href="/apply">
+            <div class="cc-row">
+              <span class="num">02</span>
+              <span>The Team</span>
+            </div>
+            <h3 class="cc-title">Join the team<span class="period">.</span></h3>
+            <p class="cc-sub">
+              Open roles for the 2026–27 cycle across mech, embedded, controls, and ML. Build something real.
+            </p>
+            <span class="cc-btn outline">Join the Team <span class="arrow"></span></span>
+          </a>
+        </div>
+      </div>
+
+      <aside class="visual-slot" aria-label="Visual element placeholder">
+        <div class="vs-head">
+          <span class="vs-id">SLOT-A · Hero Visual</span>
+          <span class="vs-live">Placeholder</span>
+        </div>
+        <div class="vs-stage">
+          <span class="vs-frame"></span>
+          <span class="vs-corner tl"></span>
+          <span class="vs-corner tr"></span>
+          <span class="vs-corner bl"></span>
+          <span class="vs-corner br"></span>
+          <div class="vs-label">
+            <div class="vs-cross" aria-hidden="true"></div>
+            <p class="vs-kind">Visual Element</p>
+            <p class="vs-tbd">/ TBD</p>
+            <p class="vs-hint">Render · Diagram · Video · 3D Model</p>
+          </div>
+        </div>
+        <div class="vs-foot">
+          <span>Aspect <span class="ok">3 : 4</span></span>
+          <span>Awaiting asset</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="site-footer" data-screen-label="Footer">
+    <div class="sf-top">
+      <div class="sf-brand">
+        <span class="sf-mark" aria-hidden="true"></span>
+        <span>TAMU Drillbotics</span>
+        <span class="slash">/</span>
+        <span class="sub">Engineering</span>
+      </div>
+      <nav class="sf-nav" aria-label="Footer">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/project">The Rig</a>
+        <a href="/apply">Apply</a>
+        <a href="/sponsors">Sponsors</a>
+      </nav>
+      <div class="sf-social">
+        <a href="#" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5.001 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-1 1.83-2.05 3.76-2.05 4.02 0 4.76 2.65 4.76 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.86V21h-3.99V9z"/>
+          </svg>
+        </a>
+        <a href="#" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="4"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="sf-rule"></div>
+
+    <div class="sf-bot">
+      <span class="copy">© 2025 TAMU Drillbotics</span>
+      <span class="tm">
+        <b>Drillbotics®</b> is a registered trademark of Rig Operations, LLC.
+        <span class="disclaimer">[ Texas A&amp;M University trademark disclaimer · TBD ]</span>
+      </span>
+      <span class="meta">
+        College Station · TX &nbsp;·&nbsp; <span class="v">v0.6 / 2026</span>
+      </span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,26 +1,265 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-bg: #FAFAFA;
+  --color-ink: #1A1A1A;
+  --color-ink-2: #3a3a3a;
+  --color-ink-3: #6b6b6b;
+  --color-ink-4: #a5a5a5;
+  --color-maroon: #500000;
+  --color-maroon-ink: #3a0000;
+  --color-amber: #C8963E;
+  --color-rule: #1a1a1a14;
+  --color-rule-strong: #1a1a1a26;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-chakra-petch), sans-serif;
+  --font-body: var(--font-barlow), sans-serif;
+  --font-display: var(--font-chakra-petch), sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes flow-dash {
+  to { stroke-dashoffset: -24; }
+}
+
+
+.subs-scroll {
+  scrollbar-width: none;
+}
+.subs-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes terminal-blink {
+  to { opacity: 0; }
+}
+
+@keyframes amber-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.92); }
+}
+
+@keyframes subtle-bounce {
+  0%   { transform: translateY(0);     animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  25%  { transform: translateY(-15px); animation-timing-function: linear; }
+  30%  { transform: translateY(-15px); animation-timing-function: cubic-bezier(0.65, 0, 0.9, 0.2); }
+  100% { transform: translateY(0); }
+}
+
+.bounce-active {
+  display: inline-block;
+  animation: subtle-bounce 1.2s linear 0.3s forwards;
+}
+
+/* ── Octagon-rectangle clip utilities ── */
+.oct-clip {
+  clip-path: polygon(
+    8px 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0 calc(100% - 8px),
+    0 8px
+  );
+}
+.oct-clip-xs {
+  clip-path: polygon(
+    3px 0,
+    calc(100% - 3px) 0,
+    100% 3px,
+    100% calc(100% - 3px),
+    calc(100% - 3px) 100%,
+    3px 100%,
+    0 calc(100% - 3px),
+    0 3px
+  );
+}
+
+/*
+ * Octagon outlined buttons.
+ * `border + clip-path` truncates the border at the corners and the bevel
+ * has no border drawn along it — fix by stacking two clipped layers:
+ *   element bg = outline color (outer octagon)
+ *   ::after    = inner fill, inset 1.5px (slightly smaller octagon)
+ * Wrap content in a positioned span (or rely on isolation) so it stays
+ * above the ::after layer.
+ */
+.oct-outline-ink,
+.oct-outline-light {
+  position: relative;
+  border: none;
+  isolation: isolate;
+  clip-path: polygon(
+    8px 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0 calc(100% - 8px),
+    0 8px
+  );
+  transition: background-color 150ms;
+}
+.oct-outline-ink::after,
+.oct-outline-light::after {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  clip-path: polygon(
+    7px 0,
+    calc(100% - 7px) 0,
+    100% 7px,
+    100% calc(100% - 7px),
+    calc(100% - 7px) 100%,
+    7px 100%,
+    0 calc(100% - 7px),
+    0 7px
+  );
+  z-index: -1;
+  transition: background-color 150ms;
+}
+
+.oct-outline-ink             { background-color: #1A1A1A; }
+.oct-outline-ink::after      { background-color: #FAFAFA; }
+.oct-outline-ink:hover       { background-color: #500000; }
+
+.oct-outline-light           { background-color: #FAFAFA; }
+.oct-outline-light::after    { background-color: #1A1A1A; }
+.group:hover .oct-outline-light::after { background-color: #FAFAFA; }
+
+/* ── Sponsor button (sb-*) ── */
+.sb-btn {
+  position: relative;
+  background: transparent;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 13px 34px;
+  font-family: var(--font-chakra-petch), 'Space Grotesk', sans-serif;
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  text-transform: uppercase;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  clip-path: polygon(
+    8px 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0 calc(100% - 8px),
+    0 8px
+  );
+}
+.sb-btn:hover,
+.sb-btn:focus,
+.sb-btn:focus-visible,
+.sb-btn:active {
+  background: transparent;
+  background-color: transparent;
+  outline: none;
+}
+
+.sb-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0;
+  background-color: #500000;
+  transition: height 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+  pointer-events: none;
+  will-change: height;
+}
+.sb-btn:hover .sb-fill { height: 100%; }
+
+.sb-content {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.sb-text-black {
+  color: #0A0A0A;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.sb-btn--on-dark .sb-text-black {
+  color: #FAFAFA;
+}
+
+.sb-text-white {
+  color: #E0E0E0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  clip-path: inset(100% -18px 0 0);
+  transition: clip-path 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.sb-btn:hover .sb-text-white { clip-path: inset(0 -18px 0 0); }
+
+.sb-arrow {
+  display: inline-block;
+  margin-left: 14px;
+}
+
+@keyframes arrow-nudge {
+  0%   { transform: translateX(0); }
+  40%  { transform: translateX(10px); }
+  100% { transform: translateX(0); }
+}
+.sb-btn:hover .sb-arrow {
+  animation: arrow-nudge 0.65s cubic-bezier(0.4, 0, 0.2, 1) 0.55s 1;
+}
+
+@keyframes status-dot {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 6px rgba(74, 157, 107, 0.65), 0 0 11px rgba(74, 157, 107, 0.3);
+  }
+  50% {
+    opacity: 0.82;
+    box-shadow: 0 0 4px rgba(74, 157, 107, 0.4), 0 0 7px rgba(74, 157, 107, 0.18);
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #FAFAFA;
+  color: #1A1A1A;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-image:
+    linear-gradient(to right, #1a1a1a11 1px, transparent 1px),
+    linear-gradient(to bottom, #1a1a1a11 1px, transparent 1px);
+  background-size: 80px 80px;
+  background-position: -1px -1px;
 }

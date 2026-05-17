@@ -1,0 +1,2140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>TAMU Drillbotics — The Rig</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAFAFA;
+    --ink:#1A1A1A;
+    --ink-2:#3a3a3a;
+    --ink-3:#6b6b6b;
+    --ink-4:#a5a5a5;
+    --rule:#1a1a1a14;
+    --rule-strong:#1a1a1a26;
+    --maroon:#500000;
+    --maroon-ink:#3a0000;
+    --amber:#C8963E;
+    --grid:#1a1a1a09;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);}
+  body{
+    font-family:'Barlow', system-ui, sans-serif;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    min-height:100vh;
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size:80px 80px;
+    background-position:-1px -1px;
+  }
+
+  /* ════════ HEADER (shared) ════════ */
+  header.nav{
+    border-bottom:1px solid var(--rule-strong);
+    background:rgba(250,250,250,.85);
+    backdrop-filter:blur(6px);
+    position:sticky; top:0; z-index:50;
+  }
+  .nav-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:18px 56px;
+    display:flex;
+    align-items:center;
+    gap:48px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    letter-spacing:.04em;
+    font-size:14px;
+    text-transform:uppercase;
+  }
+  .brand-mark{
+    width:22px; height:22px;
+    background:var(--maroon);
+    position:relative;
+    flex-shrink:0;
+  }
+  .brand-mark::after{
+    content:""; position:absolute; inset:5px;
+    border:1.5px solid #FAFAFA;
+  }
+  .brand-mark::before{
+    content:""; position:absolute; left:50%; top:0; bottom:0;
+    width:1.5px; background:#FAFAFA; transform:translateX(-50%);
+  }
+  .brand .slash{ color:var(--ink-4); font-weight:400; margin:0 2px; }
+  .brand .sub{ color:var(--ink-3); font-weight:400; letter-spacing:.08em; }
+
+  nav.links{
+    display:flex; gap:32px;
+    margin-left:24px;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:500;
+  }
+  nav.links a{
+    color:var(--ink-2);
+    text-decoration:none;
+    position:relative;
+    padding:6px 0;
+  }
+  nav.links a:hover{ color:var(--maroon); }
+  nav.links a.active{ color:var(--ink); }
+  nav.links a.active::after{
+    content:""; position:absolute; left:0; right:0; bottom:-19px;
+    height:2px; background:var(--maroon);
+  }
+
+  .nav-right{
+    margin-left:auto;
+    display:flex; align-items:center; gap:24px;
+  }
+  .nav-meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--ink-3);
+    letter-spacing:.04em;
+  }
+  .nav-meta .dot{
+    display:inline-block;
+    width:6px; height:6px; border-radius:50%;
+    background:var(--amber);
+    margin-right:6px;
+    transform:translateY(-1px);
+  }
+  .btn-ghost{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:500;
+    padding:10px 18px;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    background:transparent;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .btn-ghost:hover{ background:var(--ink); color:var(--bg); }
+
+  /* ════════ Reusable section header bar ════════ */
+  .sec-head{
+    border-top:1px solid var(--rule-strong);
+    border-bottom:1px solid var(--rule-strong);
+    background:rgba(250,250,250,.85);
+    backdrop-filter:blur(4px);
+  }
+  .sec-head-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:14px 56px;
+    display:flex; align-items:center; gap:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .sec-head .sh-tag{
+    display:inline-flex; align-items:baseline; gap:10px;
+    color:var(--ink); font-weight:500;
+  }
+  .sec-head .sh-sec{ color:var(--maroon); font-weight:500; }
+  .sec-head .sh-rule{ flex:1; height:1px; background:var(--rule-strong); }
+  .sec-head .sh-mid{ color:var(--ink-2); }
+  .sec-head .sh-end{ color:var(--ink-4); }
+
+  /* corner registration marks */
+  .reg{
+    position:absolute;
+    width:14px; height:14px;
+    color:var(--ink-4);
+  }
+  .reg::before, .reg::after{ content:""; position:absolute; background:currentColor; }
+  .reg::before{ left:0; right:0; top:50%; height:1px; }
+  .reg::after{ top:0; bottom:0; left:50%; width:1px; }
+  .reg.tl{ left:42px; top:42px; }
+  .reg.tr{ right:42px; top:42px; }
+  .reg.bl{ left:42px; bottom:42px; }
+  .reg.br{ right:42px; bottom:42px; }
+
+  .sec-body{
+    max-width:1440px;
+    margin:0 auto;
+    padding:80px 56px 96px;
+    position:relative;
+  }
+
+  /* Common heading treatment */
+  .sec-eyebrow{
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin-bottom:22px;
+  }
+  .sec-eyebrow .pulse{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--maroon);
+    box-shadow:0 0 0 3px #50000020;
+  }
+  .sec-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:72px;
+    line-height:.94;
+    letter-spacing:-.02em;
+    margin:0;
+    color:var(--ink);
+  }
+  .sec-title .period{ color:var(--maroon); }
+  .sec-lede{
+    margin-top:24px;
+    max-width:680px;
+    font-size:18px;
+    line-height:1.55;
+    color:var(--ink-2);
+  }
+  .slice-no{
+    position:absolute;
+    right:56px;
+    bottom:32px;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.4em;
+    color:var(--ink-4);
+    pointer-events:none;
+  }
+
+  /* ════════ § 01 — VISUALIZER ════════ */
+  .vis-body{
+    max-width:1440px;
+    margin:0 auto;
+    padding:36px 56px 64px;
+    display:grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    column-gap:48px;
+    position:relative;
+    min-height:calc(100vh - 110px);
+  }
+  .viewport{
+    background:#0A0A0A;
+    border:1px solid #1a1a1a;
+    position:relative;
+    min-height:640px;
+    display:flex; flex-direction:column;
+  }
+  .vp-head{
+    padding:14px 18px;
+    border-bottom:1px solid #ffffff14;
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffff7a;
+  }
+  .vp-head .vp-id{ color:#FAFAFA; }
+  .vp-head .vp-live{ display:inline-flex; align-items:center; gap:6px; }
+  .vp-head .vp-live::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--amber); }
+  .vp-stage{
+    flex:1;
+    position:relative;
+    background-image:
+      linear-gradient(to right, #ffffff0a 1px, transparent 1px),
+      linear-gradient(to bottom, #ffffff0a 1px, transparent 1px);
+    background-size:40px 40px;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  /* axis indicator bottom-left */
+  .vp-axis{
+    position:absolute; left:24px; bottom:24px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:.18em;
+    color:#ffffff5a;
+    line-height:1.5;
+  }
+  .vp-axis .ax{
+    display:inline-block; width:36px; height:1px;
+    background:#ffffff52; vertical-align:middle; margin-right:8px;
+    position:relative;
+  }
+  .vp-axis .ax::after{
+    content:""; position:absolute; right:0; top:-3px;
+    width:6px; height:6px;
+    border-top:1px solid #ffffff52; border-right:1px solid #ffffff52;
+    transform:rotate(45deg);
+  }
+  .vp-iso{
+    position:absolute; right:24px; top:24px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:.18em;
+    color:#ffffff5a;
+    text-align:right;
+    line-height:1.6;
+  }
+  .vp-iso b{ color:#ffffffbf; font-weight:500; }
+  /* dashed placeholder frame inside stage */
+  .vp-frame{
+    position:absolute; inset:32px;
+    border:1px dashed #ffffff26;
+  }
+  .vp-corner{
+    position:absolute; width:14px; height:14px; color:#ffffff8a;
+  }
+  .vp-corner::before, .vp-corner::after{ content:""; position:absolute; background:currentColor; }
+  .vp-corner::before{ left:0; right:0; top:50%; height:1px; }
+  .vp-corner.tl{ left:14px; top:14px; }
+  .vp-corner.tr{ right:14px; top:14px; }
+  .vp-corner.bl{ left:14px; bottom:14px; }
+  .vp-corner.br{ right:14px; bottom:14px; }
+  .vp-corner::after{ top:0; bottom:0; left:50%; width:1px; }
+  .vp-label{
+    position:relative;
+    text-align:center;
+    color:#FAFAFA;
+    z-index:2;
+  }
+  .vp-cross{
+    width:72px; height:72px;
+    margin:0 auto 24px;
+    color:#ffffff8a;
+    position:relative;
+  }
+  .vp-cross::before, .vp-cross::after{ content:""; position:absolute; background:currentColor; }
+  .vp-cross::before{ left:0; right:0; top:50%; height:1px; }
+  .vp-cross::after{ top:0; bottom:0; left:50%; width:1px; }
+  .vp-cross-ring{
+    position:absolute; left:50%; top:50%;
+    width:22px; height:22px;
+    border:1px solid #ffffff8a;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+  }
+  .vp-kind{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:28px;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    margin:0 0 8px;
+  }
+  .vp-tbd{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:#ffffff8a;
+    margin:0;
+  }
+  .vp-foot{
+    padding:14px 18px;
+    border-top:1px solid #ffffff14;
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffff7a;
+  }
+  .vp-foot .ok{ color:#FAFAFA; }
+  .vp-foot .dots{ display:inline-flex; gap:14px; }
+
+  /* Right rig overview panel */
+  .rig-panel{
+    border-left:1px solid var(--rule-strong);
+    padding:0 0 0 32px;
+    display:flex; flex-direction:column;
+  }
+  .rp-head{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding-bottom:14px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .rp-head .id{ color:var(--ink); font-weight:500; }
+  .rp-head .live{ display:inline-flex; align-items:center; gap:6px; }
+  .rp-head .live::before{
+    content:""; width:6px; height:6px; border-radius:50%; background:var(--maroon);
+  }
+
+  .rp-title{
+    padding:20px 0 16px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .rp-title .kicker{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin-bottom:8px;
+  }
+  .rp-title .name{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:26px;
+    font-weight:600;
+    letter-spacing:.02em;
+    color:var(--ink);
+    line-height:1;
+  }
+  .rp-title .name .accent{ color:var(--maroon); }
+
+  .rp-specs{ list-style:none; margin:0; padding:0; }
+  .rp-specs li{
+    display:flex; align-items:baseline; justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px dashed var(--rule-strong);
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+  .rp-specs .k{ color:var(--ink-3); }
+  .rp-specs .v{
+    color:var(--ink);
+    font-family:'Chakra Petch', sans-serif;
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:.04em;
+  }
+
+  /* condensed build phase */
+  .rp-phase{
+    padding:18px 0 0;
+    margin-top:auto;
+    border-top:1px solid var(--rule-strong);
+  }
+  .rp-phase .row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin-bottom:10px;
+  }
+  .rp-phase .count{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:16px;
+    color:var(--ink);
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  .rp-track{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:5px;
+  }
+  .rp-track span{ height:5px; background:#1a1a1a12; }
+  .rp-track span.done{ background:var(--ink); }
+  .rp-track span.active{ background:var(--maroon); }
+
+  /* interaction hints under viewport */
+  .vp-hints{
+    margin-top:14px;
+    display:flex; align-items:center; gap:22px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .vp-hints b{ color:var(--ink); font-weight:500; letter-spacing:.12em; }
+  .vp-hints .sep{ width:1px; height:10px; background:var(--rule-strong); display:inline-block; }
+
+  /* ════════ Two-column engineering layout (Mechanical / Electronics) ════════ */
+  .two-col{
+    display:grid;
+    grid-template-columns: 1.15fr 1fr;
+    column-gap:64px;
+    align-items:start;
+    padding-top:48px;
+  }
+  .tc-left p{
+    font-size:17px;
+    line-height:1.6;
+    color:var(--ink-2);
+    margin:0 0 18px;
+  }
+  .tc-left p strong{ color:var(--ink); font-weight:600; }
+  .tc-left .lead{
+    font-size:19px; line-height:1.55; color:var(--ink);
+    font-weight:500; margin-bottom:24px;
+  }
+
+  /* Data panel — material/component reference sheet */
+  .data-panel{
+    border:1px solid var(--rule-strong);
+    background:#fff;
+  }
+  .dp-head{
+    padding:14px 18px;
+    border-bottom:1px solid var(--rule-strong);
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .dp-head .id{ color:var(--ink); font-weight:500; }
+  .dp-group{
+    padding:14px 18px 6px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--maroon);
+    border-bottom:1px solid var(--rule);
+  }
+  .dp-list{ list-style:none; margin:0; padding:0; }
+  .dp-list li{
+    display:grid;
+    grid-template-columns: 1fr auto;
+    gap:24px;
+    align-items:baseline;
+    padding:11px 18px;
+    border-bottom:1px dashed var(--rule-strong);
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+  .dp-list li:last-child{ border-bottom:none; }
+  .dp-list .k{ color:var(--ink-3); }
+  .dp-list .v{
+    color:var(--ink);
+    font-family:'Chakra Petch', sans-serif;
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:.04em;
+    text-align:right;
+  }
+  .dp-foot{
+    padding:12px 18px;
+    border-top:1px solid var(--rule-strong);
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+  }
+  .dp-foot .ok{ color:var(--ink-2); }
+
+  /* Subsystem callouts strip */
+  .callouts{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    border:1px solid var(--rule-strong);
+    background:#fff;
+  }
+  .co{
+    padding:24px 24px 22px;
+    border-right:1px solid var(--rule-strong);
+    position:relative;
+  }
+  .co:last-child{ border-right:none; }
+  .co-row{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:14px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .co-row .id{ color:var(--maroon); }
+  .co-row .status{
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .co-row .status::before{
+    content:""; width:6px; height:6px; border-radius:50%; background:var(--maroon);
+  }
+  .co-row .status.amber::before{ background:var(--amber); }
+  .co-row .status.grey::before{ background:var(--ink-4); }
+  .co-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:22px;
+    font-weight:600;
+    color:var(--ink);
+    letter-spacing:.01em;
+    margin:0 0 8px;
+  }
+  .co-sub{
+    font-size:14px;
+    line-height:1.5;
+    color:var(--ink-2);
+    margin:0;
+  }
+
+  /* Wireframe illustration placeholder */
+  .wire-strip{
+    margin-top:40px;
+    border:1px solid var(--rule-strong);
+    background:#fff;
+    height:140px;
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .wire-strip::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 14px, #1a1a1a08 14px 15px);
+  }
+  .wire-strip .wl{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    background:#fff;
+    padding:6px 16px;
+    border:1px solid var(--rule-strong);
+    z-index:2;
+  }
+  .wire-strip .wl b{ color:var(--ink); font-weight:500; }
+  .wire-strip .corner{
+    position:absolute; width:14px; height:14px; color:var(--ink-4); z-index:1;
+  }
+  .wire-strip .corner::before, .wire-strip .corner::after{ content:""; position:absolute; background:currentColor; }
+  .wire-strip .corner::before{ left:0; right:0; top:50%; height:1px; }
+  .wire-strip .corner::after{ top:0; bottom:0; left:50%; width:1px; }
+  .wire-strip .corner.tl{ left:8px; top:8px; }
+  .wire-strip .corner.tr{ right:8px; top:8px; }
+  .wire-strip .corner.bl{ left:8px; bottom:8px; }
+  .wire-strip .corner.br{ right:8px; bottom:8px; }
+
+  /* ════════ § 02 — Architecture Diagram ════════ */
+  .arch-stage{
+    margin-top:48px;
+    border:1px solid var(--rule-strong);
+    background:#fff;
+    padding:24px 24px 18px;
+    position:relative;
+  }
+  .arch-stage .stage-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--rule);
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .arch-stage .stage-head .id{ color:var(--ink); }
+  .arch-svg{
+    display:block;
+    width:100%;
+    height:auto;
+  }
+  .arch-legend{
+    margin-top:24px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:14px;
+    padding:18px 0 4px;
+    border-top:1px solid var(--rule);
+  }
+  .leg{
+    display:flex; align-items:center; gap:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .leg b{ color:var(--ink); font-weight:500; letter-spacing:.12em; }
+  .leg .swatch{
+    width:22px; height:2px;
+  }
+  .leg.s-i2c .swatch{ background:var(--maroon); }
+  .leg.s-spi .swatch{ background:var(--ink); }
+  .leg.s-can .swatch{
+    background-image:linear-gradient(90deg, var(--amber) 0 6px, transparent 6px 10px);
+    background-size:10px 2px;
+    background-repeat:repeat-x;
+    height:2px;
+  }
+  .leg.s-gpio .swatch{
+    background-image:linear-gradient(90deg, var(--ink-3) 0 3px, transparent 3px 6px);
+    background-size:6px 2px;
+    background-repeat:repeat-x;
+    height:2px;
+  }
+
+  /* ════════ § 05 — Control loop ════════ */
+  .sw-grid{
+    display:grid;
+    grid-template-columns: 1fr 1.2fr;
+    column-gap:64px;
+    align-items:start;
+    padding-top:48px;
+  }
+  .loop-card{
+    border:1px solid var(--rule-strong);
+    background:#fff;
+    position:relative;
+  }
+  .loop-head{
+    padding:14px 18px;
+    border-bottom:1px solid var(--rule);
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .loop-head .id{ color:var(--ink); }
+  .loop-head .live{ display:inline-flex; align-items:center; gap:6px; }
+  .loop-head .live::before{
+    content:""; width:6px; height:6px; border-radius:50%; background:var(--maroon);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:.4; transform:scale(.85); }
+  }
+  .loop-svg{ display:block; width:100%; height:auto; }
+  .loop-stats{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    border-top:1px solid var(--rule);
+  }
+  .loop-stats .ls{
+    padding:14px 16px;
+    border-right:1px dashed var(--rule-strong);
+    font-family:'JetBrains Mono', monospace;
+  }
+  .loop-stats .ls:last-child{ border-right:none; }
+  .loop-stats .ls .k{
+    font-size:9.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    display:block;
+    margin-bottom:6px;
+  }
+  .loop-stats .ls .v{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:20px;
+    font-weight:600;
+    color:var(--ink);
+    letter-spacing:.02em;
+  }
+  .loop-stats .ls .v .u{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    color:var(--ink-3);
+    margin-left:4px;
+    letter-spacing:.16em;
+  }
+
+  /* dashed flow animation */
+  .flow-dash{
+    stroke-dasharray:6 6;
+    animation:flow 1.4s linear infinite;
+  }
+  @keyframes flow{
+    to{ stroke-dashoffset:-24; }
+  }
+
+  /* node hover */
+  .loop-node, .arch-node{
+    cursor:pointer;
+    transition:transform .15s ease;
+  }
+  .loop-node:hover, .arch-node:hover{
+    transform:translate(0, -1px);
+  }
+  .loop-node:hover rect, .arch-node:hover rect{
+    fill:#fff7ee;
+    stroke:var(--maroon);
+  }
+
+  /* sensor table */
+  .sensor-table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+    border:1px solid var(--rule-strong);
+    background:#fff;
+    font-family:'JetBrains Mono', monospace;
+  }
+  .sensor-table thead th{
+    text-align:left;
+    padding:12px 14px;
+    font-size:9.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--maroon);
+    background:#fafafa;
+    border-bottom:1px solid var(--rule-strong);
+    font-weight:500;
+  }
+  .sensor-table tbody td{
+    padding:11px 14px;
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    border-bottom:1px dashed var(--rule-strong);
+  }
+  .sensor-table tbody tr:last-child td{ border-bottom:none; }
+  .sensor-table tbody td:first-child{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:13px;
+    font-weight:500;
+    color:var(--ink);
+    letter-spacing:.04em;
+  }
+  .sensor-table tbody tr.tbd td{
+    color:var(--ink-4);
+  }
+  .sensor-table tbody tr.tbd td:first-child{
+    color:var(--ink-3);
+    letter-spacing:.22em;
+  }
+
+  /* ════════ § 06 — Data ════════ */
+  .three-col{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    column-gap:32px;
+    padding-top:48px;
+  }
+  .dc{
+    border:1px solid var(--rule-strong);
+    background:#fff;
+    padding:24px 24px 24px;
+    display:flex; flex-direction:column;
+  }
+  .dc-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--maroon);
+    margin-bottom:14px;
+  }
+  .dc-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:24px;
+    font-weight:600;
+    color:var(--ink);
+    margin:0 0 14px;
+    letter-spacing:.01em;
+    line-height:1.05;
+  }
+  .dc-body{
+    font-size:15px;
+    line-height:1.55;
+    color:var(--ink-2);
+    margin:0 0 24px;
+  }
+  .dc-viz{
+    margin-top:auto;
+    border:1px solid var(--rule);
+    background:#fafafa;
+    height:160px;
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .dc-viz svg{ width:88%; height:88%; }
+
+  .metrics{
+    margin-top:40px;
+    border:1px solid var(--rule-strong);
+    background:#fff;
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+  }
+  .metrics .m{
+    padding:18px 20px;
+    border-right:1px dashed var(--rule-strong);
+    font-family:'JetBrains Mono', monospace;
+  }
+  .metrics .m:last-child{ border-right:none; }
+  .metrics .k{
+    font-size:9.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    display:block;
+    margin-bottom:8px;
+  }
+  .metrics .v{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:26px;
+    font-weight:600;
+    color:var(--ink);
+    letter-spacing:.01em;
+  }
+  .metrics .v .u{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--ink-3);
+    margin-left:4px;
+    letter-spacing:.14em;
+  }
+
+  /* ════════ § 07 — Specs ════════ */
+  .specs-card{
+    margin-top:48px;
+    border:1px solid var(--rule-strong);
+    background:#fff;
+  }
+  .specs-head{
+    padding:18px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid var(--rule-strong);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .specs-head .id{ color:var(--ink); font-weight:500; }
+  .specs-head .doc{ color:var(--maroon); }
+  .specs-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+  }
+  .spec-col{
+    padding:24px 22px 24px;
+    border-right:1px solid var(--rule-strong);
+    min-height:380px;
+  }
+  .spec-col:last-child{ border-right:none; }
+  .spec-col h4{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--maroon);
+    margin:0 0 18px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--rule);
+    font-weight:500;
+  }
+  .spec-col ul{ list-style:none; margin:0; padding:0; }
+  .spec-col li{
+    display:flex; flex-direction:column;
+    padding:10px 0;
+    border-bottom:1px dashed var(--rule-strong);
+  }
+  .spec-col li:last-child{ border-bottom:none; }
+  .spec-col .k{
+    font-family:'JetBrains Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin-bottom:4px;
+  }
+  .spec-col .v{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:14px;
+    color:var(--ink);
+    font-weight:500;
+    letter-spacing:.02em;
+  }
+  .specs-foot{
+    padding:14px 24px;
+    border-top:1px solid var(--rule-strong);
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .specs-foot .ok{ color:var(--ink); }
+
+  /* ════════ § 08 — Roadmap ════════ */
+  .roadmap{
+    margin-top:48px;
+    position:relative;
+  }
+  .rm-progress{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--rule-strong);
+    margin-bottom:32px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .rm-progress .pct{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:28px;
+    color:var(--ink);
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  .rm-progress .pct .amb{ color:var(--maroon); }
+  .rm-bar{
+    flex:1; margin:0 32px;
+    height:4px; background:#1a1a1a12;
+    position:relative;
+  }
+  .rm-bar i{
+    position:absolute; left:0; top:0; bottom:0;
+    background:var(--maroon);
+  }
+  .rm-bar .mark{
+    position:absolute; top:-6px;
+    width:2px; height:16px; background:var(--ink);
+  }
+  .rm-bar .mark::after{
+    content:""; position:absolute; left:-3px; top:-3px;
+    width:8px; height:8px; border:1px solid var(--ink); background:#fff;
+  }
+
+  .phases{
+    display:grid;
+    grid-template-columns:repeat(8, 1fr);
+    border:1px solid var(--rule-strong);
+    background:#fff;
+  }
+  .ph{
+    padding:22px 18px 20px;
+    border-right:1px solid var(--rule-strong);
+    position:relative;
+    display:flex; flex-direction:column;
+    min-height:200px;
+  }
+  .ph:last-child{ border-right:none; }
+  .ph .num{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:36px;
+    font-weight:600;
+    color:var(--ink-4);
+    line-height:1;
+    letter-spacing:.01em;
+    margin-bottom:14px;
+  }
+  .ph .name{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:13px;
+    font-weight:500;
+    color:var(--ink);
+    line-height:1.2;
+    margin:0 0 12px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .ph .date{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin-bottom:auto;
+  }
+  .ph .status{
+    margin-top:18px;
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .ph .status::before{
+    content:""; width:8px; height:8px; background:var(--ink-4);
+  }
+  .ph.done .num{ color:var(--ink); }
+  .ph.done .status{ color:var(--maroon); }
+  .ph.done .status::before{ background:var(--maroon); }
+  .ph.active{
+    background:#fff7ee;
+    border-top:2px solid var(--amber);
+    margin-top:-2px;
+  }
+  .ph.active .num{ color:var(--amber); }
+  .ph.active .name{ color:var(--ink); }
+  .ph.active .status{ color:#a07217; }
+  .ph.active .status::before{ background:var(--amber); }
+  .ph.next .num{ color:var(--ink-2); }
+  .ph.next .status::before{ background:var(--ink-2); }
+  .ph.next .status{ color:var(--ink-2); }
+
+  /* tiny vertical tick over each phase */
+  .ph::before{
+    content:"";
+    position:absolute;
+    left:50%; top:-1px;
+    width:1px; height:12px;
+    background:var(--ink-4);
+    transform:translate(-50%,-50%);
+  }
+  .ph.done::before{ background:var(--maroon); }
+  .ph.active::before{ background:var(--amber); }
+
+  /* ════════ § 09 — CTA ════════ */
+  .cta-dark{
+    background:#1A1A1A;
+    color:#FAFAFA;
+    border-top:1px solid var(--rule-strong);
+    background-image:
+      linear-gradient(to right, #ffffff0a 1px, transparent 1px),
+      linear-gradient(to bottom, #ffffff0a 1px, transparent 1px);
+    background-size:80px 80px;
+    background-position:-1px -1px;
+  }
+  .cta-dark .sec-head{
+    background:#1A1A1A;
+    border-top-color:#ffffff1f;
+    border-bottom-color:#ffffff1f;
+  }
+  .cta-dark .sh-sec{ color:var(--amber); }
+  .cta-dark .sh-tag{ color:#FAFAFA; }
+  .cta-dark .sec-head-inner{ color:#ffffff8a; }
+  .cta-dark .sh-rule{ background:#ffffff1f; }
+  .cta-dark .sh-mid{ color:#ffffffd0; }
+  .cta-dark .sh-end{ color:#ffffff8a; }
+
+  .cta-body{
+    max-width:1440px;
+    margin:0 auto;
+    padding:88px 56px 96px;
+    display:grid;
+    grid-template-columns: 1.2fr 1fr;
+    column-gap:64px;
+    position:relative;
+  }
+  .cta-body .reg{ color:#ffffff5e; }
+  .cta-eyebrow{
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffffc4;
+    margin-bottom:24px;
+  }
+  .cta-eyebrow .pulse{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 0 3px #C8963E30;
+  }
+  .cta-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:88px;
+    line-height:.92;
+    letter-spacing:-.025em;
+    margin:0;
+    color:#FAFAFA;
+  }
+  .cta-title .period{ color:var(--amber); }
+  .cta-sub{
+    margin-top:24px;
+    max-width:480px;
+    font-size:17px;
+    line-height:1.55;
+    color:#ffffffd0;
+  }
+
+  .cta-cards{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+    align-self:start;
+    margin-top:48px;
+  }
+  .cta-card{
+    padding:30px 32px 30px;
+    display:flex; flex-direction:column;
+    color:#FAFAFA;
+    text-decoration:none;
+    position:relative;
+    background:var(--maroon);
+    transition:background .18s ease;
+    min-height:230px;
+  }
+  .cta-card.dark{
+    background:#0d0d0d;
+    border:1px solid #ffffff1f;
+  }
+  .cta-card:hover{ background:var(--maroon-ink); }
+  .cta-card.dark:hover{ background:#161616; }
+  .cc-row{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffff8a;
+    margin-bottom:24px;
+  }
+  .cc-row .num{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:14px;
+    color:#FAFAFA;
+    font-weight:500;
+  }
+  .cc-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:30px;
+    line-height:1.02;
+    letter-spacing:-.012em;
+    margin:0 0 10px;
+    color:#FAFAFA;
+  }
+  .cc-title .period{ color:var(--amber); }
+  .cc-sub{
+    font-size:14.5px;
+    line-height:1.5;
+    color:#ffffffbf;
+    margin:0 0 22px;
+    max-width:380px;
+  }
+  .cc-btn{
+    margin-top:auto;
+    align-self:flex-start;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:600;
+    padding:12px 18px;
+    display:inline-flex; align-items:center; gap:14px;
+    transition:all .15s ease;
+    cursor:pointer;
+  }
+  .cc-btn.solid{
+    background:#FAFAFA;
+    color:var(--maroon);
+    border:1px solid #FAFAFA;
+  }
+  .cc-btn.solid .arrow{ background:var(--maroon); }
+  .cc-btn.solid .arrow::after{ border-color:var(--maroon); }
+  .cta-card:hover .cc-btn.solid{ background:var(--amber); border-color:var(--amber); color:#1A1A1A; }
+  .cta-card:hover .cc-btn.solid .arrow{ background:#1A1A1A; }
+  .cta-card:hover .cc-btn.solid .arrow::after{ border-color:#1A1A1A; }
+
+  .cc-btn.outline{
+    background:transparent;
+    color:#FAFAFA;
+    border:1px solid #FAFAFA;
+  }
+  .cc-btn.outline .arrow{ background:#FAFAFA; }
+  .cc-btn.outline .arrow::after{ border-color:#FAFAFA; }
+  .cta-card.dark:hover .cc-btn.outline{ background:#FAFAFA; color:#1A1A1A; }
+  .cta-card.dark:hover .cc-btn.outline .arrow{ background:#1A1A1A; }
+  .cta-card.dark:hover .cc-btn.outline .arrow::after{ border-color:#1A1A1A; }
+
+  .cc-btn .arrow{
+    display:inline-block;
+    width:22px; height:1px;
+    position:relative;
+  }
+  .cc-btn .arrow::after{
+    content:""; position:absolute; right:0; top:-3px;
+    width:7px; height:7px;
+    border-top:1px solid currentColor;
+    border-right:1px solid currentColor;
+    transform:rotate(45deg);
+  }
+
+  /* ════════ FOOTER (shared) ════════ */
+  .site-footer{
+    background:#141414;
+    color:#ffffffa8;
+    border-top:1px solid #ffffff14;
+  }
+  .sf-top{
+    max-width:1440px;
+    margin:0 auto;
+    padding:36px 56px 28px;
+    display:grid;
+    grid-template-columns: 1fr auto auto;
+    align-items:center;
+    gap:48px;
+  }
+  .sf-brand{
+    display:flex; align-items:center; gap:12px;
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    letter-spacing:.04em;
+    font-size:14px;
+    text-transform:uppercase;
+    color:#FAFAFA;
+  }
+  .sf-brand .sf-mark{
+    width:18px; height:18px;
+    background:var(--maroon);
+    position:relative;
+    flex-shrink:0;
+  }
+  .sf-brand .sf-mark::after{
+    content:""; position:absolute; inset:4px; border:1.5px solid #141414;
+  }
+  .sf-brand .sf-mark::before{
+    content:""; position:absolute; left:50%; top:0; bottom:0;
+    width:1.5px; background:#141414; transform:translateX(-50%);
+  }
+  .sf-brand .slash{ color:#ffffff52; font-weight:400; margin:0 2px; }
+  .sf-brand .sub{ color:#ffffff7a; font-weight:400; letter-spacing:.08em; }
+  .sf-nav{
+    display:flex; gap:28px;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:500;
+  }
+  .sf-nav a{ color:#ffffffc4; text-decoration:none; transition:color .15s ease; }
+  .sf-nav a:hover{ color:#FAFAFA; }
+  .sf-social{ display:flex; gap:8px; }
+  .sf-social a{
+    width:34px; height:34px;
+    display:inline-flex; align-items:center; justify-content:center;
+    color:#ffffffc4;
+    text-decoration:none;
+    border:1px solid #ffffff1f;
+    transition:all .15s ease;
+  }
+  .sf-social a:hover{ color:#FAFAFA; border-color:#ffffff4a; background:#1f1f1f; }
+  .sf-social svg{ width:14px; height:14px; display:block; }
+  .sf-rule{
+    max-width:1440px; margin:0 auto;
+    height:1px; background:#ffffff14;
+  }
+  .sf-bot{
+    max-width:1440px;
+    margin:0 auto;
+    padding:22px 56px 28px;
+    display:grid;
+    grid-template-columns: auto 1fr auto;
+    align-items:start;
+    gap:48px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#ffffff7a;
+    line-height:1.6;
+  }
+  .sf-bot .copy{ color:#ffffffbf; }
+  .sf-bot .tm{ max-width:560px; }
+  .sf-bot .tm b{ color:#ffffffbf; font-weight:500; letter-spacing:.12em; }
+  .sf-bot .tm .disclaimer{
+    display:block; margin-top:6px;
+    color:#ffffff5a; letter-spacing:.14em;
+  }
+  .sf-bot .meta{ text-align:right; color:#ffffff5a; }
+  .sf-bot .meta .v{ color:#ffffffa8; }
+
+  /* hover detail for arch nodes */
+  .node-detail{
+    position:absolute;
+    background:#0A0A0A;
+    color:#FAFAFA;
+    padding:10px 14px;
+    border:1px solid #2a2a2a;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    pointer-events:none;
+    opacity:0;
+    transform:translateY(4px);
+    transition:opacity .15s ease, transform .15s ease;
+    z-index:5;
+    white-space:nowrap;
+  }
+  .node-detail b{ color:var(--amber); font-weight:500; }
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="nav" data-screen-label="The Rig / Header">
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>TAMU Drillbotics</span>
+        <span class="slash">/</span>
+        <span class="sub">Engineering</span>
+      </div>
+      <nav class="links">
+        <a href="Hero.html">Home</a>
+        <a href="About.html">About</a>
+        <a href="TheRig.html" class="active">The Rig</a>
+        <a href="Apply.html">Apply</a>
+        <a href="Sponsors.html">Sponsors</a>
+      </nav>
+      <div class="nav-right">
+        <span class="nav-meta"><span class="dot"></span>2026 Season · Active</span>
+        <button class="btn-ghost">Join the Team</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════ § 01 — VISUALIZER ══════════ -->
+  <section data-screen-label="01 Rig / Visualizer">
+    <div class="sec-head">
+      <div class="sec-head-inner">
+        <span class="sh-tag"><span class="sh-sec">§ 01</span> Rig</span>
+        <span class="sh-rule"></span>
+        <span class="sh-mid">RIG-02</span>
+        <span class="sh-rule"></span>
+        <span class="sh-end">ISO VIEW · INTERACTIVE</span>
+      </div>
+    </div>
+
+    <div class="vis-body">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <div>
+        <div class="viewport">
+          <div class="vp-head">
+            <span class="vp-id">VIEWPORT · ISO-01 · RIG-02</span>
+            <span class="vp-live">Interactive</span>
+          </div>
+          <div class="vp-stage">
+            <span class="vp-frame"></span>
+            <span class="vp-corner tl"></span>
+            <span class="vp-corner tr"></span>
+            <span class="vp-corner bl"></span>
+            <span class="vp-corner br"></span>
+
+            <div class="vp-iso">
+              ISO · 30° / 30°<br/>
+              <b>ORIGIN 0,0,0</b>
+            </div>
+
+            <div class="vp-axis">
+              <span class="ax"></span>X &nbsp; · &nbsp; Y &nbsp; · &nbsp; Z<br/>
+              <span style="opacity:.6">UNITS · METRES</span>
+            </div>
+
+            <div class="vp-label">
+              <div class="vp-cross" aria-hidden="true">
+                <span class="vp-cross-ring"></span>
+              </div>
+              <p class="vp-kind">3D Model</p>
+              <p class="vp-tbd">/ TBD</p>
+            </div>
+          </div>
+          <div class="vp-foot">
+            <span>Geometry · <span class="ok">/ Awaiting CAD export</span></span>
+            <span class="dots">
+              <span>Tris &nbsp;—</span>
+              <span>Verts &nbsp;—</span>
+              <span>Mat &nbsp;—</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="vp-hints">
+          <span><b>Drag</b> to rotate</span>
+          <span class="sep"></span>
+          <span><b>Scroll</b> to zoom</span>
+          <span class="sep"></span>
+          <span><b>Click</b> component for detail</span>
+          <span class="sep"></span>
+          <span>Reset · <b>R</b></span>
+        </div>
+      </div>
+
+      <!-- Rig overview panel -->
+      <aside class="rig-panel" aria-label="Rig Overview">
+        <div class="rp-head">
+          <span class="id">Rig Overview</span>
+          <span class="live">In Build</span>
+        </div>
+
+        <div class="rp-title">
+          <div class="kicker">TAMU Drillbotics /</div>
+          <div class="name">RIG-<span class="accent">02</span></div>
+        </div>
+
+        <ul class="rp-specs">
+          <li><span class="k">Height</span><span class="v">1.20 M</span></li>
+          <li><span class="k">Footprint</span><span class="v">0.60 × 0.60 M</span></li>
+          <li><span class="k">Weight</span><span class="v">85 KG</span></li>
+          <li><span class="k">Bit Type</span><span class="v">PDC · 12.5 MM</span></li>
+          <li><span class="k">Drive</span><span class="v">BLDC · DIRECT</span></li>
+          <li><span class="k">Sensors</span><span class="v">14 CH</span></li>
+          <li><span class="k">Controller</span><span class="v">STM32H7</span></li>
+          <li><span class="k">Est. Compl.</span><span class="v">Q1 / 2026</span></li>
+        </ul>
+
+        <div class="rp-phase">
+          <div class="row">
+            <span>Build Phase</span>
+            <span class="count">02 / 04</span>
+          </div>
+          <div class="rp-track">
+            <span class="done"></span><span class="active"></span><span></span><span></span>
+          </div>
+        </div>
+      </aside>
+
+      <div class="slice-no">SEC · 01 / 09 — RIG</div>
+    </div>
+  </section>
+
+  <!-- ══════════ § 03 — MECHANICAL ══════════ -->
+  <section data-screen-label="03 Mechanical">
+    <div class="sec-head">
+      <div class="sec-head-inner">
+        <span class="sh-tag"><span class="sh-sec">§ 03</span> Mechanical</span>
+        <span class="sh-rule"></span>
+        <span class="sh-mid">STRUCTURE · DRILLSTRING · HYDRAULICS</span>
+        <span class="sh-rule"></span>
+        <span class="sh-end">MECH-DOM</span>
+      </div>
+    </div>
+    <div class="sec-body">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <div class="sec-eyebrow"><span class="pulse"></span><span>Mechanical Engineering</span></div>
+      <h2 class="sec-title">Materials, design, physics<span class="period">.</span></h2>
+
+      <div class="two-col">
+        <div class="tc-left">
+          <p class="lead">The rig is a precision instrument scaled down — a 1.2-metre tower built to drill repeatable holes, instrument every reaction, and survive autonomous operation.</p>
+          <p>The frame is fabricated from <strong>8020 aluminum extrusion</strong>, T-slot profiled for rapid iteration on sensor and bracket placement. FEA-driven structural analysis sets a target deflection under 0.5 mm at peak weight-on-bit, validated against load-cell readings during dry runs.</p>
+          <p>The <strong>drillstring</strong> couples a PDC bit through a length-matched shaft to a direct-drive BLDC, with a fluid jacket carrying drilling mud to clear cuttings. Hydraulic flow is sized for an optimal jet impact factor; weight-on-bit and rotary speed are co-controlled to keep the bit operating in its target torque envelope.</p>
+          <p>Safety is structural, not bolted on. A plexiglass enclosure contains debris under failure modes, mechanical interlocks gate spin-up to a closed-and-latched door, and a hardware E-stop cuts power upstream of every motor driver.</p>
+        </div>
+
+        <div class="tc-right">
+          <div class="data-panel">
+            <div class="dp-head">
+              <span class="id">MECH-REF-01</span>
+              <span>Components</span>
+            </div>
+            <div class="dp-group">Structure</div>
+            <ul class="dp-list">
+              <li><span class="k">Frame</span><span class="v">8020 · 40 × 40</span></li>
+              <li><span class="k">Material</span><span class="v">6061-T6 AL</span></li>
+              <li><span class="k">Max Deflection</span><span class="v">0.5 MM</span></li>
+              <li><span class="k">Total Height</span><span class="v">1.20 M</span></li>
+            </ul>
+            <div class="dp-group">Drillstring</div>
+            <ul class="dp-list">
+              <li><span class="k">Bit</span><span class="v">PDC · 12.5 MM</span></li>
+              <li><span class="k">Shaft</span><span class="v">SS-316 · 8 MM</span></li>
+              <li><span class="k">Mud Flow</span><span class="v">2.4 L / MIN</span></li>
+              <li><span class="k">WOB Range</span><span class="v">5 – 35 N</span></li>
+            </ul>
+            <div class="dp-group">Safety</div>
+            <ul class="dp-list">
+              <li><span class="k">Enclosure</span><span class="v">PMMA · 8 MM</span></li>
+              <li><span class="k">Interlock</span><span class="v">DUAL CH</span></li>
+              <li><span class="k">E-Stop</span><span class="v">CAT-1</span></li>
+            </ul>
+            <div class="dp-foot">
+              <span>Reference Sheet</span>
+              <span class="ok">REV A · 05/26</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callouts">
+        <div class="co">
+          <div class="co-row">
+            <span class="id">M-01</span>
+            <span class="status">Operational</span>
+          </div>
+          <h3 class="co-title">Drillstring</h3>
+          <p class="co-sub">PDC bit, length-matched shaft, mud-jacketed coupling. Tuned for clean cuttings transport.</p>
+        </div>
+        <div class="co">
+          <div class="co-row">
+            <span class="id">M-02</span>
+            <span class="status amber">In Build</span>
+          </div>
+          <h3 class="co-title">Frame</h3>
+          <p class="co-sub">8020 aluminum tower, FEA-validated, with sensor mounts on every face.</p>
+        </div>
+        <div class="co">
+          <div class="co-row">
+            <span class="id">M-03</span>
+            <span class="status grey">In Review</span>
+          </div>
+          <h3 class="co-title">Safety</h3>
+          <p class="co-sub">Plexiglass enclosure, dual-channel interlock, hardware E-stop upstream of drivers.</p>
+        </div>
+      </div>
+
+      <div class="wire-strip">
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+        <span class="wl"><b>MECH-WF-01</b> &nbsp; · &nbsp; Structural wireframe · TBD</span>
+      </div>
+
+      <div class="slice-no">SEC · 03 / 09 — MECH</div>
+    </div>
+  </section>
+
+  <!-- ══════════ § 04 — ELECTRONICS ══════════ -->
+  <section data-screen-label="04 Electronics">
+    <div class="sec-head">
+      <div class="sec-head-inner">
+        <span class="sh-tag"><span class="sh-sec">§ 04</span> Electronics</span>
+        <span class="sh-rule"></span>
+        <span class="sh-mid">HARDWARE · SENSORS · POWER</span>
+        <span class="sh-rule"></span>
+        <span class="sh-end">EE-DOM</span>
+      </div>
+    </div>
+    <div class="sec-body">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <div class="sec-eyebrow"><span class="pulse"></span><span>Electronics Stack</span></div>
+      <h2 class="sec-title">From signal to actuator<span class="period">.</span></h2>
+
+      <div class="two-col">
+        <div class="tc-left">
+          <p class="lead">Fourteen sensor channels feed a central electronics enclosure that converts physical reality into a 1 kHz stream of state estimates — and back into commanded torque.</p>
+          <p>The <strong>sensor stack</strong> spans pressure transducers on the mud line, strain gauges and torque sensors at the bit, hall-effect encoders for RPM, optical depth measurement at the feed, and a 6-axis IMU for vibration spectroscopy. Each is selected for sampling rate, noise floor, and bus compatibility — not just on a parts-shelf basis.</p>
+          <p>Motor drivers sit on an isolated 48-volt rail with independent fuses per channel. Logic-level signals are opto-isolated before crossing into the high-current domain; every driver carries its own current sense, fed back to the controller for closed-loop torque.</p>
+          <p>The central <strong>electronics enclosure</strong> houses the STM32H7 controller, CAN transceiver, sensor breakout, and power conditioning on a 4-layer custom carrier — designed in-house, fabricated externally, hand-assembled in the lab.</p>
+        </div>
+
+        <div class="tc-right">
+          <table class="sensor-table" aria-label="Sensor Stack">
+            <thead>
+              <tr>
+                <th>Sensor</th>
+                <th>Type</th>
+                <th>I/F</th>
+                <th>Rate</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>PT-01</td><td>Press.</td><td>I2C</td><td>200 Hz</td><td>Mud Line</td></tr>
+              <tr><td>TQ-01</td><td>Torque</td><td>SPI</td><td>1 kHz</td><td>Bit Reaction</td></tr>
+              <tr><td>RPM-01</td><td>Hall</td><td>GPIO</td><td>1 kHz</td><td>Spindle</td></tr>
+              <tr><td>DPT-01</td><td>Optical</td><td>UART</td><td>500 Hz</td><td>Feed Depth</td></tr>
+              <tr class="tbd"><td>TBD</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr class="tbd"><td>TBD</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr class="tbd"><td>TBD</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr class="tbd"><td>TBD</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr class="tbd"><td>TBD</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr class="tbd"><td>TBD</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="slice-no">SEC · 04 / 09 — EE</div>
+    </div>
+  </section>
+
+  <!-- ══════════ § 05 — SOFTWARE ══════════ -->
+  <section data-screen-label="05 Software">
+    <div class="sec-head">
+      <div class="sec-head-inner">
+        <span class="sh-tag"><span class="sh-sec">§ 05</span> Software</span>
+        <span class="sh-rule"></span>
+        <span class="sh-mid">FIRMWARE · CONTROL · INTEGRATION</span>
+        <span class="sh-rule"></span>
+        <span class="sh-end">SW-DOM</span>
+      </div>
+    </div>
+    <div class="sec-body">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <div class="sec-eyebrow"><span class="pulse"></span><span>Software Stack &amp; Control Loop</span></div>
+      <h2 class="sec-title">Code that controls steel<span class="period">.</span></h2>
+
+      <div class="sw-grid">
+        <div class="tc-left">
+          <p class="lead">A real-time control loop closes around every revolution of the bit — embedded C on bare-metal STM32, deterministic to the microsecond.</p>
+          <p>The firmware layer is built on FreeRTOS with priority-pinned tasks for sensor acquisition, control compute, and CAN dispatch. <strong>PID controllers</strong> regulate three coupled axes: drill RPM, feed rate, and weight-on-bit — with cross-axis decoupling tuned during dry runs.</p>
+          <p>An <strong>ML interfacing layer</strong> pipes a downsampled sensor frame over high-speed serial to a co-processor running inference, then receives gain-trim and setpoint deltas back. The model never has direct authority — control authority always sits with the deterministic PID core, with the ML layer recommending, not commanding.</p>
+          <p>Telemetry is broadcast over CAN to a host laptop running a Python dashboard; logs are written to a removable SD card at 1 kHz for offline analysis and model training.</p>
+        </div>
+
+        <div>
+          <div class="loop-card">
+            <div class="loop-head">
+              <span class="id">CTRL-LOOP · CL-001</span>
+              <span class="live">Active · 1 kHz</span>
+            </div>
+
+            <svg class="loop-svg" viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="loop-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                  <path d="M0,0 L10,5 L0,10 Z" fill="#500000"/>
+                </marker>
+                <pattern id="loop-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M40 0H0V40" fill="none" stroke="#1a1a1a09" stroke-width="1"/>
+                </pattern>
+              </defs>
+
+              <rect width="640" height="420" fill="url(#loop-grid)"/>
+
+              <!-- center label -->
+              <text x="320" y="200" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#6b6b6b" letter-spacing="3">CONTROL · LOOP</text>
+              <text x="320" y="220" text-anchor="middle" font-family="Chakra Petch" font-size="20" font-weight="600" fill="#1A1A1A">1 kHz</text>
+              <text x="320" y="240" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#a5a5a5" letter-spacing="3">CLOSED · DETERMINISTIC</text>
+
+              <!-- flow arcs (curved arrows between nodes positioned around an oblong) -->
+              <!-- 6 nodes positioned around an ellipse -->
+              <!-- SENSORS top-left -->
+              <g class="loop-node" data-detail="SENSORS · 14ch acquisition @ 1–10 kHz">
+                <rect x="50" y="40" width="160" height="60" fill="#fff" stroke="#1A1A1A" stroke-width="1.5"/>
+                <text x="60" y="58" font-family="JetBrains Mono" font-size="9" fill="#500000" letter-spacing="2">STAGE · 01</text>
+                <text x="60" y="82" font-family="Chakra Petch" font-size="16" font-weight="600" fill="#1A1A1A">SENSORS</text>
+                <text x="60" y="96" font-family="JetBrains Mono" font-size="8" fill="#6b6b6b" letter-spacing="2">14 CH · ACQ</text>
+              </g>
+
+              <!-- SIGNAL CONDITIONING top -->
+              <g class="loop-node" data-detail="SIGNAL CONDITIONING · filtering, scaling, fault detection">
+                <rect x="240" y="20" width="160" height="60" fill="#fff" stroke="#1A1A1A" stroke-width="1.5"/>
+                <text x="250" y="38" font-family="JetBrains Mono" font-size="9" fill="#500000" letter-spacing="2">STAGE · 02</text>
+                <text x="250" y="62" font-family="Chakra Petch" font-size="16" font-weight="600" fill="#1A1A1A">CONDITION</text>
+                <text x="250" y="76" font-family="JetBrains Mono" font-size="8" fill="#6b6b6b" letter-spacing="2">FILTER · SCALE</text>
+              </g>
+
+              <!-- PID top-right -->
+              <g class="loop-node" data-detail="PID CONTROLLER · 3 coupled axes (RPM / feed / WOB)">
+                <rect x="430" y="40" width="160" height="60" fill="#fff" stroke="#1A1A1A" stroke-width="1.5"/>
+                <text x="440" y="58" font-family="JetBrains Mono" font-size="9" fill="#500000" letter-spacing="2">STAGE · 03</text>
+                <text x="440" y="82" font-family="Chakra Petch" font-size="16" font-weight="600" fill="#1A1A1A">PID CORE</text>
+                <text x="440" y="96" font-family="JetBrains Mono" font-size="8" fill="#6b6b6b" letter-spacing="2">3-AXIS · COUPLED</text>
+              </g>
+
+              <!-- ML INFERENCE right -->
+              <g class="loop-node" data-detail="ML INFERENCE · advisory layer, gain-trim only">
+                <rect x="430" y="320" width="160" height="60" fill="#fff" stroke="#C8963E" stroke-width="1.5"/>
+                <text x="440" y="338" font-family="JetBrains Mono" font-size="9" fill="#a07217" letter-spacing="2">STAGE · 04</text>
+                <text x="440" y="362" font-family="Chakra Petch" font-size="16" font-weight="600" fill="#1A1A1A">ML INFER</text>
+                <text x="440" y="376" font-family="JetBrains Mono" font-size="8" fill="#6b6b6b" letter-spacing="2">ADVISORY · TRIM</text>
+              </g>
+
+              <!-- ACTUATORS bottom-right -->
+              <g class="loop-node" data-detail="ACTUATOR COMMANDS · CAN dispatch to drivers">
+                <rect x="240" y="340" width="160" height="60" fill="#fff" stroke="#1A1A1A" stroke-width="1.5"/>
+                <text x="250" y="358" font-family="JetBrains Mono" font-size="9" fill="#500000" letter-spacing="2">STAGE · 05</text>
+                <text x="250" y="382" font-family="Chakra Petch" font-size="16" font-weight="600" fill="#1A1A1A">COMMANDS</text>
+                <text x="250" y="396" font-family="JetBrains Mono" font-size="8" fill="#6b6b6b" letter-spacing="2">CAN · DISPATCH</text>
+              </g>
+
+              <!-- DRILL bottom-left -->
+              <g class="loop-node" data-detail="DRILL · physical world response (RPM, torque, depth)">
+                <rect x="50" y="320" width="160" height="60" fill="#fff" stroke="#500000" stroke-width="2"/>
+                <text x="60" y="338" font-family="JetBrains Mono" font-size="9" fill="#500000" letter-spacing="2">STAGE · 06</text>
+                <text x="60" y="362" font-family="Chakra Petch" font-size="16" font-weight="600" fill="#1A1A1A">DRILL</text>
+                <text x="60" y="376" font-family="JetBrains Mono" font-size="8" fill="#6b6b6b" letter-spacing="2">PHYSICAL · WORLD</text>
+              </g>
+
+              <!-- Connection arrows around the loop -->
+              <path class="flow-dash" d="M210,70 L240,50" fill="none" stroke="#500000" stroke-width="1.5" marker-end="url(#loop-arrow)"/>
+              <path class="flow-dash" d="M400,50 L430,70" fill="none" stroke="#500000" stroke-width="1.5" marker-end="url(#loop-arrow)"/>
+              <path class="flow-dash" d="M510,100 L510,320" fill="none" stroke="#500000" stroke-width="1.5" marker-end="url(#loop-arrow)"/>
+              <path class="flow-dash" d="M430,360 L400,370" fill="none" stroke="#500000" stroke-width="1.5" marker-end="url(#loop-arrow)"/>
+              <path class="flow-dash" d="M240,370 L210,370" fill="none" stroke="#500000" stroke-width="1.5" marker-end="url(#loop-arrow)"/>
+              <path class="flow-dash" d="M130,320 L130,100" fill="none" stroke="#500000" stroke-width="1.5" marker-end="url(#loop-arrow)"/>
+
+              <!-- ML feedback to PID (advisory) -->
+              <path d="M430,340 C 380,280 380,180 430,100" fill="none" stroke="#C8963E" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#loop-arrow)" style="filter:none"/>
+              <text x="350" y="220" font-family="JetBrains Mono" font-size="9" fill="#a07217" letter-spacing="2">ADVISORY</text>
+
+              <!-- annotations -->
+              <text x="20" y="412" font-family="JetBrains Mono" font-size="9" fill="#a5a5a5" letter-spacing="2">DWG · CL-001</text>
+              <text x="540" y="412" font-family="JetBrains Mono" font-size="9" fill="#a5a5a5" letter-spacing="2">REV A</text>
+            </svg>
+
+            <div class="loop-stats">
+              <div class="ls">
+                <span class="k">Sampling</span>
+                <span class="v">10<span class="u">kHz</span></span>
+              </div>
+              <div class="ls">
+                <span class="k">Control</span>
+                <span class="v">1<span class="u">kHz</span></span>
+              </div>
+              <div class="ls">
+                <span class="k">Latency</span>
+                <span class="v">&lt; 800<span class="u">µs</span></span>
+              </div>
+              <div class="ls">
+                <span class="k">Jitter</span>
+                <span class="v">12<span class="u">µs</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slice-no">SEC · 05 / 09 — SW</div>
+    </div>
+  </section>
+
+  <!-- ══════════ § 06 — DATA ══════════ -->
+  <section data-screen-label="06 Data">
+    <div class="sec-head">
+      <div class="sec-head-inner">
+        <span class="sh-tag"><span class="sh-sec">§ 06</span> Data</span>
+        <span class="sh-rule"></span>
+        <span class="sh-mid">ML · INFERENCE · SENSOR FUSION</span>
+        <span class="sh-rule"></span>
+        <span class="sh-end">DATA-DOM</span>
+      </div>
+    </div>
+    <div class="sec-body">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <div class="sec-eyebrow"><span class="pulse"></span><span>Data &amp; Machine Learning</span></div>
+      <h2 class="sec-title">Sensor fusion meets machine learning<span class="period">.</span></h2>
+
+      <div class="three-col">
+        <div class="dc">
+          <div class="dc-tag">D-01 · Sensor Fusion</div>
+          <h3 class="dc-title">Unified state from messy reality.</h3>
+          <p class="dc-body">A Kalman-style estimator combines pressure, torque, RPM, depth, and IMU streams into a single bit-state vector — denoised, time-aligned, and physically-constrained. The fused estimate, not raw sensors, is what the controller and ML layer see.</p>
+          <div class="dc-viz" aria-label="Kalman conceptual diagram">
+            <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+              <g stroke="#1a1a1a26" fill="none" stroke-width="1">
+                <path d="M0 80 Q 40 30 80 75 T 160 70 T 240 80 T 320 75"/>
+                <path d="M0 95 Q 40 60 80 90 T 160 85 T 240 95 T 320 90" stroke="#C8963E55"/>
+                <path d="M0 65 Q 40 100 80 60 T 160 55 T 240 70 T 320 60" stroke="#1a1a1a44"/>
+              </g>
+              <path d="M0 80 Q 40 50 80 78 T 160 72 T 240 82 T 320 78" stroke="#500000" stroke-width="1.8" fill="none"/>
+              <g font-family="JetBrains Mono" font-size="8" fill="#6b6b6b" letter-spacing="2">
+                <text x="6" y="14">RAW · STREAMS</text>
+                <text x="220" y="130">FUSED · ESTIMATE</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="dc">
+          <div class="dc-tag">D-02 · Model Training</div>
+          <h3 class="dc-title">Offline, dataset-driven, reproducible.</h3>
+          <p class="dc-body">Recorded drill runs form a versioned dataset; models are trained in PyTorch with deterministic seeds and checkpointed to a registry. Each release ships with a model card, hyperparameter manifest, and evaluation harness.</p>
+          <div class="dc-viz" aria-label="Training pipeline diagram">
+            <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+              <g font-family="JetBrains Mono" font-size="7" fill="#6b6b6b" letter-spacing="2">
+                <rect x="14" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+                <text x="20" y="74">RUNS · CSV</text>
+                <rect x="100" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+                <text x="108" y="74">TRAIN · PT</text>
+                <rect x="186" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+                <text x="192" y="74">EVAL · CV</text>
+                <rect x="252" y="50" width="56" height="40" fill="#fff" stroke="#500000" stroke-width="1.5"/>
+                <text x="258" y="74" fill="#500000">CKPT</text>
+              </g>
+              <g stroke="#500000" stroke-width="1.2" fill="none">
+                <path d="M70 70 L100 70"/>
+                <path d="M156 70 L186 70"/>
+                <path d="M242 70 L252 70"/>
+              </g>
+              <g font-family="JetBrains Mono" font-size="8" fill="#a07217" letter-spacing="2">
+                <text x="6" y="14">PIPELINE · TR-001</text>
+                <text x="240" y="130">REGISTRY</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="dc">
+          <div class="dc-tag">D-03 · Real-Time Inference</div>
+          <h3 class="dc-title">On-rig, low-latency, advisory.</h3>
+          <p class="dc-body">Quantized models run on a dedicated CUDA-accelerated edge module beside the controller. The inference pipeline is hard-budgeted: drop a frame, miss a deadline, fall through to PID-only — never block the loop.</p>
+          <div class="dc-viz" aria-label="Inference pipeline diagram">
+            <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+              <g font-family="JetBrains Mono" font-size="7" fill="#6b6b6b" letter-spacing="2">
+                <rect x="14" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+                <text x="20" y="74">FRAME · IN</text>
+                <rect x="100" y="50" width="56" height="40" fill="#fff" stroke="#C8963E" stroke-width="1.5"/>
+                <text x="108" y="74" fill="#a07217">CUDA · INF</text>
+                <rect x="186" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+                <text x="194" y="74">TRIM · OUT</text>
+                <rect x="252" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+                <text x="262" y="74">PID</text>
+              </g>
+              <g stroke="#500000" stroke-width="1.2" fill="none">
+                <path d="M70 70 L100 70"/>
+                <path d="M156 70 L186 70"/>
+                <path d="M242 70 L252 70"/>
+              </g>
+              <path d="M70 110 L308 110" stroke="#1a1a1a44" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+              <g font-family="JetBrains Mono" font-size="8" fill="#a07217" letter-spacing="2">
+                <text x="6" y="14">PIPELINE · IN-001</text>
+                <text x="200" y="130">BUDGET · &lt; 800µs</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="m"><span class="k">Model Accuracy</span><span class="v">94.2<span class="u">%</span></span></div>
+        <div class="m"><span class="k">Inference Latency</span><span class="v">612<span class="u">µs</span></span></div>
+        <div class="m"><span class="k">Throughput</span><span class="v">1.4<span class="u">TF</span></span></div>
+        <div class="m"><span class="k">Dataset Hours</span><span class="v">218<span class="u">hr</span></span></div>
+        <div class="m"><span class="k">Param Count</span><span class="v">2.1<span class="u">M</span></span></div>
+      </div>
+
+      <div class="slice-no">SEC · 06 / 09 — DATA</div>
+    </div>
+  </section>
+
+  <!-- ══════════ § 08 — ROADMAP ══════════ -->
+  <section data-screen-label="08 Roadmap">
+    <div class="sec-head">
+      <div class="sec-head-inner">
+        <span class="sh-tag"><span class="sh-sec">§ 08</span> Roadmap</span>
+        <span class="sh-rule"></span>
+        <span class="sh-mid">BUILD TIMELINE · 2025–26 CYCLE</span>
+        <span class="sh-rule"></span>
+        <span class="sh-end">8 PHASES</span>
+      </div>
+    </div>
+    <div class="sec-body">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <div class="sec-eyebrow"><span class="pulse"></span><span>2025–26 Build Cycle</span></div>
+      <h2 class="sec-title">What&rsquo;s next<span class="period">.</span></h2>
+
+      <div class="roadmap">
+        <div class="rm-progress">
+          <span class="pct"><span class="amb">34</span> %</span>
+          <span class="rm-bar">
+            <i style="width:34%"></i>
+            <span class="mark" style="left:34%"></span>
+          </span>
+          <span>Cycle Completion · Wk 14 / 32</span>
+        </div>
+
+        <div class="phases">
+          <div class="ph done">
+            <div class="num">01</div>
+            <h4 class="name">Structural Assembly</h4>
+            <div class="date">Sep · 2025</div>
+            <div class="status">Complete</div>
+          </div>
+          <div class="ph done">
+            <div class="num">02</div>
+            <h4 class="name">Hoist / Elevator</h4>
+            <div class="date">Oct · 2025</div>
+            <div class="status">Complete</div>
+          </div>
+          <div class="ph active">
+            <div class="num">03</div>
+            <h4 class="name">Drivetrain Bring-up</h4>
+            <div class="date">Nov · 2025 – Jan · 2026</div>
+            <div class="status">In Progress</div>
+          </div>
+          <div class="ph next">
+            <div class="num">04</div>
+            <h4 class="name">Sensor Array Install</h4>
+            <div class="date">Feb · 2026</div>
+            <div class="status">Next</div>
+          </div>
+          <div class="ph">
+            <div class="num">05</div>
+            <h4 class="name">Control S/W Integration</h4>
+            <div class="date">Mar · 2026</div>
+            <div class="status">Planned</div>
+          </div>
+          <div class="ph">
+            <div class="num">06</div>
+            <h4 class="name">ML Pipeline Deploy</h4>
+            <div class="date">Apr · 2026</div>
+            <div class="status">Planned</div>
+          </div>
+          <div class="ph">
+            <div class="num">07</div>
+            <h4 class="name">Autonomous Testing</h4>
+            <div class="date">May · 2026</div>
+            <div class="status">Planned</div>
+          </div>
+          <div class="ph">
+            <div class="num">08</div>
+            <h4 class="name">Competition Readiness</h4>
+            <div class="date">Jun · 2026</div>
+            <div class="status">Planned</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slice-no">SEC · 08 / 09 — ROAD</div>
+    </div>
+  </section>
+
+  <!-- ══════════ § 09 — CTA ══════════ -->
+  <section class="cta-dark" data-screen-label="09 CTA">
+    <div class="sec-head">
+      <div class="sec-head-inner">
+        <span class="sh-tag"><span class="sh-sec">§ 09</span> CTA</span>
+        <span class="sh-rule"></span>
+        <span class="sh-mid">JOIN · OR · BACK · THE · WORK</span>
+        <span class="sh-rule"></span>
+        <span class="sh-end">2026 Season</span>
+      </div>
+    </div>
+
+    <div class="cta-body">
+      <span class="reg tl"></span>
+      <span class="reg tr"></span>
+      <span class="reg bl"></span>
+      <span class="reg br"></span>
+
+      <div>
+        <div class="cta-eyebrow"><span class="pulse"></span><span>You&rsquo;ve seen the spec sheet</span></div>
+        <h2 class="cta-title">Now build it<br/>with us<span class="period">.</span></h2>
+        <p class="cta-sub">If the depth here resonates, there are two ways to move from spectator to participant. Pick the one that fits.</p>
+      </div>
+
+      <div class="cta-cards">
+        <a class="cta-card" href="Apply.html">
+          <div class="cc-row"><span class="num">01</span><span>The Team</span></div>
+          <h3 class="cc-title">Want to build this<span class="period">?</span></h3>
+          <p class="cc-sub">Open roles across mechanical, electrical, software, and ML. Find where you fit.</p>
+          <span class="cc-btn solid">Apply Now <span class="arrow"></span></span>
+        </a>
+
+        <a class="cta-card dark" href="Sponsors.html">
+          <div class="cc-row"><span class="num">02</span><span>The Partners</span></div>
+          <h3 class="cc-title">Support the work<span class="period">.</span></h3>
+          <p class="cc-sub">Sponsor a year of engineering, R&amp;D, and student development.</p>
+          <span class="cc-btn outline">Become a Sponsor <span class="arrow"></span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="site-footer" data-screen-label="Footer">
+    <div class="sf-top">
+      <div class="sf-brand">
+        <span class="sf-mark" aria-hidden="true"></span>
+        <span>TAMU Drillbotics</span>
+        <span class="slash">/</span>
+        <span class="sub">Engineering</span>
+      </div>
+      <nav class="sf-nav" aria-label="Footer">
+        <a href="Hero.html">Home</a>
+        <a href="About.html">About</a>
+        <a href="TheRig.html">The Rig</a>
+        <a href="Apply.html">Apply</a>
+        <a href="Sponsors.html">Sponsors</a>
+      </nav>
+      <div class="sf-social">
+        <a href="#" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5.001 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-1 1.83-2.05 3.76-2.05 4.02 0 4.76 2.65 4.76 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.86V21h-3.99V9z"/>
+          </svg>
+        </a>
+        <a href="#" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="4"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="sf-rule"></div>
+
+    <div class="sf-bot">
+      <span class="copy">© 2025 TAMU Drillbotics</span>
+      <span class="tm">
+        <b>Drillbotics®</b> is a registered trademark of Rig Operations, LLC.
+        <span class="disclaimer">[ Texas A&amp;M University trademark disclaimer · TBD ]</span>
+      </span>
+      <span class="meta">
+        College Station · TX &nbsp;·&nbsp; <span class="v">v0.6 / 2026</span>
+      </span>
+    </div>
+  </footer>
+
+<script>
+  // Lightweight tooltip for arch + loop nodes
+  (function(){
+    const tip = document.createElement('div');
+    tip.className = 'node-detail';
+    document.body.appendChild(tip);
+
+    function bind(selector){
+      document.querySelectorAll(selector).forEach(n=>{
+        n.addEventListener('mouseenter', (e)=>{
+          const t = n.getAttribute('data-detail');
+          if(!t) return;
+          tip.innerHTML = t.replace(/·/g,'<b>·</b>');
+          tip.style.opacity = '1';
+          tip.style.transform = 'translateY(0)';
+        });
+        n.addEventListener('mousemove', (e)=>{
+          tip.style.left = (e.clientX + 14) + 'px';
+          tip.style.top  = (e.clientY + 14 + window.scrollY) + 'px';
+        });
+        n.addEventListener('mouseleave', ()=>{
+          tip.style.opacity = '0';
+          tip.style.transform = 'translateY(4px)';
+        });
+      });
+    }
+    bind('.arch-node');
+    bind('.loop-node');
+  })();
+</script>
+</body>
+</html>

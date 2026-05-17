@@ -1,0 +1,1949 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>TAMU Drillbotics — About</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAFAFA;
+    --ink:#1A1A1A;
+    --ink-2:#3a3a3a;
+    --ink-3:#6b6b6b;
+    --ink-4:#a5a5a5;
+    --rule:#1a1a1a14;
+    --rule-strong:#1a1a1a26;
+    --maroon:#500000;
+    --maroon-ink:#3a0000;
+    --amber:#C8963E;
+    --grid:#1a1a1a09;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);}
+  body{
+    font-family:'Barlow', system-ui, sans-serif;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    min-height:100vh;
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size:80px 80px;
+    background-position:-1px -1px;
+  }
+
+  /* ────────── HEADER (mirrors Hero) ────────── */
+  header.nav{
+    border-bottom:1px solid var(--rule-strong);
+    background:rgba(250,250,250,.85);
+    backdrop-filter:blur(6px);
+  }
+  .nav-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:18px 56px;
+    display:flex; align-items:center; gap:48px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    letter-spacing:.04em;
+    font-size:14px;
+    text-transform:uppercase;
+  }
+  .brand-mark{
+    width:22px; height:22px;
+    background:var(--maroon);
+    position:relative;
+    flex-shrink:0;
+  }
+  .brand-mark::after{
+    content:"";
+    position:absolute; inset:5px;
+    border:1.5px solid #FAFAFA;
+  }
+  .brand-mark::before{
+    content:"";
+    position:absolute; left:50%; top:0; bottom:0;
+    width:1.5px; background:#FAFAFA; transform:translateX(-50%);
+  }
+  .brand .slash{ color:var(--ink-4); font-weight:400; margin:0 2px; }
+  .brand .sub{ color:var(--ink-3); font-weight:400; letter-spacing:.08em; }
+
+  nav.links{
+    display:flex; gap:32px;
+    margin-left:24px;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:500;
+  }
+  nav.links a{
+    color:var(--ink-2);
+    text-decoration:none;
+    position:relative;
+    padding:6px 0;
+  }
+  nav.links a:hover{ color:var(--maroon); }
+  nav.links a.active{ color:var(--ink); }
+  nav.links a.active::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:-19px;
+    height:2px; background:var(--maroon);
+  }
+
+  .nav-right{
+    margin-left:auto;
+    display:flex; align-items:center; gap:24px;
+  }
+  .nav-meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--ink-3);
+    letter-spacing:.04em;
+  }
+  .nav-meta .dot{
+    display:inline-block;
+    width:6px; height:6px; border-radius:50%;
+    background:var(--amber);
+    margin-right:6px;
+    transform:translateY(-1px);
+  }
+  .btn-ghost{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:500;
+    padding:10px 18px;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    background:transparent;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .btn-ghost:hover{ background:var(--ink); color:var(--bg); }
+
+  /* registration marks */
+  .reg{
+    position:absolute;
+    width:14px; height:14px;
+    color:var(--ink-4);
+  }
+  .reg::before, .reg::after{
+    content:""; position:absolute; background:currentColor;
+  }
+  .reg::before{ left:0; right:0; top:50%; height:1px; }
+  .reg::after{ top:0; bottom:0; left:50%; width:1px; }
+  .reg.tl{ left:42px; top:42px; }
+  .reg.tr{ right:42px; top:42px; }
+  .reg.bl{ left:42px; bottom:42px; }
+  .reg.br{ right:42px; bottom:42px; }
+
+  /* ────────── SECTION HEADER BAR ────────── */
+  .sec-head{
+    border-bottom:1px solid var(--rule-strong);
+    background:rgba(250,250,250,.85);
+  }
+  .sh-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:14px 56px;
+    display:flex; align-items:center; gap:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .sh-tag{
+    display:inline-flex; align-items:baseline; gap:10px;
+    color:var(--ink);
+    font-weight:500;
+  }
+  .sh-sec{ color:var(--maroon); font-weight:500; }
+  .sh-rule{ flex:1; height:1px; background:var(--rule-strong); }
+  .sh-mid{ color:var(--ink-2); }
+  .sh-end{ color:var(--ink-4); }
+
+  /* ────────── ABOUT TOP ────────── */
+  main.about{
+    max-width:1440px;
+    margin:0 auto;
+    padding:64px 56px 96px;
+    position:relative;
+  }
+
+  /* Top intro band — page title, anchor list */
+  .about-top{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap:64px;
+    align-items:end;
+    padding-bottom:40px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .about-eyebrow{
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin-bottom:24px;
+  }
+  .about-eyebrow .pulse{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--maroon);
+    box-shadow:0 0 0 3px #50000020;
+  }
+  .about-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:96px;
+    line-height:.9;
+    letter-spacing:-.025em;
+    margin:0;
+    color:var(--ink);
+  }
+  .about-title .period{ color:var(--maroon); }
+
+  /* anchor jump list, right side */
+  .toc{
+    margin:0 0 6px auto;
+    max-width:420px;
+    list-style:none;
+    padding:0;
+  }
+  .toc li{
+    display:flex; align-items:baseline; justify-content:space-between;
+    gap:14px;
+    padding:10px 0;
+    border-top:1px dashed var(--rule-strong);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .toc li:last-child{ border-bottom:1px dashed var(--rule-strong); }
+  .toc a{
+    color:var(--ink);
+    text-decoration:none;
+    font-weight:500;
+    letter-spacing:.14em;
+  }
+  .toc a:hover{ color:var(--maroon); }
+  .toc .idx{ color:var(--ink-4); }
+  .toc li.is-current a{ color:var(--maroon); }
+  .toc li.is-current::after{ display:none; }
+
+  /* ────────── TWO-COLUMN BODY ────────── */
+  .two-col{
+    margin-top:64px;
+    display:grid;
+    grid-template-columns: 1fr 1px 1fr;
+    column-gap:0;
+    position:relative;
+  }
+  .col{
+    min-width:0;
+    padding:0 48px;
+  }
+  .col:first-child{ padding-left:0; }
+  .col:last-child{ padding-right:0; }
+  /* center divider */
+  .col-divider{
+    background:var(--rule-strong);
+    position:relative;
+  }
+  .col-divider::before,
+  .col-divider::after{
+    content:"";
+    position:absolute;
+    left:50%; transform:translateX(-50%);
+    width:9px; height:9px;
+    color:var(--ink-4);
+  }
+  .col-divider::before{
+    top:0;
+    background:
+      linear-gradient(var(--ink-4),var(--ink-4)) center/100% 1px no-repeat,
+      linear-gradient(var(--ink-4),var(--ink-4)) center/1px 100% no-repeat;
+    background-color:var(--bg);
+  }
+  .col-divider::after{
+    bottom:0;
+    background:
+      linear-gradient(var(--ink-4),var(--ink-4)) center/100% 1px no-repeat,
+      linear-gradient(var(--ink-4),var(--ink-4)) center/1px 100% no-repeat;
+    background-color:var(--bg);
+  }
+
+  /* column header */
+  .c-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    gap:14px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--rule-strong);
+    margin-bottom:28px;
+  }
+  .c-id{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink);
+    font-weight:500;
+  }
+  .c-id .num{ color:var(--maroon); }
+  .c-id .slash{ color:var(--ink-4); margin:0 6px; }
+  .c-meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+  }
+
+  .c-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:44px;
+    line-height:1.02;
+    letter-spacing:-.012em;
+    margin:0 0 14px;
+    color:var(--ink);
+  }
+  .c-title .period{ color:var(--maroon); }
+  .c-deck{
+    font-size:18px;
+    line-height:1.55;
+    color:var(--ink-2);
+    margin:0 0 28px;
+    font-weight:400;
+  }
+  .c-deck strong{ color:var(--ink); font-weight:600; }
+
+  /* body paragraphs */
+  .c-body p{
+    font-size:15.5px;
+    line-height:1.65;
+    color:var(--ink-2);
+    margin:0 0 16px;
+  }
+  .c-body p em{
+    font-style:normal;
+    color:var(--ink);
+    font-weight:600;
+    box-shadow:inset 0 -2px 0 #50000026;
+    padding-bottom:1px;
+  }
+
+  /* keyline data rows — used in both columns */
+  .keyline{
+    margin-top:36px;
+    padding-top:18px;
+    border-top:1px solid var(--rule-strong);
+  }
+  .keyline-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+    margin-bottom:8px;
+  }
+  .keyline ul{ list-style:none; margin:0; padding:0; }
+  .keyline li{
+    display:grid;
+    grid-template-columns: 22px 1fr auto;
+    align-items:baseline;
+    gap:14px;
+    padding:13px 0;
+    border-bottom:1px dashed var(--rule-strong);
+  }
+  .keyline .n{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.16em;
+    color:var(--ink-4);
+  }
+  .keyline .k{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:500;
+    font-size:15px;
+    color:var(--ink);
+    letter-spacing:.01em;
+  }
+  .keyline .k small{
+    display:block;
+    font-family:'Barlow', sans-serif;
+    font-weight:400;
+    font-size:13px;
+    color:var(--ink-3);
+    margin-top:3px;
+    letter-spacing:0;
+    text-transform:none;
+  }
+  .keyline .v{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    text-align:right;
+  }
+
+  /* Competition timeline placeholder */
+  .tl-placeholder{
+    margin-top:36px;
+    border:1px solid var(--rule-strong);
+    background:#fff;
+    padding:22px 22px 20px;
+    position:relative;
+  }
+  .tl-row{
+    display:flex; align-items:baseline; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin-bottom:14px;
+  }
+  .tl-row .live{
+    display:inline-flex; align-items:center; gap:6px;
+    color:var(--ink-2);
+  }
+  .tl-row .live::before{
+    content:""; width:6px; height:6px; border-radius:50%;
+    background:var(--amber);
+  }
+  .tl-row .live.posture{ color:var(--maroon); }
+  .tl-row .live.posture::before{ background:var(--maroon); }
+  .tl-track{
+    height:6px;
+    background:#1a1a1a10;
+    position:relative;
+    background-image:
+      repeating-linear-gradient(to right,
+        transparent 0,
+        transparent 7px,
+        #1a1a1a20 7px,
+        #1a1a1a20 8px);
+  }
+  .tl-track .head{
+    position:absolute; left:0; top:-4px; bottom:-4px;
+    width:2px; background:var(--maroon);
+  }
+  .tl-foot{
+    margin-top:12px;
+    display:flex; align-items:baseline; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+  }
+  .tl-foot .label{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink);
+    letter-spacing:.04em;
+  }
+  .tl-foot .label .dim{ color:var(--ink-3); font-weight:400; margin-left:6px; }
+  .tl-note{
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1px dashed var(--rule-strong);
+    font-size:13.5px;
+    line-height:1.55;
+    color:var(--ink-3);
+  }
+
+  /* watermark slice number */
+  /* inline learn-more link (matches Hero's “Become a sponsor” treatment) */
+  .inline-link{
+    display:inline-flex; align-items:center; gap:10px;
+    margin-top:6px;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:500;
+    color:var(--ink);
+    text-decoration:none;
+    border-bottom:1px solid var(--rule-strong);
+    padding-bottom:4px;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .inline-link:hover{ color:var(--maroon); border-color:var(--maroon); }
+  .inline-link .arrow{
+    display:inline-block; width:14px; height:1px; background:currentColor; position:relative;
+  }
+  .inline-link .arrow::after{
+    content:""; position:absolute; right:0; top:-3px;
+    width:6px; height:6px;
+    border-top:1px solid currentColor; border-right:1px solid currentColor;
+    transform:rotate(45deg);
+  }
+  /* ───── tweak toggles ───── */
+  body.tw-no-grid{ background-image:none; }
+  body.tw-no-reg .reg{ display:none; }
+  body.tw-no-toc .toc{ display:none; }
+  body.tw-no-toc .about-top{ grid-template-columns:1fr; }
+  body.tw-no-spec .keyline{ display:none; }
+  body.tw-no-timeline .tl-placeholder{ display:none; }
+  body.tw-divider-dashed .col-divider{ background:transparent; background-image:linear-gradient(to bottom, var(--rule-strong) 50%, transparent 0); background-size:1px 8px; background-repeat:repeat-y; }
+  body.tw-divider-none .col-divider{ background:transparent; }
+  body.tw-divider-none .col-divider::before, body.tw-divider-none .col-divider::after{ display:none; }
+  /* ────────── TEAM EXPLORER ────────── */
+  .team-explorer{
+    max-width:1440px;
+    margin:0 auto;
+    padding:96px 56px 0;
+    position:relative;
+  }
+
+  /* Section bar */
+  .te-sec-bar{
+    display:flex; align-items:center; gap:24px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding-bottom:14px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .te-sec-bar .te-left{ color:var(--ink); font-weight:500; }
+  .te-sec-bar .te-left .num{ color:var(--maroon); }
+  .te-sec-bar .te-center{ color:var(--ink-2); }
+  .te-sec-bar .te-right{ margin-left:auto; color:var(--ink-4); }
+  .te-sec-bar .dot-sep{ color:var(--ink-4); margin:0 6px; }
+
+  /* Two-column intro */
+  .te-intro{
+    display:grid;
+    grid-template-columns: 40% 60%;
+    column-gap:64px;
+    align-items:start;
+    padding:48px 0 64px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .te-intro-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin-bottom:18px;
+  }
+  .te-intro-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:56px;
+    line-height:1.0;
+    letter-spacing:-.018em;
+    margin:0;
+    color:var(--ink);
+  }
+  .te-intro-title .period{ color:var(--amber); }
+  .te-intro-copy{
+    font-size:18px;
+    line-height:1.6;
+    color:var(--ink-2);
+    margin:6px 0 0;
+    max-width:560px;
+  }
+  .te-intro-copy code{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.85em;
+    color:var(--maroon);
+    background:#5000000d;
+    padding:1px 6px;
+    border-radius:2px;
+    letter-spacing:.02em;
+  }
+
+  /* Legend panel */
+  .te-legend{
+    margin-top:48px;
+    position:relative;
+    border:1px solid var(--rule-strong);
+    background:#ffffff80;
+    padding:18px 24px 22px;
+  }
+  /* L-shaped corner crosses on top-left & bottom-right */
+  .te-legend::before,
+  .te-legend::after{
+    content:"";
+    position:absolute;
+    width:14px; height:14px;
+    pointer-events:none;
+  }
+  .te-legend::before{
+    top:-1px; left:-1px;
+    border-top:1px solid var(--ink);
+    border-left:1px solid var(--ink);
+  }
+  .te-legend::after{
+    bottom:-1px; right:-1px;
+    border-bottom:1px solid var(--ink);
+    border-right:1px solid var(--ink);
+  }
+
+  .te-legend-strip{
+    display:flex; align-items:baseline; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding-bottom:14px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .te-legend-strip .lead{ color:var(--ink); font-weight:500; }
+  .te-legend-strip .count{ color:var(--ink-4); }
+
+  .te-row{
+    display:grid;
+    grid-template-columns: 100px 1fr;
+    align-items:center;
+    gap:24px;
+    padding:18px 0;
+  }
+  .te-row + .te-row{
+    border-top:1px dashed var(--rule-strong);
+  }
+  .te-row-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+  }
+  .te-chips{
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+  }
+  .chip{
+    display:inline-flex; align-items:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:.02em;
+    text-transform:lowercase;
+    color:var(--ink);
+    background:transparent;
+    border:1px solid #1a1a1a26;
+    padding:6px 12px;
+    cursor:pointer;
+    transition:all .12s ease;
+    user-select:none;
+  }
+  .chip:hover,
+  .chip.is-hover{
+    background:var(--ink);
+    color:var(--bg);
+    border-color:var(--ink);
+  }
+  .chip.cmd{
+    color:var(--maroon);
+    border-color:#50000033;
+    background:transparent;
+  }
+  .chip.cmd::before{
+    content:"$ ";
+    color:var(--maroon);
+    opacity:.6;
+    margin-right:2px;
+  }
+  .chip.cmd:hover{
+    background:var(--maroon);
+    color:#fff;
+    border-color:var(--maroon);
+  }
+  .chip-dot{
+    color:#1a1a1a33;
+    font-family:'JetBrains Mono', monospace;
+    font-size:14px;
+    user-select:none;
+    margin:0 2px;
+  }
+
+  /* Terminal window */
+  .te-term{
+    margin-top:36px;
+    margin-bottom:64px;
+    background:#141414;
+    border:1px solid #2a2a2a;
+    box-shadow:0 24px 48px -16px rgba(20,0,0,.18),
+               0 8px 20px -8px rgba(20,0,0,.10);
+    overflow:hidden;
+  }
+  .te-term-bar{
+    display:flex; align-items:center;
+    height:40px;
+    background:#1c1c1c;
+    border-bottom:1px solid #2a2a2a;
+    padding:0 16px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+  }
+  .te-term-dots{
+    display:flex; gap:7px;
+    flex:0 0 auto;
+  }
+  .te-term-dots span{
+    width:11px; height:11px; border-radius:50%;
+    background:#3a3a3a;
+    display:inline-block;
+  }
+  .te-term-title{
+    flex:1;
+    text-align:center;
+    color:#8a8a8a;
+    letter-spacing:.02em;
+  }
+  .te-term-right{
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--amber);
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+  .te-term-right .a-dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 0 3px #c8963e26, 0 0 8px #c8963e80;
+  }
+
+  .te-term-body{
+    padding:22px 28px 28px;
+    min-height:540px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13.5px;
+    line-height:1.65;
+    color:#c9c9c9;
+    white-space:pre;
+    overflow-x:auto;
+  }
+  .te-term-body .amber{ color:var(--amber); }
+  .te-term-body .white{ color:#f5f5f5; }
+  .te-term-body .dim{ color:#8a8a8a; }
+  .te-term-body .tree{ color:#4a4a4a; }
+  .te-term-body .rule{ color:#3a3a3a; }
+  .te-term-body .heading{
+    color:#f5f5f5;
+    letter-spacing:.04em;
+  }
+  .te-cursor{
+    display:inline-block;
+    color:var(--amber);
+    animation: te-blink 1s steps(2) infinite;
+    text-shadow:0 0 6px #c8963e80;
+  }
+  @keyframes te-blink{
+    0%, 50% { opacity:1; }
+    50.01%, 100% { opacity:0; }
+  }
+
+  /* ────────── BENEFITS / SKILLS MATRIX ────────── */
+  .benefits{
+    max-width:1440px;
+    margin:0 auto;
+    padding:32px 56px 120px;
+    position:relative;
+  }
+  /* corner crosses (reuse .reg) — placed inside this section */
+  .benefits .reg.tl{ left:56px; top:32px; }
+  .benefits .reg.tr{ right:56px; top:32px; }
+  .benefits .reg.bl{ left:56px; bottom:48px; }
+  .benefits .reg.br{ right:56px; bottom:48px; }
+
+  .bn-sec-bar{
+    display:flex; align-items:center; gap:24px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding-bottom:14px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .bn-sec-bar .lead{ color:var(--ink); font-weight:500; }
+  .bn-sec-bar .lead .num{ color:var(--maroon); }
+  .bn-sec-bar .center{ color:var(--ink-2); }
+  .bn-sec-bar .right{ margin-left:auto; color:var(--ink-4); }
+
+  .bn-grid{
+    display:grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap:64px;
+    align-items:start;
+    padding-top:56px;
+  }
+
+  /* LEFT col */
+  .bn-left .label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin-bottom:20px;
+  }
+  .bn-left .label::before{
+    content:""; display:inline-block;
+    width:18px; height:1px; background:var(--maroon);
+    vertical-align:middle; margin-right:10px;
+  }
+  .bn-left .title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:48px;
+    line-height:1.02;
+    letter-spacing:-.015em;
+    margin:0 0 28px;
+    color:var(--ink);
+    text-wrap:balance;
+  }
+  .bn-left .title .period{ color:var(--maroon); }
+  .bn-left .body p{
+    font-size:17px;
+    line-height:1.6;
+    color:var(--ink-2);
+    margin:0 0 14px;
+    text-wrap:pretty;
+  }
+  .bn-left .body p em{
+    font-style:normal;
+    color:var(--ink);
+    font-weight:600;
+    box-shadow:inset 0 -2px 0 #50000026;
+    padding-bottom:1px;
+  }
+
+  /* legend strip below the copy */
+  .bn-legend{
+    margin-top:36px;
+    padding-top:16px;
+    border-top:1px dashed var(--rule-strong);
+    display:flex; gap:24px; flex-wrap:wrap;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .bn-legend .item{ display:inline-flex; align-items:center; gap:8px; }
+  .bn-legend .ind{
+    width:10px; height:10px; border-radius:50%;
+    display:inline-block; flex-shrink:0;
+  }
+  .bn-legend .ind.primary{
+    background:var(--maroon);
+    box-shadow:0 0 0 2px #5000001a, 0 0 6px #500000aa;
+  }
+  .bn-legend .ind.exposure{
+    background:transparent;
+    border:1.5px solid var(--amber);
+    box-shadow:inset 0 0 0 2px #c8963e26;
+  }
+  .bn-legend .ind.none{
+    background:transparent;
+    border:1px solid #1a1a1a26;
+  }
+
+  /* RIGHT col — Matrix */
+  .matrix-wrap{
+    position:relative;
+    background:#f1efe9;
+    border:1px solid var(--rule-strong);
+    padding:14px;
+    box-shadow:
+      inset 0 0 0 1px #ffffff80,
+      0 1px 0 #ffffff;
+  }
+  .matrix-wrap::before,
+  .matrix-wrap::after{
+    content:"";
+    position:absolute;
+    width:14px; height:14px;
+    pointer-events:none;
+  }
+  .matrix-wrap::before{
+    top:-1px; left:-1px;
+    border-top:1px solid var(--ink);
+    border-left:1px solid var(--ink);
+  }
+  .matrix-wrap::after{
+    bottom:-1px; right:-1px;
+    border-bottom:1px solid var(--ink);
+    border-right:1px solid var(--ink);
+  }
+
+  /* Top meta line */
+  .matrix-top{
+    display:flex; align-items:baseline; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding:4px 8px 12px;
+    border-bottom:1px solid var(--rule-strong);
+    margin-bottom:8px;
+  }
+  .matrix-top .ttl{ color:var(--ink); font-weight:500; }
+
+  /* The actual matrix grid */
+  .matrix{
+    --col-w: 1fr;
+    display:grid;
+    grid-template-columns: minmax(190px, 1.4fr) repeat(8, var(--col-w));
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    background:#1a1a1a14;
+    gap:1px;
+  }
+  .matrix > *{
+    background:#f1efe9;
+    padding:9px 8px;
+    min-height:36px;
+    display:flex;
+    align-items:center;
+    transition:background .12s ease;
+  }
+
+  /* Column headers (rotated) */
+  .matrix .col-h{
+    justify-content:center;
+    text-align:center;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    color:var(--ink-2);
+    background:#ebe8e0;
+    font-weight:500;
+    font-size:10px;
+    height:120px;
+    min-height:120px;
+    align-items:end;
+    padding-bottom:10px;
+  }
+  .matrix .col-h span{
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    white-space:nowrap;
+    letter-spacing:.16em;
+  }
+  .matrix .col-h .group-tag{
+    writing-mode:horizontal-tb;
+    transform:none;
+    position:absolute;
+    top:8px;
+    font-size:8.5px;
+    letter-spacing:.18em;
+    color:var(--ink-4);
+  }
+  .matrix .col-h{ position:relative; }
+
+  /* Top-left empty corner */
+  .matrix .corner{
+    background:#ebe8e0;
+    height:120px;
+    min-height:120px;
+    align-items:end;
+    padding-bottom:10px;
+    font-size:9.5px;
+    letter-spacing:.2em;
+    color:var(--ink-4);
+    text-transform:uppercase;
+    justify-content:flex-start;
+  }
+
+  /* Group color hints on column headers (top stripe) */
+  .matrix .col-h::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0; height:3px;
+    background:currentColor;
+    opacity:.18;
+  }
+  .matrix .col-h.g-mech{ color:var(--maroon); }
+  .matrix .col-h.g-elec{ color:#0B4F4F; }
+  .matrix .col-h.g-algo{ color:var(--amber); }
+  .matrix .col-h.g-ops { color:#5a5a5a; }
+  .matrix .col-h .name{ color:var(--ink); }
+
+  /* Skill label cells */
+  .matrix .skill{
+    background:#ebe8e0;
+    color:var(--ink);
+    font-size:11px;
+    letter-spacing:.04em;
+    justify-content:flex-start;
+    padding-left:12px;
+  }
+  .matrix .skill .idx{
+    color:var(--ink-4);
+    margin-right:8px;
+    font-size:9.5px;
+  }
+
+  /* Data cells */
+  .matrix .cell{
+    justify-content:center;
+    position:relative;
+    cursor:default;
+  }
+  .matrix .cell .dot{
+    width:10px; height:10px; border-radius:50%;
+    display:inline-block;
+    background:transparent;
+    border:1px solid #1a1a1a1f;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .matrix .cell.p .dot{
+    background:var(--maroon);
+    border-color:var(--maroon);
+    box-shadow:0 0 0 2px #50000014, 0 0 8px #500000aa;
+  }
+  .matrix .cell.e .dot{
+    background:transparent;
+    border:1.5px solid var(--amber);
+    box-shadow:inset 0 0 0 2px #c8963e1f;
+  }
+
+  /* Row hover (using :has on the matrix) */
+  .matrix:has(.cell[data-row="1"]:hover) .cell[data-row="1"],
+  .matrix:has(.cell[data-row="1"]:hover) .skill[data-row="1"],
+  .matrix:has(.cell[data-row="2"]:hover) .cell[data-row="2"],
+  .matrix:has(.cell[data-row="2"]:hover) .skill[data-row="2"],
+  .matrix:has(.cell[data-row="3"]:hover) .cell[data-row="3"],
+  .matrix:has(.cell[data-row="3"]:hover) .skill[data-row="3"],
+  .matrix:has(.cell[data-row="4"]:hover) .cell[data-row="4"],
+  .matrix:has(.cell[data-row="4"]:hover) .skill[data-row="4"],
+  .matrix:has(.cell[data-row="5"]:hover) .cell[data-row="5"],
+  .matrix:has(.cell[data-row="5"]:hover) .skill[data-row="5"],
+  .matrix:has(.cell[data-row="6"]:hover) .cell[data-row="6"],
+  .matrix:has(.cell[data-row="6"]:hover) .skill[data-row="6"],
+  .matrix:has(.cell[data-row="7"]:hover) .cell[data-row="7"],
+  .matrix:has(.cell[data-row="7"]:hover) .skill[data-row="7"],
+  .matrix:has(.cell[data-row="8"]:hover) .cell[data-row="8"],
+  .matrix:has(.cell[data-row="8"]:hover) .skill[data-row="8"],
+  .matrix:has(.cell[data-row="9"]:hover) .cell[data-row="9"],
+  .matrix:has(.cell[data-row="9"]:hover) .skill[data-row="9"],
+  .matrix:has(.cell[data-row="10"]:hover) .cell[data-row="10"],
+  .matrix:has(.cell[data-row="10"]:hover) .skill[data-row="10"],
+  .matrix:has(.cell[data-row="11"]:hover) .cell[data-row="11"],
+  .matrix:has(.cell[data-row="11"]:hover) .skill[data-row="11"],
+  .matrix:has(.cell[data-row="12"]:hover) .cell[data-row="12"],
+  .matrix:has(.cell[data-row="12"]:hover) .skill[data-row="12"]{
+    background:#ffffff;
+  }
+
+  /* Column hover */
+  .matrix:has(.cell[data-col="1"]:hover) .cell[data-col="1"],
+  .matrix:has(.cell[data-col="1"]:hover) .col-h[data-col="1"],
+  .matrix:has(.cell[data-col="2"]:hover) .cell[data-col="2"],
+  .matrix:has(.cell[data-col="2"]:hover) .col-h[data-col="2"],
+  .matrix:has(.cell[data-col="3"]:hover) .cell[data-col="3"],
+  .matrix:has(.cell[data-col="3"]:hover) .col-h[data-col="3"],
+  .matrix:has(.cell[data-col="4"]:hover) .cell[data-col="4"],
+  .matrix:has(.cell[data-col="4"]:hover) .col-h[data-col="4"],
+  .matrix:has(.cell[data-col="5"]:hover) .cell[data-col="5"],
+  .matrix:has(.cell[data-col="5"]:hover) .col-h[data-col="5"],
+  .matrix:has(.cell[data-col="6"]:hover) .cell[data-col="6"],
+  .matrix:has(.cell[data-col="6"]:hover) .col-h[data-col="6"],
+  .matrix:has(.cell[data-col="7"]:hover) .cell[data-col="7"],
+  .matrix:has(.cell[data-col="7"]:hover) .col-h[data-col="7"],
+  .matrix:has(.cell[data-col="8"]:hover) .cell[data-col="8"],
+  .matrix:has(.cell[data-col="8"]:hover) .col-h[data-col="8"]{
+    background:#ffffff;
+  }
+
+  /* Bottom meta strip under the matrix */
+  .matrix-foot{
+    display:flex; align-items:baseline; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-4);
+    padding:12px 8px 4px;
+    margin-top:8px;
+    border-top:1px solid var(--rule-strong);
+  }
+  .matrix-foot .swatches{ display:inline-flex; gap:18px; }
+  .matrix-foot .sw{ display:inline-flex; align-items:center; gap:7px; color:var(--ink-3); }
+  .matrix-foot .sw .ind{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .matrix-foot .sw .ind.p{ background:var(--maroon); box-shadow:0 0 4px #500000aa; }
+  .matrix-foot .sw .ind.e{ border:1.5px solid var(--amber); }
+  .matrix-foot .sw .ind.n{ border:1px solid #1a1a1a26; }
+
+  /* ────────── COMPACT CTA ────────── */
+  .about-cta{
+    background:#1A1A1A;
+    color:#FAFAFA;
+    border-top:1px solid #ffffff14;
+  }
+  .acta-head{
+    border-bottom:1px solid #ffffff1f;
+  }
+  .acta-ch-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:14px 56px;
+    display:flex; align-items:center; gap:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffffa8;
+  }
+  .acta-ch-inner .tag{
+    color:#FAFAFA; font-weight:500;
+    display:inline-flex; align-items:baseline; gap:10px;
+  }
+  .acta-ch-inner .tag .sec{ color:var(--amber); font-weight:500; }
+  .acta-ch-inner .rule{ flex:1; height:1px; background:#ffffff26; }
+  .acta-ch-inner .mid{ color:#ffffffd0; }
+  .acta-ch-inner .end{ color:#ffffff8a; }
+
+  .about-cta-inner{
+    max-width:1440px;
+    margin:0 auto;
+    padding:96px 56px 104px;
+  }
+  .about-cta-cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+  }
+  .acc-card{
+    padding:56px 48px 48px;
+    display:flex; flex-direction:column;
+    color:#FAFAFA;
+    text-decoration:none;
+    background:#500000;
+    background-image:
+      linear-gradient(to right, #ffffff08 1px, transparent 1px),
+      linear-gradient(to bottom, #ffffff08 1px, transparent 1px);
+    background-size:80px 80px;
+    position:relative;
+    transition:background-color .18s ease;
+    min-height:320px;
+    border:1px solid #ffffff1f;
+  }
+  .acc-card.dark{ background-color:#222; }
+  .acc-card:hover{ background-color:#3a0000; }
+  .acc-card.dark:hover{ background-color:#0d0d0d; }
+
+  .acc-row{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#ffffff8a;
+    margin-bottom:40px;
+  }
+  .acc-row .num{
+    font-family:'Chakra Petch', sans-serif;
+    font-size:14px;
+    color:#FAFAFA;
+    letter-spacing:.04em;
+    font-weight:500;
+  }
+  .acc-title{
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    font-size:40px;
+    line-height:1.02;
+    letter-spacing:-.012em;
+    margin:0 0 16px;
+    color:#FAFAFA;
+  }
+  .acc-title .period{ color:var(--amber); }
+  .acc-sub{
+    font-size:16px;
+    line-height:1.55;
+    color:#ffffffbf;
+    margin:0 0 36px;
+    max-width:400px;
+  }
+  .acc-btn{
+    margin-top:auto;
+    align-self:flex-start;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:600;
+    padding:14px 22px;
+    display:inline-flex; align-items:center; gap:14px;
+    transition:all .15s ease;
+    cursor:pointer;
+  }
+  .acc-btn.solid{
+    background:#FAFAFA;
+    color:var(--maroon);
+    border:1px solid #FAFAFA;
+  }
+  .acc-btn.solid .arrow{ background:var(--maroon); }
+  .acc-btn.solid .arrow::after{ border-color:var(--maroon); }
+  .acc-card:hover .acc-btn.solid{ background:var(--amber); border-color:var(--amber); color:#1A1A1A; }
+  .acc-card:hover .acc-btn.solid .arrow{ background:#1A1A1A; }
+  .acc-card:hover .acc-btn.solid .arrow::after{ border-color:#1A1A1A; }
+
+  .acc-btn.outline{
+    background:transparent;
+    color:#FAFAFA;
+    border:1px solid #FAFAFA;
+  }
+  .acc-btn.outline .arrow{ background:#FAFAFA; }
+  .acc-btn.outline .arrow::after{ border-color:#FAFAFA; }
+  .acc-card.dark:hover .acc-btn.outline{ background:#FAFAFA; color:#1A1A1A; }
+  .acc-card.dark:hover .acc-btn.outline .arrow{ background:#1A1A1A; }
+  .acc-card.dark:hover .acc-btn.outline .arrow::after{ border-color:#1A1A1A; }
+
+  .acc-btn .arrow{
+    display:inline-block;
+    width:22px; height:1px;
+    position:relative;
+  }
+  .acc-btn .arrow::after{
+    content:""; position:absolute; right:0; top:-3px;
+    width:7px; height:7px;
+    border-top:1px solid currentColor;
+    border-right:1px solid currentColor;
+    transform:rotate(45deg);
+  }
+
+  /* ────────── FOOTER (mirrors Hero) ────────── */
+  .site-footer{
+    background:#141414;
+    color:#ffffffa8;
+    border-top:1px solid #ffffff14;
+  }
+  .sf-top{
+    max-width:1440px;
+    margin:0 auto;
+    padding:36px 56px 28px;
+    display:grid;
+    grid-template-columns: 1fr auto auto;
+    align-items:center;
+    gap:48px;
+  }
+  .sf-brand{
+    display:flex; align-items:center; gap:12px;
+    font-family:'Chakra Petch', sans-serif;
+    font-weight:600;
+    letter-spacing:.04em;
+    font-size:14px;
+    text-transform:uppercase;
+    color:#FAFAFA;
+  }
+  .sf-brand .sf-mark{
+    width:18px; height:18px;
+    background:var(--maroon);
+    position:relative;
+    flex-shrink:0;
+  }
+  .sf-brand .sf-mark::after{
+    content:""; position:absolute; inset:4px; border:1.5px solid #141414;
+  }
+  .sf-brand .sf-mark::before{
+    content:""; position:absolute; left:50%; top:0; bottom:0;
+    width:1.5px; background:#141414; transform:translateX(-50%);
+  }
+  .sf-brand .slash{ color:#ffffff52; font-weight:400; margin:0 2px; }
+  .sf-brand .sub{ color:#ffffff7a; font-weight:400; letter-spacing:.08em; }
+
+  .sf-nav{
+    display:flex; gap:28px;
+    font-family:'Chakra Petch', sans-serif;
+    font-size:12px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:500;
+  }
+  .sf-nav a{
+    color:#ffffffc4;
+    text-decoration:none;
+    transition:color .15s ease;
+  }
+  .sf-nav a:hover{ color:#FAFAFA; }
+
+  .sf-social{
+    display:flex; gap:8px;
+  }
+  .sf-social a{
+    width:34px; height:34px;
+    display:inline-flex; align-items:center; justify-content:center;
+    color:#ffffffc4;
+    text-decoration:none;
+    border:1px solid #ffffff1f;
+    transition:all .15s ease;
+  }
+  .sf-social a:hover{ color:#FAFAFA; border-color:#ffffff4a; background:#1f1f1f; }
+  .sf-social svg{ width:14px; height:14px; display:block; }
+
+  .sf-rule{
+    max-width:1440px;
+    margin:0 auto;
+    height:1px;
+    background:#ffffff14;
+  }
+
+  .sf-bot{
+    max-width:1440px;
+    margin:0 auto;
+    padding:22px 56px 28px;
+    display:grid;
+    grid-template-columns: auto 1fr auto;
+    align-items:start;
+    gap:48px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#ffffff7a;
+    line-height:1.6;
+  }
+  .sf-bot .copy{ color:#ffffffbf; }
+  .sf-bot .tm{ max-width:560px; }
+  .sf-bot .tm b{ color:#ffffffbf; font-weight:500; letter-spacing:.12em; }
+  .sf-bot .tm .disclaimer{
+    display:block;
+    margin-top:6px;
+    color:#ffffff5a;
+    letter-spacing:.14em;
+  }
+  .sf-bot .meta{ text-align:right; color:#ffffff5a; }
+  .sf-bot .meta .v{ color:#ffffffa8; }
+
+  .slice-no{
+    position:absolute;
+    right:56px;
+    bottom:32px;
+    transform:rotate(180deg);
+    writing-mode:vertical-rl;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.4em;
+    color:var(--ink-4);
+    pointer-events:none;
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="nav" data-screen-label="About / Header">
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>TAMU Drillbotics</span>
+        <span class="slash">/</span>
+        <span class="sub">Engineering</span>
+      </div>
+      <nav class="links">
+        <a href="Hero.html">Home</a>
+        <a href="About.html" class="active">About</a>
+        <a href="#">The Rig</a>
+        <a href="#">Apply</a>
+        <a href="#">Sponsors</a>
+      </nav>
+      <div class="nav-right">
+        <span class="nav-meta"><span class="dot"></span>2026 Season · Active</span>
+        <button class="btn-ghost">Join the Team</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT TOP -->
+  <main class="about" data-screen-label="About / Top">
+    <span class="reg tl"></span>
+    <span class="reg tr"></span>
+    <span class="reg bl"></span>
+    <span class="reg br"></span>
+
+    <!-- Page intro -->
+    <header class="about-top">
+      <div>
+        <div class="about-eyebrow">
+          <span class="pulse"></span>
+          <span data-tw="eyebrow">WHAT WE DO</span>
+        </div>
+        <h1 class="about-title">
+          <span data-tw="titleA">The competition,</span><br/><span data-tw="titleB">and our role in it</span><span class="period">.</span>
+        </h1>
+      </div>
+      <ul class="toc" aria-label="About sections">
+        <li class="is-current">
+          <span class="idx">01</span>
+          <a href="#competition">The Competition</a>
+        </li>
+        <li class="is-current">
+          <span class="idx">02</span>
+          <a href="#what-we-do">What We Do</a>
+        </li>
+        <li>
+          <span class="idx">03</span>
+          <a href="#team">The Team</a>
+        </li>
+        <li>
+          <span class="idx">04</span>
+          <a href="#benefits">Why Students Join</a>
+        </li>
+      </ul>
+    </header>
+
+    <!-- TWO COLUMN BODY -->
+    <section class="two-col">
+      <!-- LEFT -->
+      <article class="col" id="competition">
+        <div class="c-head">
+          <span class="c-id"><span class="num">01</span> <span class="slash">/</span> <span data-tw="leftLabel">The Competition</span></span>
+          <span class="c-meta">External · SPE / DSATS</span>
+        </div>
+
+        <h2 class="c-title">An international student drilling-rig competition<span class="period">.</span></h2>
+        <p class="c-deck">
+          <strong>SPE Drillbotics</strong> — run by the Society of Petroleum
+          Engineers' DSATS committee — challenges university teams to design,
+          build, and operate a miniature autonomous drilling rig from scratch.
+        </p>
+
+        <div class="c-body">
+          <p>
+            Teams must drill a <em>directional well</em> through a sealed rock sample
+            with no human intervention. The rig is required to interpret surface
+            and downhole measurements in real time and use them to make trajectory
+            and weight-on-bit decisions on the fly.
+          </p>
+          <a class="inline-link" href="https://drillbotics.com" target="_blank" rel="noreferrer">View the full competition <span class="arrow"></span></a>
+        </div>
+
+        <div class="keyline">
+          <div class="keyline-head">
+            <span>Competition · Format</span>
+            <span>
+</span>
+          </div>
+          <ul>
+            <li>
+              <span class="n">01</span>
+              <span class="k">Autonomous Operation<small>No human input from spud to TD.</small></span>
+              <span class="v">Required</span>
+            </li>
+            <li>
+              <span class="n">02</span>
+              <span class="k">Directional Well<small>Pre-set target, scored on path accuracy.</small></span>
+              <span class="v">Scored</span>
+            </li>
+            <li>
+              <span class="n">03</span>
+              <span class="k">Real-Time Sensing<small>Surface + downhole feedback into control loop.</small></span>
+              <span class="v">Required</span>
+            </li>
+            <li>
+              <span class="n">04</span>
+              <span class="k">Multidisciplinary Team<small>PETE · MECH · ELEN · CSCE · DATA.</small></span>
+              <span class="v">Encouraged</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Timeline placeholder -->
+        <div class="tl-placeholder" role="note" aria-label="Competition timeline placeholder">
+          <div class="tl-row">
+            <span>2026 – 27 Timeline</span>
+            <span class="live">Awaiting Schedule</span>
+          </div>
+          <div class="tl-track">
+            <span class="head" style="left:6%"></span>
+          </div>
+          <div class="tl-foot">
+            <span class="label">TBD <span class="dim">/ confirmed in fall semester</span></span>
+            <span>Kickoff · Design Review · Build · Competition</span>
+          </div>
+          <p class="tl-note">
+            Phase dates, design-review deadlines, and the on-site competition
+            window are published by SPE / DSATS each fall. This block will be
+            populated once the official 2026 – 27 schedule is released.
+          </p>
+        </div>
+      </article>
+
+      <div class="col-divider" aria-hidden="true"></div>
+
+      <!-- RIGHT -->
+      <article class="col" id="what-we-do">
+        <div class="c-head">
+          <span class="c-id"><span class="num">02</span> <span class="slash">/</span> <span data-tw="rightLabel">What We Do</span></span>
+          <span class="c-meta">Internal · TAMU Drillbotics</span>
+        </div>
+
+        <h2 class="c-title">We build the rig (nearly) end to end.</h2>
+        <p class="c-deck">While we outsource the machining and components, the research, assembly, and testing happen right here at A&amp;M.</p>
+
+        <div class="c-body">
+          <p>Our team is built to be interdisciplinary. Mechanical engineers handle the frame, drillstring, and hydraulics. The electrical team manages the sensor stack and firmware. Our algorithms team runs the machine learning and control systems that tie the whole rig together.</p>
+          <p>Keeping the core work on campus means we can iterate quickly. We troubleshoot issues together in person, which helps us refine the hardware and software in real time.</p>
+          <p>We are training a new group of engineers who understand how autonomy, data, and hardware work together in the oil and gas industry. Our members graduate with hands-on experience across all three fields.</p>
+        </div>
+
+        <div class="keyline">
+          <div class="keyline-head">
+            <span>Build · Subsystems</span>
+            <span>Owned In-House</span>
+          </div>
+          <ul>
+            <li>
+              <span class="n">A</span>
+              <span class="k">Mechanical<small>Frame, drillstring, hydraulics, bit manufacturing.</small></span>
+              <span class="v">3 sub-teams</span>
+            </li>
+            <li>
+              <span class="n">B</span>
+              <span class="k">Electrical<small>Sensors, motors / drivers, embedded firmware (STM32).</small></span>
+              <span class="v">2 sub-teams</span>
+            </li>
+            <li>
+              <span class="n">C</span>
+              <span class="k">Algorithm<small>Sensor fusion, ML, PID + adaptive control.</small></span>
+              <span class="v">3 sub-teams</span>
+            </li>
+            <li>
+              <span class="n">D</span>
+              <span class="k">Marketing/Operations<small>Outreach, sponsor relations, project finance.</small></span>
+              <span class="v">1 sub-team</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tl-placeholder" style="background:#fff;">
+          <div class="tl-row">
+            <span>Posture · 2026 Season</span>
+            <span class="live posture">In Build</span>
+          </div>
+          <p class="tl-note">
+            The rig is mid-cycle. The hoist / elevator subsystem is operational;
+            drivetrain bring-up is next. Sensor array, control software, and the
+            autonomy stack are tracking against the 2026 – 27 competition window.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <div class="slice-no">SEC · 01 / 04 — ABOUT</div>
+  </main>
+
+  <!-- TEAM EXPLORER -->
+  <section class="team-explorer" id="team" data-screen-label="About / Team Explorer">
+    <!-- Section bar -->
+    <div class="te-sec-bar">
+      <span class="te-left">§ <span class="num">03</span>  ·  TEAM</span>
+      <span class="te-center">CLI / INTERACTIVE TAXONOMY</span>
+      <span class="te-right">RUNTIME · ZSH</span>
+    </div>
+
+    <!-- Intro -->
+    <div class="te-intro">
+      <div>
+        <div class="te-intro-label">HOW IT WORKS</div>
+        <h2 class="te-intro-title">Browse the team like a filesystem<span class="period">.</span></h2>
+      </div>
+      <p class="te-intro-copy">Tap any subteam below to see what they work on. The terminal also takes commands: tree shows the whole team at once, help lists what else you can type. ↑ / ↓ for history.</p>
+    </div>
+
+    <!-- Legend / chip menu -->
+    <div class="te-legend">
+      <div class="te-legend-strip">
+        <span class="lead">CLICK A CHIP TO EXPLORE</span>
+        <span class="count">10 SUBTEAMS</span>
+      </div>
+
+      <div class="te-row">
+        <span class="te-row-label">START</span>
+        <div class="te-chips">
+          <span class="chip cmd">tree</span>
+          <span class="chip cmd">help</span>
+        </div>
+      </div>
+
+      <div class="te-row">
+        <span class="te-row-label">SUBTEAMS</span>
+        <div class="te-chips">
+          <span class="chip is-hover">drillstring</span>
+          <span class="chip">safety</span>
+          <span class="chip">frame</span>
+          <span class="chip-dot" aria-hidden="true">·</span>
+          <span class="chip">electronics</span>
+          <span class="chip">software</span>
+          <span class="chip-dot" aria-hidden="true">·</span>
+          <span class="chip">gpu</span>
+          <span class="chip">data</span>
+          <span class="chip">ml</span>
+          <span class="chip-dot" aria-hidden="true">·</span>
+          <span class="chip">sponsorship</span>
+          <span class="chip">marketing</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal -->
+    <div class="te-term" role="img" aria-label="Team explorer terminal mockup">
+      <div class="te-term-bar">
+        <div class="te-term-dots" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="te-term-title">tamu-drillbotics — zsh — team-explorer</div>
+        <div class="te-term-right">
+          <span class="a-dot" aria-hidden="true"></span>
+          <span>CONNECTED</span>
+        </div>
+      </div>
+      <div class="te-term-body"><span class="heading">TAMU DRILLBOTICS® · TEAM EXPLORER · v0.2</span>
+<span class="rule">──────────────────────────────────────────────────────────</span>
+<span class="dim">Browse the team like a filesystem. 10 subteams across 4 parent groups.</span>
+
+<span class="dim">Try:</span> <span class="amber">tree</span> · <span class="amber">cat drillstring</span> · <span class="amber">help</span>
+
+<span class="amber">drillbotics@rig-02 ~$</span> tree
+<span class="amber">teams/</span>
+<span class="tree">├──</span> <span class="amber">mechanical/</span>
+<span class="tree">│   ├──</span> <span class="white">drillstring</span>        <span class="dim"># hydraulics, bit manufacturing</span>
+<span class="tree">│   ├──</span> <span class="white">safety</span>             <span class="dim"># enclosure, E-stop, hydraulic systems, safety report</span>
+<span class="tree">│   └──</span> <span class="white">frame</span>              <span class="dim"># dolly frame, structural assembly</span>
+<span class="tree">├──</span> <span class="amber">electrical/</span>
+<span class="tree">│   ├──</span> <span class="white">electronics</span>        <span class="dim"># sensors, motors / drivers, electronics box</span>
+<span class="tree">│   └──</span> <span class="white">software</span>           <span class="dim"># embedded C firmware (STM32), ML interface, PID control</span>
+<span class="tree">├──</span> <span class="amber">algorithm/</span>
+<span class="tree">│   ├──</span> <span class="white">gpu</span>                <span class="dim"># dedicated ML compute hardware, CUDA pipeline</span>
+<span class="tree">│   ├──</span> <span class="white">data</span>               <span class="dim"># sensor fusion, analytics</span>
+<span class="tree">│   └──</span> <span class="white">ml</span>                 <span class="dim"># model development (PyTorch, TensorFlow)</span>
+<span class="tree">└──</span> <span class="amber">operations/</span>
+<span class="tree">    ├──</span> <span class="white">sponsorship</span>        <span class="dim"># sponsor outreach, relations, finance, budget</span>
+<span class="tree">    └──</span> <span class="white">marketing</span>          <span class="dim"># brand, social media, content, advertising</span>
+
+<span class="amber">drillbotics@rig-02 ~$</span> <span class="te-cursor">▌</span></div>
+    </div>
+  </section>
+
+  <!-- BENEFITS / SKILLS MATRIX -->
+  <section class="benefits" id="benefits" data-screen-label="About / Benefits">
+    <span class="reg tl"></span>
+    <span class="reg tr"></span>
+    <span class="reg bl"></span>
+    <span class="reg br"></span>
+
+    <div class="bn-sec-bar">
+      <span class="lead">§ <span class="num">04</span>  ·  DEVELOPMENT</span>
+      <span class="center">SKILLS ACQUISITION MATRIX</span>
+      <span class="right">REV · 2026.A</span>
+    </div>
+
+    <div class="bn-grid">
+      <!-- LEFT — copy -->
+      <div class="bn-left">
+        <div class="label">WHY JOIN</div>
+        <h2 class="title">Your coursework gives you theory<span class="period">.</span></h2>
+        <div class="body">
+          <p>Drillbotics gives you the project that proves you can build. <em>Real hardware, real deadlines, real systems that break.</em></p>
+          <p>You'll work across disciplines, own a subsystem, and walk away with something no classroom can give you — proof that you can ship.</p>
+        </div>
+
+        <div class="bn-legend">
+          <span class="item"><span class="ind primary"></span>Primary · core skill</span>
+          <span class="item"><span class="ind exposure"></span>Exposure · you'll touch it</span>
+          <span class="item"><span class="ind none"></span>N/A</span>
+        </div>
+      </div>
+
+      <!-- RIGHT — matrix -->
+      <div class="bn-right">
+        <div class="matrix-wrap">
+          <div class="matrix-top">
+            <span class="ttl">SKILL × SUBTEAM</span>
+            <span>12 SKILLS · 8 SUBTEAMS</span>
+          </div>
+          <div class="matrix" id="skills-matrix" aria-label="Skills acquired by sub-team"></div>
+          <div class="matrix-foot">
+            <span>HOVER · ROW OR COLUMN</span>
+            <span class="swatches">
+              <span class="sw"><span class="ind p"></span>PRIMARY</span>
+              <span class="sw"><span class="ind e"></span>EXPOSURE</span>
+              <span class="sw"><span class="ind n"></span>NONE</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slice-no" style="position:absolute;">SEC · 04 / 04 — BENEFITS</div>
+  </section>
+
+  <!-- COMPACT CTA -->
+  <section class="about-cta" data-screen-label="About / CTA">
+    <div class="acta-head">
+      <div class="acta-ch-inner">
+        <span class="tag"><span class="sec">§ 05</span> NEXT STEPS</span>
+        <span class="rule"></span>
+        <span class="mid">TWO PATHS</span>
+        <span class="rule"></span>
+        <span class="end">RIG · TEAM</span>
+      </div>
+    </div>
+
+    <div class="about-cta-inner">
+      <div class="about-cta-cards">
+        <a class="acc-card" href="/project">
+          <div class="acc-row">
+            <span class="num">01</span>
+            <span>The Rig</span>
+          </div>
+          <h3 class="acc-title">See what we're building<span class="period">.</span></h3>
+          <p class="acc-sub">Full system breakdown. Mechanical, electrical, software, and ML — every subsystem documented.</p>
+          <span class="acc-btn solid">See the Rig <span class="arrow"></span></span>
+        </a>
+
+        <a class="acc-card dark" href="/apply">
+          <div class="acc-row">
+            <span class="num">02</span>
+            <span>The Team</span>
+          </div>
+          <h3 class="acc-title">Ready to build<span class="period">?</span></h3>
+          <p class="acc-sub">Applications for the 2026–27 cycle are open. Find your sub-team and start contributing.</p>
+          <span class="acc-btn outline">Apply Now <span class="arrow"></span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" data-screen-label="About / Footer">
+    <div class="sf-top">
+      <div class="sf-brand">
+        <span class="sf-mark" aria-hidden="true"></span>
+        <span>TAMU Drillbotics</span>
+        <span class="slash">/</span>
+        <span class="sub">Engineering</span>
+      </div>
+      <nav class="sf-nav" aria-label="Footer">
+        <a href="Hero.html">Home</a>
+        <a href="About.html">About</a>
+        <a href="/project">The Rig</a>
+        <a href="/apply">Apply</a>
+        <a href="/sponsors">Sponsors</a>
+      </nav>
+      <div class="sf-social">
+        <a href="#" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5.001 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-1 1.83-2.05 3.76-2.05 4.02 0 4.76 2.65 4.76 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.86V21h-3.99V9z"/>
+          </svg>
+        </a>
+        <a href="#" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+            <circle cx="12" cy="12" r="4"></circle>
+            <circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"></circle>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="sf-rule"></div>
+
+    <div class="sf-bot">
+      <span class="copy">© 2025 TAMU Drillbotics</span>
+      <span class="tm">
+        <b>Drillbotics®</b> is a registered trademark of Rig Operations, LLC.
+        <span class="disclaimer">[ Texas A&amp;M University trademark disclaimer · TBD ]</span>
+      </span>
+      <span class="meta">
+        College Station · TX &nbsp;·&nbsp; <span class="v">v0.6 / 2026</span>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+  (function buildMatrix(){
+    const cols = [
+      { name:'Drillstring', group:'MECH', g:'g-mech' },
+      { name:'Safety',      group:'MECH', g:'g-mech' },
+      { name:'Frame',       group:'MECH', g:'g-mech' },
+      { name:'Electronics', group:'ELEC', g:'g-elec' },
+      { name:'Software',    group:'ELEC', g:'g-elec' },
+      { name:'GPU',         group:'ALGO', g:'g-algo' },
+      { name:'Data',        group:'ALGO', g:'g-algo' },
+      { name:'ML',          group:'ALGO', g:'g-algo' }
+    ];
+    // P = primary, E = exposure, '' = none
+    const skills = [
+      ['CAD / Mechanical Design',   ['P','P','P','','','','','']],
+      ['Machining / Manufacturing', ['P','E','P','','','','','']],
+      ['Circuit Design / PCB',      ['','E','','P','E','E','','']],
+      ['Soldering / Wiring',        ['E','E','E','P','E','E','','']],
+      ['Embedded C / Firmware',     ['','','','E','P','','','E']],
+      ['Python',                    ['','','','E','E','E','P','P']],
+      ['PID / Controls',            ['E','E','','E','P','','E','E']],
+      ['Machine Learning',          ['','','','','E','P','E','P']],
+      ['Sensor Fusion',             ['','E','','E','E','','P','E']],
+      ['Data Analytics',            ['','','','','','E','P','E']],
+      ['Project Management',        ['E','E','E','E','E','E','E','E']],
+      ['Technical Writing',         ['E','P','E','E','E','E','E','E']]
+    ];
+
+    const m = document.getElementById('skills-matrix');
+    if (!m) return;
+
+    const corner = document.createElement('div');
+    corner.className = 'corner';
+    corner.textContent = 'SKILL ↓ / SUBTEAM →';
+    m.appendChild(corner);
+
+    cols.forEach((c, i) => {
+      const h = document.createElement('div');
+      h.className = 'col-h ' + c.g;
+      h.setAttribute('data-col', String(i + 1));
+      const tag = document.createElement('span');
+      tag.className = 'group-tag';
+      tag.textContent = c.group;
+      const name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = c.name;
+      h.appendChild(tag);
+      h.appendChild(name);
+      m.appendChild(h);
+    });
+
+    skills.forEach((row, r) => {
+      const [name, vals] = row;
+      const rowIdx = r + 1;
+
+      const label = document.createElement('div');
+      label.className = 'skill';
+      label.setAttribute('data-row', String(rowIdx));
+      label.innerHTML = '<span class="idx">' + String(rowIdx).padStart(2,'0') + '</span>' + name;
+      m.appendChild(label);
+
+      vals.forEach((v, ci) => {
+        const cell = document.createElement('div');
+        const cls = v === 'P' ? 'cell p' : v === 'E' ? 'cell e' : 'cell';
+        cell.className = cls;
+        cell.setAttribute('data-row', String(rowIdx));
+        cell.setAttribute('data-col', String(ci + 1));
+        const ttl = v === 'P' ? 'Primary' : v === 'E' ? 'Exposure' : 'None';
+        cell.setAttribute('title', name + ' · ' + cols[ci].name + ' — ' + ttl);
+        const dot = document.createElement('span');
+        dot.className = 'dot';
+        cell.appendChild(dot);
+        m.appendChild(cell);
+      });
+    });
+  })();
+  </script>
+
+</body>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+(function(){
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "pageTitleA": "The competition,",
+    "pageTitleB": "and our role in it",
+    "eyebrow": "What this is & what we do",
+    "leftLabel": "The Competition",
+    "rightLabel": "What We Do",
+    "accent": "#500000",
+    "divider": "dashed",
+    "showGrid": true,
+    "showReg": true,
+    "showToc": true,
+    "showSpec": true,
+    "showTimeline": true
+  }/*EDITMODE-END*/;
+
+  function Panel(){
+    const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+    React.useEffect(()=>{
+      // text bindings
+      const set = (sel, txt) => { const el = document.querySelector(sel); if (el) el.textContent = txt; };
+      set('[data-tw="titleA"]', t.pageTitleA);
+      set('[data-tw="titleB"]', t.pageTitleB);
+      set('[data-tw="eyebrow"]', t.eyebrow);
+      set('[data-tw="leftLabel"]', t.leftLabel);
+      set('[data-tw="rightLabel"]', t.rightLabel);
+
+      // class toggles on body
+      const b = document.body;
+      b.classList.toggle('tw-no-grid', !t.showGrid);
+      b.classList.toggle('tw-no-reg', !t.showReg);
+      b.classList.toggle('tw-no-toc', !t.showToc);
+      b.classList.toggle('tw-no-spec', !t.showSpec);
+      b.classList.toggle('tw-no-timeline', !t.showTimeline);
+      b.classList.toggle('tw-divider-dashed', t.divider === 'dashed');
+      b.classList.toggle('tw-divider-none', t.divider === 'none');
+
+      // accent
+      document.documentElement.style.setProperty('--maroon', t.accent);
+      // brand mark inner cutout color always matches bg — nothing to change there.
+    }, [t]);
+
+    return (
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Copy">
+          <TweakText label="Title line 1" value={t.pageTitleA} onChange={v=>setTweak('pageTitleA', v)} />
+          <TweakText label="Title line 2" value={t.pageTitleB} onChange={v=>setTweak('pageTitleB', v)} />
+          <TweakText label="Eyebrow" value={t.eyebrow} onChange={v=>setTweak('eyebrow', v)} />
+          <TweakText label="Left label" value={t.leftLabel} onChange={v=>setTweak('leftLabel', v)} />
+          <TweakText label="Right label" value={t.rightLabel} onChange={v=>setTweak('rightLabel', v)} />
+        </TweakSection>
+
+        <TweakSection label="Layout">
+          <TweakRadio
+            label="Divider"
+            value={t.divider}
+            options={[{label:'Line', value:'line'},{label:'Dashed', value:'dashed'},{label:'None', value:'none'}]}
+            onChange={v=>setTweak('divider', v)} />
+          <TweakToggle label="Engineering grid" value={t.showGrid} onChange={v=>setTweak('showGrid', v)} />
+          <TweakToggle label="Corner crosses" value={t.showReg} onChange={v=>setTweak('showReg', v)} />
+          <TweakToggle label="Section index (TOC)" value={t.showToc} onChange={v=>setTweak('showToc', v)} />
+          <TweakToggle label="Spec keyline" value={t.showSpec} onChange={v=>setTweak('showSpec', v)} />
+          <TweakToggle label="Timeline / posture" value={t.showTimeline} onChange={v=>setTweak('showTimeline', v)} />
+        </TweakSection>
+
+        <TweakSection label="Color">
+          <TweakColor
+            label="Maroon"
+            value={t.accent}
+            options={["#500000","#3A0000","#7A1F1F","#1A1A1A","#0B4F4F"]}
+            onChange={v=>setTweak('accent', v)} />
+        </TweakSection>
+      </TweaksPanel>
+    );
+  }
+
+  const root = document.createElement('div');
+  root.id = 'tweaks-root';
+  document.body.appendChild(root);
+  ReactDOM.createRoot(root).render(<Panel />);
+})();
+</script>
+</html>

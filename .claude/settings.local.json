@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \"[System.IO.Compression.GzipStream]::new\\([System.IO.FileStream]::new\\('C:\\\\Users\\\\Andres Gumucio\\\\.claude\\\\projects\\\\C--Users-Andres-Gumucio-Desktop-tamu-drillbotics\\\\75a8a4a6-e7ad-44b3-a303-00d5dbabe6e4\\\\tool-results\\\\webfetch-1778455247434-t4tfbq.bin', [System.IO.FileMode]::Open\\), [System.IO.Compression.CompressionMode]::Decompress\\).CopyTo\\([System.IO.FileStream]::new\\('C:\\\\Users\\\\Andres Gumucio\\\\Desktop\\\\tamu-drillbotics\\\\design-hero.html', [System.IO.FileMode]::Create\\)\\)\")",
+      "Bash(npx next *)",
+      "Bash(curl -s http://localhost:3000)",
+      "PowerShell(taskkill *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Andres Gumucio\\\\Desktop\\\\tamu-drillbotics\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(curl *)",
+      "Bash(npm run *)",
+      "WebFetch(domain:api.anthropic.com)",
+      "PowerShell(New-Item *)",
+      "WebFetch(domain:localhost)",
+      "Bash(npx tsc *)",
+      "Read(//c/Users/ANDRES~1/AppData/Local/Temp/claude/C--Users-Andres-Gumucio-Desktop-tamu-drillbotics/af49dc2a-103a-41d5-9714-4ee027c865b1/tasks/**)",
+      "Bash(cp \"/c/Users/Andres Gumucio/.claude/projects/C--Users-Andres-Gumucio-Desktop-tamu-drillbotics/af49dc2a-103a-41d5-9714-4ee027c865b1/tool-results/webfetch-1778725508481-u4my0j.bin\" /tmp/design.gz)",
+      "Bash(gunzip -f /tmp/design.gz)",
+      "Read(//tmp/**)",
+      "Bash(mkdir -p /tmp/design-extract)",
+      "Bash(tar -xf /tmp/design -C /tmp/design-extract)",
+      "Bash(npx --yes \"@google/design.md\" lint DESIGN.md)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(rm lint-out.txt)",
+      "Bash(mkdir -p \"/tmp/design-rig\")",
+      "Bash(gunzip -c \"C:/Users/Andres Gumucio/.claude/projects/C--Users-Andres-Gumucio-Desktop-tamu-drillbotics/7479336c-5f66-432d-8ab3-812ee9e55cf1/tool-results/webfetch-1779046266963-n3hvk3.bin\")",
+      "Bash(npm install *)"
+    ]
+  }
+}
