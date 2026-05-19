@@ -1,4 +1,30 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+
+function SketchedUnderline() {
+  const ref = useRef<SVGSVGElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  return (
+    <svg
+      ref={ref}
+      className="absolute left-0 right-0 -bottom-[6px] w-full h-[14px] pointer-events-none overflow-visible text-amber"
+      viewBox="0 0 720 16"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path
+        className="sketched-underline"
+        d="M 2 9 C 80 5, 160 11, 240 7 C 320 10, 400 6, 480 10 C 560 7, 640 11, 718 6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2.5}
+        strokeLinecap="round"
+        strokeDasharray={820}
+        strokeDashoffset={inView ? 0 : 820}
+      />
+    </svg>
+  );
+}
 
 const majors = [
   { code: "MECH", name: "Mechanical Engineering", desc: "Frame, drillstring, hydraulics, bit manufacturing." },
@@ -59,11 +85,12 @@ export function Candidates() {
 
         {/* Major chips */}
         <div className="grid grid-cols-6 gap-3.5 mb-14" role="list">
-          {majors.map((m) => (
+          {majors.map((m, i) => (
             <div
               key={m.code}
               role="listitem"
-              className="border border-white/30 px-[18px] pt-[22px] pb-[26px] bg-white/[0.02] min-h-[180px] flex flex-col transition-[border-color,background-color] duration-200 ease-out hover:border-amber hover:bg-[rgba(200,150,62,0.06)]"
+              className="ripple-block border px-[18px] pt-[22px] pb-[26px] bg-white/[0.02] min-h-[180px] flex flex-col"
+              style={{ animationDelay: `-${i * 0.8}s` }}
             >
               <span className="font-mono text-[10.5px] tracking-[.2em] uppercase text-amber mb-[18px]">
                 {m.code}
@@ -97,7 +124,11 @@ export function Candidates() {
           </span>
 
           <div className="font-heading font-semibold text-[26px] leading-[1.1] tracking-[-.005em] text-white">
-            No prior experience required<span className="text-amber">.</span>
+            <span className="relative inline-block">
+              No prior experience required
+              <SketchedUnderline />
+            </span>
+            <span className="text-amber">.</span>
           </div>
           <p className="text-[15.5px] leading-[1.6] text-[#f2e4cc] m-0 max-w-[560px]">
             Most subteams take on first-year students. Bring curiosity and

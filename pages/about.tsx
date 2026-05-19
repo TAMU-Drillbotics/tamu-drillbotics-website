@@ -58,7 +58,7 @@ const teamLeads: Array<{ name: string; role: string; tbd?: boolean; photo?: stri
   { name: "TBD",             role: "Vice President",              tbd: true },
   { name: "Andres Gumucio",  role: "Embedded Software Lead",      photo: "/people/andres-gumucio.jpg" },
   { name: "Tej Nagasamudra", role: "Electronics Co-Lead" },
-  { name: "Ayden Alvarez",   role: "Electronics Co-Lead",         photo: "/people/ayden-alvarez.jpg" },
+  { name: "Ayden Alvarez",   role: "Hydraulics Lead",         photo: "/people/ayden-alvarez.jpg" },
   { name: "Sammy",           role: "Treasury & Relations Chair" },
   { name: "Shivam",          role: "Algorithm Lead" },
   { name: "TBD",             role: "Marketing Lead",              tbd: true },
@@ -86,7 +86,7 @@ function CrossMark({ className, light }: { className: string; light?: boolean })
 
 export default function About() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-[#1A1A1A]">
       <Nav />
 
       {/* ══════════ § 01 — ABOUT ══════════ */}
@@ -342,36 +342,36 @@ export default function About() {
       </section>
 
       {/* ══════════ § 02 — TEAM EXPLORER ══════════ */}
-      <motion.section {...REVEAL} className="relative border-t border-rule-strong scroll-mt-20" id="team">
+      <motion.section {...REVEAL} className="relative bg-[#1A1A1A] scroll-mt-20" id="team">
         <div className="max-w-[1440px] mx-auto px-14 py-24">
           <TeamExplorer />
         </div>
       </motion.section>
 
       {/* ══════════ § 03 — OUR TEAM ══════════ */}
-      <motion.section {...REVEAL} className="relative scroll-mt-20 bg-white" id="our-team">
+      <motion.section {...REVEAL} className="relative scroll-mt-20 bg-[#1A1A1A]" id="our-team">
         <div className="max-w-[1440px] mx-auto px-14 pt-16 pb-[120px] relative">
-          <CrossMark className="left-14 top-6" />
-          <CrossMark className="right-14 top-6" />
+          <CrossMark className="left-14 top-6" light />
+          <CrossMark className="right-14 top-6" light />
 
           {/* Section bar */}
           <div className="flex items-center gap-[18px] pb-[14px] font-mono text-[10px] tracking-[.18em] uppercase mb-14">
-            <span className="text-ink">&sect; <span className="text-maroon">03</span> &middot; OUR TEAM</span>
-            <span className="flex-1 h-px bg-ink" />
+            <span className="text-[#E0E0E0]">&sect; <span className="text-maroon">03</span> &middot; OUR TEAM</span>
+            <span className="flex-1 h-px bg-[#E0E0E0]/15" />
           </div>
 
           {/* Pitch */}
           <div className="grid grid-cols-[1.1fr_1.5fr] gap-16 mb-20 items-start">
             <div>
               <div
-                className="text-[10px] tracking-[.18em] text-ink-3 uppercase mb-3.5"
-                style={{ fontFamily: "var(--font-space-grotesk)", fontWeight: 300, letterSpacing: "0.15em" }}
+                className="text-[10px] tracking-[.18em] uppercase mb-3.5"
+                style={{ fontFamily: "var(--font-space-grotesk)", fontWeight: 300, letterSpacing: "0.15em", color: "rgba(224,224,224,0.5)" }}
               >
                 LEADERSHIP
               </div>
               <h3
                 className="text-[48px] leading-[1.05] tracking-[-0.01em] m-0"
-                style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, color: "#0A0A0A" }}
+                style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, color: "#E0E0E0" }}
               >
                 The people behind the rig<span className="text-maroon">.</span>
               </h3>
@@ -379,7 +379,7 @@ export default function About() {
             <div className="pt-1">
               <p
                 className="m-0"
-                style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 400, fontSize: "15px", lineHeight: 1.65, color: "#333333" }}
+                style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 400, fontSize: "15px", lineHeight: 1.65, color: "rgba(224,224,224,0.7)" }}
               >
                 Meet the leads driving design, fabrication, software, and operations for the 2025&ndash;26 competition season.
               </p>
@@ -390,17 +390,9 @@ export default function About() {
           <div className="grid grid-cols-1 md:grid-cols-[340px_1fr] gap-12 md:gap-16 items-start mb-[88px]">
             {/* Portrait frame */}
             <div className="relative w-full max-w-[340px] mx-auto md:mx-0">
-              <span
-                className="absolute -bottom-2.5 -left-2.5 w-full h-full pointer-events-none"
-                style={{ backgroundColor: "rgba(80,0,0,0.10)" }}
-                aria-hidden="true"
-              />
               <div
                 className="relative aspect-[3/4] flex items-center justify-center"
-                style={{
-                  backgroundColor: "#E8E4E0",
-                  border: "1px solid rgba(80,0,0,0.30)",
-                }}
+                style={{ backgroundColor: "#222222" }}
               >
                 <span
                   className="uppercase"
@@ -409,16 +401,11 @@ export default function About() {
                     fontWeight: 400,
                     fontSize: "11px",
                     letterSpacing: "0.18em",
-                    color: "#AAAAAA",
+                    color: "rgba(224,224,224,0.3)",
                   }}
                 >
                   Photo
                 </span>
-                <span
-                  className="absolute left-0 right-0 bottom-0 h-[2px]"
-                  style={{ backgroundColor: "#500000" }}
-                  aria-hidden="true"
-                />
               </div>
             </div>
 
@@ -431,7 +418,7 @@ export default function About() {
                   fontSize: "1.65rem",
                   lineHeight: 1.15,
                   letterSpacing: "-0.01em",
-                  color: "#0A0A0A",
+                  color: "#E0E0E0",
                 }}
               >
                 {president.name}
@@ -443,14 +430,14 @@ export default function About() {
                   fontWeight: 400,
                   fontSize: "0.95rem",
                   letterSpacing: "0.01em",
-                  color: "#500000",
+                  color: "#C8963E",
                 }}
               >
                 {president.role}
               </div>
               <span
                 className="block mt-5 mb-6"
-                style={{ width: 40, height: 2, backgroundColor: "#500000" }}
+                style={{ width: 40, height: 2, backgroundColor: "#C8963E" }}
                 aria-hidden="true"
               />
               <p
@@ -460,7 +447,7 @@ export default function About() {
                   fontWeight: 400,
                   fontSize: "0.975rem",
                   lineHeight: 1.6,
-                  color: "#333333",
+                  color: "rgba(224,224,224,0.7)",
                 }}
               >
                 {president.bio}
@@ -476,7 +463,7 @@ export default function About() {
               fontWeight: 300,
               fontSize: "11px",
               letterSpacing: "0.15em",
-              color: "#999999",
+              color: "rgba(224,224,224,0.5)",
               textTransform: "uppercase",
             }}
           >
@@ -490,17 +477,9 @@ export default function About() {
                 <li key={`${name}-${role}-${i}`} className="group">
                   {/* Portrait frame */}
                   <div className="relative w-full">
-                    <span
-                      className="absolute -bottom-2 -left-2 w-full h-full pointer-events-none transition-opacity duration-300 group-hover:opacity-100"
-                      style={{ backgroundColor: "rgba(80,0,0,0.10)", opacity: 0.7 }}
-                      aria-hidden="true"
-                    />
                     <div
-                      className="relative aspect-[3/4] flex items-center justify-center overflow-hidden transition-shadow duration-300 group-hover:shadow-[0_0_0_1px_rgba(80,0,0,0.55),0_12px_30px_-12px_rgba(80,0,0,0.25)]"
-                      style={{
-                        backgroundColor: "#E8E4E0",
-                        border: "1px solid rgba(80,0,0,0.30)",
-                      }}
+                      className="relative aspect-[3/4] flex items-center justify-center overflow-hidden"
+                      style={{ backgroundColor: "#222222" }}
                     >
                       {photo ? (
                         <img
@@ -517,17 +496,12 @@ export default function About() {
                             fontWeight: 400,
                             fontSize: "10.5px",
                             letterSpacing: "0.18em",
-                            color: "#AAAAAA",
+                            color: "rgba(224,224,224,0.3)",
                           }}
                         >
                           Photo
                         </span>
                       )}
-                      <span
-                        className="absolute left-0 right-0 bottom-0 h-[2px] transition-all duration-300 group-hover:h-[3px]"
-                        style={{ backgroundColor: "#500000" }}
-                        aria-hidden="true"
-                      />
                     </div>
                   </div>
 
@@ -541,10 +515,10 @@ export default function About() {
                         fontSize: "1.05rem",
                         lineHeight: 1.2,
                         letterSpacing: "-0.005em",
-                        color: isTbd ? "#AAAAAA" : "#0A0A0A",
+                        color: isTbd ? "rgba(224,224,224,0.4)" : "#E0E0E0",
                       }}
                     >
-                      <span className={isTbd ? "" : "group-hover:text-maroon"}>{name}</span>
+                      <span className={isTbd ? "" : "group-hover:text-amber"}>{name}</span>
                     </div>
                     <div
                       className="mt-1.5"
@@ -553,7 +527,7 @@ export default function About() {
                         fontWeight: 400,
                         fontSize: "0.85rem",
                         lineHeight: 1.45,
-                        color: "#555555",
+                        color: "rgba(224,224,224,0.6)",
                       }}
                     >
                       {role}
@@ -565,7 +539,7 @@ export default function About() {
           </ul>
 
           {/* Total member count */}
-          <div className="mt-14 pt-6 border-t border-[#1a1a1a14] flex items-baseline justify-between">
+          <div className="mt-14 pt-6 border-t border-[#E0E0E0]/15 flex items-baseline justify-between">
             <span
               className="uppercase"
               style={{
@@ -573,7 +547,7 @@ export default function About() {
                 fontWeight: 300,
                 fontSize: "11px",
                 letterSpacing: "0.15em",
-                color: "#999999",
+                color: "rgba(224,224,224,0.6)",
               }}
             >
               Total Members
@@ -585,7 +559,7 @@ export default function About() {
                 fontSize: "28px",
                 lineHeight: 1,
                 letterSpacing: "-0.01em",
-                color: "#0A0A0A",
+                color: "#E0E0E0",
               }}
             >
               17

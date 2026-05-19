@@ -63,30 +63,10 @@
   animation: subtle-bounce 1.2s linear 0.3s forwards;
 }
 
-/* ── Octagon-rectangle clip utilities ── */
-.oct-clip {
-  clip-path: polygon(
-    8px 0,
-    calc(100% - 8px) 0,
-    100% 8px,
-    100% calc(100% - 8px),
-    calc(100% - 8px) 100%,
-    8px 100%,
-    0 calc(100% - 8px),
-    0 8px
-  );
-}
+/* ── Octagon-rectangle clip utilities (octagons disabled — rectangles) ── */
+.oct-clip,
 .oct-clip-xs {
-  clip-path: polygon(
-    3px 0,
-    calc(100% - 3px) 0,
-    100% 3px,
-    100% calc(100% - 3px),
-    calc(100% - 3px) 100%,
-    3px 100%,
-    0 calc(100% - 3px),
-    0 3px
-  );
+  clip-path: none;
 }
 
 /*
@@ -103,16 +83,6 @@
   position: relative;
   border: none;
   isolation: isolate;
-  clip-path: polygon(
-    8px 0,
-    calc(100% - 8px) 0,
-    100% 8px,
-    100% calc(100% - 8px),
-    calc(100% - 8px) 100%,
-    8px 100%,
-    0 calc(100% - 8px),
-    0 8px
-  );
   transition: background-color 150ms;
 }
 .oct-outline-ink::after,
@@ -120,16 +90,6 @@
   content: '';
   position: absolute;
   inset: 1.5px;
-  clip-path: polygon(
-    7px 0,
-    calc(100% - 7px) 0,
-    100% 7px,
-    100% calc(100% - 7px),
-    calc(100% - 7px) 100%,
-    7px 100%,
-    0 calc(100% - 7px),
-    0 7px
-  );
   z-index: -1;
   transition: background-color 150ms;
 }
@@ -163,16 +123,6 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  clip-path: polygon(
-    8px 0,
-    calc(100% - 8px) 0,
-    100% 8px,
-    100% calc(100% - 8px),
-    calc(100% - 8px) 100%,
-    8px 100%,
-    0 calc(100% - 8px),
-    0 8px
-  );
 }
 .sb-btn:hover,
 .sb-btn:focus,
@@ -241,6 +191,36 @@
   animation: arrow-nudge 0.65s cubic-bezier(0.4, 0, 0.2, 1) 0.55s 1;
 }
 
+/* ── Apply page: sketched underline draw ── */
+.sketched-underline {
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1) 600ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sketched-underline {
+    transition: none;
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+/* ── Apply page: candidate-block ripple highlight ── */
+.ripple-block {
+  --block-border-default: rgba(255, 255, 255, 0.3);
+  --block-border-highlight: #C8963E;
+  border-color: var(--block-border-default);
+  animation: ripple-highlight 4.8s linear infinite;
+}
+@keyframes ripple-highlight {
+  0%, 100% { border-color: var(--block-border-default); }
+  6%       { border-color: var(--block-border-highlight); }
+  12%      { border-color: var(--block-border-default); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ripple-block {
+    animation: none;
+    border-color: var(--block-border-default);
+  }
+}
+
 @keyframes status-dot {
   0%, 100% {
     opacity: 1;
@@ -262,4 +242,13 @@ body {
     linear-gradient(to bottom, #1a1a1a11 1px, transparent 1px);
   background-size: 80px 80px;
   background-position: -1px -1px;
+}
+
+html, body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }

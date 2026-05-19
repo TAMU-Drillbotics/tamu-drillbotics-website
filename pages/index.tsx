@@ -4,6 +4,7 @@ import { motion, useInView, useScroll, useTransform, AnimatePresence } from "fra
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import DisciplineConstellation from "@/components/DisciplineConstellation";
+import ProjectStatusDial from "@/components/ProjectStatusDial";
 
 function CrossMark({ className, light }: { className: string; light?: boolean }) {
   const color = light ? "bg-[#ffffff6e]" : "bg-ink-4";
@@ -523,7 +524,7 @@ export default function Home() {
           </section>
 
           {/* ── Right column: Status panel ── */}
-          <StatusPanel />
+          <ProjectStatusDial />
 
         </motion.main>
 

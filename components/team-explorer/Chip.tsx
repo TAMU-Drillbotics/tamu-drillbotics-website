@@ -10,11 +10,11 @@ const base =
 
 const styles = {
   cmd:
-    'text-[#500000] border-[rgba(80,0,0,0.3)] bg-transparent ' +
+    'text-[#E0E0E0] border-[#500000]/40 bg-[#500000]/20 ' +
     'hover:bg-[#500000] hover:text-[#fafafa] hover:border-[#500000]',
   sub:
-    'text-[#1a1a1a] border-[#d0d0d0] bg-transparent ' +
-    'hover:bg-[#1a1a1a] hover:text-[#fafafa] hover:border-[#1a1a1a]',
+    'text-[#E0E0E0] border-[#E0E0E0]/30 bg-transparent ' +
+    'hover:bg-[#500000] hover:text-[#fafafa] hover:border-[#500000]',
 };
 
 export function Chip({ label, kind = 'sub', onRun }: Props) {
