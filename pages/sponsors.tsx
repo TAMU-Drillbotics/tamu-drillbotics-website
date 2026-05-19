@@ -272,12 +272,6 @@ export default function Sponsors() {
 
       {/* ══════════ § 01 — TIERS ══════════ */}
       <section className="relative">
-        <SectionHeader
-          num="01"
-          numColor="text-maroon"
-          label="Sponsors"
-        />
-
         <div className="max-w-[1440px] mx-auto px-14 py-20 pb-24 relative">
           <CrossMark className="left-[42px] top-[42px]" />
           <CrossMark className="right-[42px] top-[42px]" />
@@ -287,13 +281,6 @@ export default function Sponsors() {
           {/* Intro */}
           <header className="grid grid-cols-2 gap-x-16 items-end pb-14 border-b border-rule-strong">
             <div>
-              <motion.div
-                {...fadeUp(0)}
-                className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.18em] uppercase text-ink-2 mb-6"
-              >
-                <span className="w-[7px] h-[7px] rounded-full bg-maroon shadow-[0_0_0_3px_#50000020]" />
-                <span>Partners of record</span>
-              </motion.div>
               <motion.h1
                 {...fadeUp(0.1)}
                 className="font-heading font-semibold text-[84px] leading-[.92] tracking-[-.022em] m-0 text-ink"
@@ -393,10 +380,10 @@ export default function Sponsors() {
         </div>
       </section>
 
-      {/* ══════════ § 02 — VALUE ══════════ */}
+      {/* ══════════ § 01 — VALUE ══════════ */}
       <section className="relative">
         <SectionHeader
-          num="02"
+          num="01"
           numColor="text-maroon"
           label="Value"
         />
@@ -410,13 +397,6 @@ export default function Sponsors() {
           {/* Intro */}
           <header className="grid grid-cols-2 gap-x-16 items-end pb-12 border-b border-rule-strong">
             <div>
-              <motion.div
-                {...fadeUp(0)}
-                className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.18em] uppercase text-ink-2 mb-6"
-              >
-                <span className="w-[7px] h-[7px] rounded-full bg-maroon shadow-[0_0_0_3px_#50000020]" />
-                <span>What sponsorship returns</span>
-              </motion.div>
               <motion.h2
                 {...fadeUp(0.1)}
                 className="font-heading font-semibold text-[64px] leading-[.94] tracking-[-.02em] m-0 text-ink"
@@ -478,7 +458,7 @@ export default function Sponsors() {
         </div>
       </section>
 
-      {/* ══════════ § 03 — CONTACT CTA ══════════ */}
+      {/* ══════════ § 02 — CONTACT CTA ══════════ */}
       <motion.section
         {...REVEAL}
         className="relative bg-[#1A1A1A] text-[#FAFAFA]"
@@ -491,7 +471,7 @@ export default function Sponsors() {
       >
         <SectionHeader
           dark
-          num="03"
+          num="02"
           numColor="text-amber"
           label="Contact"
         />

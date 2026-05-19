@@ -22,14 +22,12 @@ export function ApplicationForm() {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       {/* Section header bar */}
-      <div className="bg-[rgba(58,0,0,0.4)]">
-        <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-white/75">
-          <span className="inline-flex items-baseline gap-2.5 text-white font-medium">
-            <span className="text-amber font-medium">&sect; 04</span>
-            <span>&middot; APPLICATION</span>
-          </span>
-          <span className="flex-1 h-px bg-white/[0.18]" />
-        </div>
+      <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-white/75">
+        <span className="inline-flex items-baseline gap-2.5 text-white font-medium">
+          <span className="text-amber font-medium">&sect; 02</span>
+          <span>&middot; APPLICATION</span>
+        </span>
+        <span className="flex-1 h-px bg-white/[0.18]" />
       </div>
 
       <section
@@ -40,7 +38,7 @@ export function ApplicationForm() {
         {/* Intro */}
         <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-x-16 items-end mb-12">
           <div>
-            <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.2em] uppercase text-[#f2e4cc] mb-5">
+            <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.2em] uppercase text-[#FAFAFA]/70 mb-5">
               <span className="inline-block w-[18px] h-px bg-amber align-middle" />
               FORM
             </div>
@@ -52,7 +50,7 @@ export function ApplicationForm() {
             </h2>
           </div>
           <div className="max-w-[520px] pb-2">
-            <p className="text-[16px] leading-[1.6] text-[#f2e4cc] m-0">
+            <p className="text-[16px] leading-[1.6] text-[#FAFAFA]/70 m-0">
               The form below is hosted on Tally &mdash; short, structured, and
               routed straight to the review pool. Plan on ~10 minutes.
             </p>
@@ -134,7 +132,7 @@ export function ApplicationForm() {
         </div>
 
         {/* Foot note */}
-        <div className="mt-[18px] flex gap-3.5 items-center font-mono text-[11px] tracking-[.18em] uppercase text-[#f2e4cc]">
+        <div className="mt-[18px] flex gap-3.5 items-center font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA]/70">
           <span>DATA &middot; TALLY &rarr; REVIEW POOL &middot; ENCRYPTED IN TRANSIT</span>
           <span className="relative inline-block w-3.5 h-px bg-current">
             <span

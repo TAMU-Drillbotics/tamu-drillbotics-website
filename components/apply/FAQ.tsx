@@ -18,14 +18,12 @@ export function FAQ() {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       {/* Section header bar */}
-      <div className="bg-[rgba(58,0,0,0.4)]">
-        <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-white/75">
-          <span className="inline-flex items-baseline gap-2.5 text-white font-medium">
-            <span className="text-amber font-medium">&sect; 05</span>
-            <span>&middot; FAQ</span>
-          </span>
-          <span className="flex-1 h-px bg-white/[0.18]" />
-        </div>
+      <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-white/75">
+        <span className="inline-flex items-baseline gap-2.5 text-white font-medium">
+          <span className="text-amber font-medium">&sect; 03</span>
+          <span>&middot; FAQ</span>
+        </span>
+        <span className="flex-1 h-px bg-white/[0.18]" />
       </div>
 
       <section
@@ -35,7 +33,7 @@ export function FAQ() {
         {/* Intro */}
         <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-x-16 items-end mb-12">
           <div>
-            <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.2em] uppercase text-[#f2e4cc] mb-5">
+            <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.2em] uppercase text-[#FAFAFA]/70 mb-5">
               <span className="inline-block w-[18px] h-px bg-amber align-middle" />
               QUESTIONS
             </div>
@@ -47,7 +45,7 @@ export function FAQ() {
             </h2>
           </div>
           <div className="max-w-[520px] pb-2">
-            <p className="text-[16px] leading-[1.6] text-[#f2e4cc] m-0">
+            <p className="text-[16px] leading-[1.6] text-[#FAFAFA]/70 m-0">
               Most common questions from prospective members.
             </p>
           </div>
@@ -78,7 +76,7 @@ export function FAQ() {
                   <span
                     aria-hidden="true"
                     className={`font-mono text-[22px] leading-none text-right inline-block self-center transition-[transform,color] duration-200 ease-out ${
-                      isOpen ? "rotate-45 text-amber" : "text-[#f2e4cc]"
+                      isOpen ? "rotate-45 text-amber" : "text-[#FAFAFA]/70"
                     }`}
                     style={{ transformOrigin: "center" }}
                   >
@@ -95,7 +93,7 @@ export function FAQ() {
                       <span className="font-mono text-[10.5px] tracking-[.2em] uppercase text-white/75 pt-1">
                         {faq.ref.replace("Q", "A")}
                       </span>
-                      <p className="text-[16px] leading-[1.6] text-[#f2e4cc] max-w-[760px] m-0">
+                      <p className="text-[16px] leading-[1.6] text-[#FAFAFA]/70 max-w-[760px] m-0">
                         {faq.answer}
                       </p>
                       <span />

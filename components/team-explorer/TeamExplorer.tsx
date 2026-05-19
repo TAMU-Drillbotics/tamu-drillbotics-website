@@ -47,9 +47,9 @@ export function TeamExplorer() {
           <p className="text-[15px] leading-[1.65] text-[#E0E0E0]/70 max-w-[560px]">
             Tap any subteam below to see what they work on. The terminal also takes
             commands &mdash;{' '}
-            <code className="font-mono text-[13px] bg-[#500000]/30 text-[#E0E0E0] px-[6px] py-[1px]">tree</code>{' '}
+            <code className="font-mono text-[13px] bg-[#C8963E]/30 text-[#E0E0E0] px-[6px] py-[1px]">tree</code>{' '}
             shows the whole team at once,{' '}
-            <code className="font-mono text-[13px] bg-[#500000]/30 text-[#E0E0E0] px-[6px] py-[1px]">help</code>{' '}
+            <code className="font-mono text-[13px] bg-[#C8963E]/30 text-[#E0E0E0] px-[6px] py-[1px]">help</code>{' '}
             lists what else you can type.{' '}
             <code className="font-mono text-[13px] bg-[#500000]/30 text-[#E0E0E0] px-[6px] py-[1px]">&uarr; / &darr;</code>{' '}
             for history.

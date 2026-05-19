@@ -3,7 +3,6 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { Hero } from "@/components/apply/Hero";
 import { Candidates } from "@/components/apply/Candidates";
-import { Timeline } from "@/components/apply/Timeline";
 import { ApplicationForm } from "@/components/apply/ApplicationForm";
 import { FAQ } from "@/components/apply/FAQ";
 
@@ -39,7 +38,7 @@ function OuterCross({ className }: { className: string }) {
   return (
     <span
       aria-hidden="true"
-      className={`absolute w-3.5 h-3.5 text-[#f2e4cc] pointer-events-none z-[2] ${className}`}
+      className={`absolute w-3.5 h-3.5 text-[#FAFAFA]/30 pointer-events-none z-[2] ${className}`}
     >
       <span className="absolute left-0 right-0 top-1/2 h-px bg-current" />
       <span className="absolute top-0 bottom-0 left-1/2 w-px bg-current" />
@@ -55,7 +54,7 @@ export default function Apply() {
       <Nav />
 
       <div
-        className="relative bg-maroon text-white overflow-hidden"
+        className="relative bg-[#1A1A1A] text-white overflow-hidden"
         style={{
           backgroundImage:
             "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px)",
@@ -70,7 +69,6 @@ export default function Apply() {
 
         <Hero />
         <Candidates />
-        <Timeline />
         <ApplicationForm />
         <FAQ />
       </div>

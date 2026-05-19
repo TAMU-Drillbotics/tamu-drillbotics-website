@@ -24,7 +24,9 @@
       "Bash(rm lint-out.txt)",
       "Bash(mkdir -p \"/tmp/design-rig\")",
       "Bash(gunzip -c \"C:/Users/Andres Gumucio/.claude/projects/C--Users-Andres-Gumucio-Desktop-tamu-drillbotics/7479336c-5f66-432d-8ab3-812ee9e55cf1/tool-results/webfetch-1779046266963-n3hvk3.bin\")",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(mkdir -p \"/tmp/design-bundle\")",
+      "Bash(tar -xzf \"C:/Users/Andres Gumucio/.claude/projects/C--Users-Andres-Gumucio-Desktop-tamu-drillbotics/0a28901a-7a07-473c-9985-ec2f48c2881f/tool-results/webfetch-1779217496788-a0osyb.bin\" -C \"/tmp/design-bundle\")"
     ]
   }
 }

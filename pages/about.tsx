@@ -55,12 +55,11 @@ const president = {
 };
 
 const teamLeads: Array<{ name: string; role: string; tbd?: boolean; photo?: string }> = [
-  { name: "TBD",             role: "Vice President",              tbd: true },
+  { name: "Shivam Sharma",   role: "Algorithm Lead",              photo: "/people/shivam.jpg" },
   { name: "Andres Gumucio",  role: "Embedded Software Lead",      photo: "/people/andres-gumucio.jpg" },
-  { name: "Tej Nagasamudra", role: "Electronics Co-Lead" },
-  { name: "Ayden Alvarez",   role: "Hydraulics Lead",         photo: "/people/ayden-alvarez.jpg" },
+  { name: "Tej Nagasamudra", role: "Electronics Lead" },
+  { name: "Ayden Alvarez",   role: "Hydraulics Lead",             photo: "/people/ayden-alvarez.jpg" },
   { name: "Sammy",           role: "Treasury & Relations Chair" },
-  { name: "Shivam",          role: "Algorithm Lead" },
   { name: "TBD",             role: "Marketing Lead",              tbd: true },
 ];
 
@@ -86,32 +85,34 @@ function CrossMark({ className, light }: { className: string; light?: boolean })
 
 export default function About() {
   return (
-    <div className="flex flex-col bg-[#1A1A1A]">
+    <div
+      className="flex flex-col bg-[#1A1A1A]"
+      style={{
+        backgroundImage:
+          "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px)",
+        backgroundSize: "80px 80px",
+        backgroundPosition: "-1px -1px",
+      }}
+    >
       <Nav />
 
       {/* ══════════ § 01 — ABOUT ══════════ */}
-      <section className="relative bg-ink">
+      <section className="relative">
         <div className="max-w-[1440px] mx-auto px-14 pt-16 pb-24 relative">
           <CrossMark className="left-[42px] top-6" light />
           <CrossMark className="right-[42px] top-6" light />
           <CrossMark className="left-[42px] bottom-8" light />
           <CrossMark className="right-[42px] bottom-8" light />
 
-          {/* Section bar */}
-          <div className="flex items-center gap-[18px] pb-[14px] font-mono text-[10px] tracking-[.18em] uppercase mb-14">
-            <span className="text-[#FAFAFA]">&sect; <span className="text-maroon">01</span> &middot; ABOUT</span>
-            <span className="flex-1 h-px bg-[#FAFAFA]/30" />
-          </div>
-
           {/* About top: title + TOC */}
           <header className="grid grid-cols-2 gap-x-16 items-end pb-10 border-b border-[#FAFAFA]/20">
             <div>
               <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA]/70 mb-6">
-                <span className="w-[7px] h-[7px] rounded-full bg-maroon" style={{ boxShadow: "0 0 0 3px rgba(80,0,0,0.4)" }} />
+                <span className="inline-block w-[18px] h-px bg-amber align-middle" />
                 <span>What we do</span>
               </div>
               <h1 className="font-heading font-semibold text-[96px] leading-[.9] tracking-[-.025em] m-0 text-[#FAFAFA]">
-                The competition,<br />and our role in it<span className="text-maroon">.</span>
+                The competition,<br />and our role in it<span className="text-amber">.</span>
               </h1>
             </div>
             <ul className="list-none m-0 p-0 ml-auto max-w-[420px] mb-1.5" aria-label="About sections">
@@ -152,7 +153,7 @@ export default function About() {
             <article className="pr-12 scroll-mt-20" id="competition">
               <div className="flex items-baseline justify-between gap-3.5 pb-3.5 border-b border-[#FAFAFA]/20 mb-7">
                 <span className="font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA] font-medium">
-                  <span className="text-maroon">01</span>
+                  <span className="text-amber">01</span>
                   <span className="text-[#FAFAFA]/30 mx-1.5">/</span>
                   The Competition
                 </span>
@@ -162,7 +163,7 @@ export default function About() {
               </div>
 
               <h2 className="font-heading font-semibold text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
-                An international student drilling-rig competition<span className="text-maroon">.</span>
+                An international student drilling-rig competition<span className="text-amber">.</span>
               </h2>
               <p className="text-[18px] leading-[1.55] text-[#FAFAFA]/80 m-0 mb-7">
                 <strong className="text-[#FAFAFA] font-semibold">SPE Drillbotics</strong> &mdash; run by the Society of Petroleum
@@ -267,7 +268,7 @@ export default function About() {
             <article className="pl-12 scroll-mt-20" id="what-we-do">
               <div className="flex items-baseline justify-between gap-3.5 pb-3.5 border-b border-[#FAFAFA]/20 mb-7">
                 <span className="font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA] font-medium">
-                  <span className="text-maroon">02</span>
+                  <span className="text-amber">02</span>
                   <span className="text-[#FAFAFA]/30 mx-1.5">/</span>
                   What We Do
                 </span>
@@ -342,21 +343,21 @@ export default function About() {
       </section>
 
       {/* ══════════ § 02 — TEAM EXPLORER ══════════ */}
-      <motion.section {...REVEAL} className="relative bg-[#1A1A1A] scroll-mt-20" id="team">
+      <motion.section {...REVEAL} className="relative scroll-mt-20" id="team">
         <div className="max-w-[1440px] mx-auto px-14 py-24">
           <TeamExplorer />
         </div>
       </motion.section>
 
       {/* ══════════ § 03 — OUR TEAM ══════════ */}
-      <motion.section {...REVEAL} className="relative scroll-mt-20 bg-[#1A1A1A]" id="our-team">
+      <motion.section {...REVEAL} className="relative scroll-mt-20" id="our-team">
         <div className="max-w-[1440px] mx-auto px-14 pt-16 pb-[120px] relative">
           <CrossMark className="left-14 top-6" light />
           <CrossMark className="right-14 top-6" light />
 
           {/* Section bar */}
           <div className="flex items-center gap-[18px] pb-[14px] font-mono text-[10px] tracking-[.18em] uppercase mb-14">
-            <span className="text-[#E0E0E0]">&sect; <span className="text-maroon">03</span> &middot; OUR TEAM</span>
+            <span className="text-[#E0E0E0]">&sect; <span className="text-amber">02</span> &middot; OUR TEAM</span>
             <span className="flex-1 h-px bg-[#E0E0E0]/15" />
           </div>
 
@@ -373,7 +374,7 @@ export default function About() {
                 className="text-[48px] leading-[1.05] tracking-[-0.01em] m-0"
                 style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, color: "#E0E0E0" }}
               >
-                The people behind the rig<span className="text-maroon">.</span>
+                The people behind the rig<span className="text-amber">.</span>
               </h3>
             </div>
             <div className="pt-1">
@@ -563,21 +564,15 @@ export default function About() {
               }}
             >
               17
-              <span className="text-maroon">.</span>
+              <span className="text-amber">.</span>
             </span>
           </div>
         </div>
       </motion.section>
 
       {/* ══════════ § 04 — CTA ══════════ */}
-      <motion.section {...REVEAL} className="bg-[#1A1A1A] text-[#FAFAFA]">
-        {/* Header bar */}
-        <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[10px] tracking-[.18em] uppercase">
-          <span className="text-[#FAFAFA] font-medium">&sect; <span className="text-amber">04</span> &middot; NEXT STEPS</span>
-          <span className="flex-1 h-px bg-[#ffffff1f]" />
-        </div>
-
-        <div className="max-w-[1440px] mx-auto px-14 py-24 pb-[104px]">
+      <motion.section {...REVEAL} className="text-[#FAFAFA]">
+        <div className="max-w-[1440px] mx-auto px-14 pt-8 pb-[104px]">
           <div className="grid grid-cols-2 gap-6">
             {/* Card 1 — maroon */}
             <Link

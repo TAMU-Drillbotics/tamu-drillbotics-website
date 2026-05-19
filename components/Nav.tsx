@@ -19,7 +19,7 @@ const REVEAL_HOLD_MS = 550;
 type NavTheme = 'light' | 'maroon' | 'ink';
 
 function themeForPath(pathname: string): NavTheme {
-  if (pathname === '/apply') return 'maroon';
+  if (pathname === '/apply') return 'ink';
   if (pathname === '/about') return 'ink';
   return 'light';
 }

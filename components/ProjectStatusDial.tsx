@@ -64,18 +64,8 @@ export default function ProjectStatusDial() {
       className="flex flex-col py-6 pl-8"
       aria-label="Project status"
     >
-      {/* 1. Status row */}
-      <div className="flex items-center justify-end gap-1.5 font-heading text-[11px] tracking-[0.1em] uppercase text-[#1A1A1A]">
-        <motion.span
-          className="inline-block w-1.5 h-1.5 rounded-full bg-[#500000]"
-          animate={inView ? { opacity: [1, 0.35, 1] } : { opacity: 1 }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <span>IN BUILD</span>
-      </div>
-
       {/* 2. Radial dial */}
-      <div className="mt-5 mb-6 flex justify-center">
+      <div className="mb-6 flex justify-center">
         <svg width={216} height={216} viewBox="-12 -12 204 204" aria-hidden="true">
           {/* Track ring */}
           <circle

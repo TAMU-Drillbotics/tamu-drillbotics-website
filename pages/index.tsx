@@ -173,13 +173,6 @@ function StatusPanel() {
       {/* Panel header */}
       <div className="flex items-center justify-between font-mono text-[11px] tracking-[.18em] uppercase text-ink-3 pb-3.5 border-b border-rule-strong">
         <span className="text-ink font-medium">Project Status &middot; 2026</span>
-        <span className="inline-flex items-center gap-1.5">
-          <span
-            className="w-1.5 h-1.5 rounded-full bg-maroon"
-            style={{ animation: inView ? "pulse-dot 1.3s ease-in-out infinite" : "none" }}
-          />
-          In Build
-        </span>
       </div>
 
       {/* Build phase */}
@@ -529,7 +522,10 @@ export default function Home() {
         </motion.main>
 
         {/* Bottom metadata strip */}
-        <motion.footer className="border-t border-rule bg-bg/70" style={{ opacity: heroStripOpacity }}>
+        <motion.footer
+          className="absolute bottom-8 left-0 right-0 border-t border-rule bg-bg/70"
+          style={{ opacity: heroStripOpacity }}
+        >
           <div className="max-w-[1440px] mx-auto px-14 py-2 flex items-center gap-6 font-mono text-[9.5px] tracking-[.16em] uppercase text-ink-4">
             <span className="inline-flex items-center gap-1.5">
               <span className="text-ink-2 font-medium tracking-[.12em]">30.6280&deg;N</span>{" "}
@@ -543,8 +539,6 @@ export default function Home() {
               <span className="text-ink-2 font-medium tracking-[.12em]">2015</span>
             </span>
             <div className="ml-auto flex items-center gap-6">
-              <span>Industry-Backed Research Program</span>
-              <span className="w-px h-[9px] bg-rule" />
               <span className="inline-flex items-center gap-2 text-ink-3">
                 <span>Scroll</span>
                 <span className="w-[22px] h-px bg-ink-4" />

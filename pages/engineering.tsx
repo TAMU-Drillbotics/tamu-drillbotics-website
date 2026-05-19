@@ -58,7 +58,7 @@ function SectionBar({
 }) {
   const tag = dark ? "text-[#FAFAFA]" : "text-ink";
   const numColor = dark ? "text-amber" : "text-maroon";
-  const rule = dark ? "bg-[#ffffff1f]" : "bg-ink";
+  const rule = dark ? "bg-[#ffffff1f]" : "bg-rule-strong";
   return (
     <div className="max-w-[1440px] mx-auto px-14">
       <div className="flex items-center gap-[18px] py-3.5 font-mono text-[10px] tracking-[.18em] uppercase">

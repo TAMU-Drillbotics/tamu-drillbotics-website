@@ -44,14 +44,12 @@ export function Candidates() {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       {/* Section header bar */}
-      <div className="bg-[rgba(58,0,0,0.4)]">
-        <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-white/75">
-          <span className="inline-flex items-baseline gap-2.5 text-white font-medium">
-            <span className="text-amber font-medium">&sect; 02</span>
-            <span>&middot; CANDIDATES</span>
-          </span>
-          <span className="flex-1 h-px bg-white/[0.18]" />
-        </div>
+      <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-white/75">
+        <span className="inline-flex items-baseline gap-2.5 text-white font-medium">
+          <span className="text-amber font-medium">&sect; 01</span>
+          <span>&middot; CANDIDATES</span>
+        </span>
+        <span className="flex-1 h-px bg-white/[0.18]" />
       </div>
 
       <section
@@ -61,7 +59,7 @@ export function Candidates() {
         {/* Intro */}
         <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-x-16 items-start mb-16">
           <div>
-            <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.2em] uppercase text-[#f2e4cc] mb-5">
+            <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.2em] uppercase text-[#FAFAFA]/70 mb-5">
               <span className="inline-block w-[18px] h-px bg-amber align-middle" />
               WHO WE WANT
             </div>
@@ -75,7 +73,7 @@ export function Candidates() {
             </h2>
           </div>
           <div className="max-w-[540px] pt-[22px]">
-            <p className="text-[18px] leading-[1.6] text-[#f2e4cc] m-0">
+            <p className="text-[18px] leading-[1.6] text-[#FAFAFA]/70 m-0">
               The team pulls from across the College of Engineering and beyond.
               Each subteam has roles that match different disciplines, and most
               don&rsquo;t require prior experience.
@@ -106,18 +104,18 @@ export function Candidates() {
         </div>
 
         {/* Amber callout */}
-        <div className="relative border border-amber bg-[rgba(200,150,62,0.04)] px-9 py-8 grid grid-cols-[auto_1fr] gap-x-12 items-center">
+        <div className="relative px-9 py-8 grid grid-cols-[auto_1fr] gap-x-12 items-center">
           {/* Top-left + bottom-right corner crosses */}
           <span
             aria-hidden="true"
-            className="absolute -top-[7px] -left-[7px] w-3.5 h-3.5 text-[#f2e4cc] pointer-events-none"
+            className="absolute -top-[7px] -left-[7px] w-3.5 h-3.5 text-[#FAFAFA]/70 pointer-events-none"
           >
             <span className="absolute left-0 right-0 top-1/2 h-px bg-current" />
             <span className="absolute top-0 bottom-0 left-1/2 w-px bg-current" />
           </span>
           <span
             aria-hidden="true"
-            className="absolute -bottom-[7px] -right-[7px] w-3.5 h-3.5 text-[#f2e4cc] pointer-events-none"
+            className="absolute -bottom-[7px] -right-[7px] w-3.5 h-3.5 text-[#FAFAFA]/70 pointer-events-none"
           >
             <span className="absolute left-0 right-0 top-1/2 h-px bg-current" />
             <span className="absolute top-0 bottom-0 left-1/2 w-px bg-current" />
@@ -130,7 +128,7 @@ export function Candidates() {
             </span>
             <span className="text-amber">.</span>
           </div>
-          <p className="text-[15.5px] leading-[1.6] text-[#f2e4cc] m-0 max-w-[560px]">
+          <p className="text-[15.5px] leading-[1.6] text-[#FAFAFA]/70 m-0 max-w-[560px]">
             Most subteams take on first-year students. Bring curiosity and
             willingness to learn &mdash; we&rsquo;ll teach the rest.
           </p>

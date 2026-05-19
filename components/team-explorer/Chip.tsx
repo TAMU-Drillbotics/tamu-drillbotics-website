@@ -10,8 +10,8 @@ const base =
 
 const styles = {
   cmd:
-    'text-[#E0E0E0] border-[#500000]/40 bg-[#500000]/20 ' +
-    'hover:bg-[#500000] hover:text-[#fafafa] hover:border-[#500000]',
+    'text-[#E0E0E0] border-[#C8963E]/40 bg-[#C8963E]/20 ' +
+    'hover:bg-[#C8963E] hover:text-[#1A1A1A] hover:border-[#C8963E]',
   sub:
     'text-[#E0E0E0] border-[#E0E0E0]/30 bg-transparent ' +
     'hover:bg-[#500000] hover:text-[#fafafa] hover:border-[#500000]',
