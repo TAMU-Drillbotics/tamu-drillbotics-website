@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Chakra_Petch, Barlow, JetBrains_Mono, Outfit, Space_Grotesk, DM_Sans } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
+import { NAV_HEIGHT_PX } from "@/components/Nav";
 
 const chakraPetch = Chakra_Petch({
   variable: "--font-chakra-petch",
@@ -49,6 +50,12 @@ export default function App({ Component, pageProps }: AppProps) {
     router.events.on('routeChangeComplete', onRouteChange);
     return () => router.events.off('routeChangeComplete', onRouteChange);
   }, [router.events]);
+
+  // Expose nav height to CSS so calc() expressions in stylesheets stay in
+  // sync with the JS constant. CSS provides a 57px fallback for first paint.
+  useEffect(() => {
+    document.documentElement.style.setProperty('--nav-height', `${NAV_HEIGHT_PX}px`);
+  }, []);
 
   return (
     <div className={`${chakraPetch.variable} ${barlow.variable} ${jetbrainsMono.variable} ${outfit.variable} ${spaceGrotesk.variable} ${dmSans.variable} font-body`}>

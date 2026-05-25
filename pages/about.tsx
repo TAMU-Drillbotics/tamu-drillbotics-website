@@ -2,7 +2,16 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import GridReveal from "@/components/GridReveal";
 import { TeamExplorer } from "@/components/team-explorer";
+import { TimelineOrchestrator, useTimelineBeat } from "@/components/TimelineOrchestrator";
+import { ABOUT_TIMELINE } from "@/lib/aboutTimeline";
+
+const FADE_UP_8 = { hidden: { opacity: 0, y: 8 }, shown: { opacity: 1, y: 0 } };
+const CLIP_WIPE = {
+  hidden: { clipPath: "inset(0 100% 0 0)" },
+  shown: { clipPath: "inset(0 0 0 0)" },
+};
 
 const REVEAL = {
   initial: { opacity: 0, y: 24 },
@@ -78,22 +87,155 @@ function CrossMark({ className, light }: { className: string; light?: boolean })
   );
 }
 
-
 /* ═══════════════════════════════════════════════════════
    PAGE
    ═══════════════════════════════════════════════════════ */
 
+/* ════════ about-page beat-gated pieces ════════ */
+
+function AboutHeader() {
+  const eyebrow = useTimelineBeat("eyebrow");
+  const headline = useTimelineBeat("headline");
+  const toc = useTimelineBeat("tocReveal");
+  const tocItems = [
+    { idx: "01", label: "The Competition", href: "#competition" },
+    { idx: "02", label: "What We Do", href: "#what-we-do" },
+    { idx: "03", label: "The Team", href: "#team" },
+    { idx: "04", label: "Our Team", href: "#our-team" },
+  ];
+  return (
+    <header className="grid grid-cols-2 gap-x-16 items-end pb-10 border-b border-[#FAFAFA]/20">
+      <div>
+        <motion.div
+          className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA]/70 mb-6"
+          initial="hidden"
+          animate={eyebrow.hasFired ? "shown" : "hidden"}
+          variants={FADE_UP_8}
+          transition={{ duration: eyebrow.reducedMotion ? 0 : 0.3, ease: "easeOut" }}
+        >
+          <span className="inline-block w-[18px] h-px bg-amber align-middle" />
+          <span>What we do</span>
+        </motion.div>
+        <h1 className="font-heading font-semibold text-[96px] leading-[.9] tracking-[-.025em] m-0 text-[#FAFAFA]">
+          <motion.span
+            className="inline-block"
+            style={{ clipPath: "inset(0 100% 0 0)" }}
+            initial="hidden"
+            animate={headline.hasFired ? "shown" : "hidden"}
+            variants={CLIP_WIPE}
+            transition={{ duration: headline.reducedMotion ? 0 : 0.5, ease: "easeOut" }}
+          >
+            The competition,
+          </motion.span>
+          <br />
+          <motion.span
+            className="inline-block"
+            style={{ clipPath: "inset(0 100% 0 0)" }}
+            initial="hidden"
+            animate={headline.hasFired ? "shown" : "hidden"}
+            variants={CLIP_WIPE}
+            transition={{ duration: headline.reducedMotion ? 0 : 0.5, ease: "easeOut" }}
+          >
+            and our role in it<span className="text-amber">.</span>
+          </motion.span>
+        </h1>
+      </div>
+      <ul className="list-none m-0 p-0 ml-auto max-w-[420px] mb-1.5" aria-label="About sections">
+        {tocItems.map((item, i) => (
+          <motion.li
+            key={item.idx}
+            className={`flex items-baseline justify-between gap-3.5 py-2.5 border-t border-dashed border-[#FAFAFA]/15 font-mono text-[11px] tracking-[.16em] uppercase text-[#FAFAFA]/55 ${
+              i === 3 ? "border-b" : ""
+            }`}
+            initial={{ opacity: 0, y: 10 }}
+            animate={toc.hasFired ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+            transition={{
+              duration: toc.reducedMotion ? 0 : 0.22,
+              delay: toc.reducedMotion ? 0 : i * 0.16,
+              ease: "easeOut",
+            }}
+          >
+            <span className="text-[#FAFAFA]/30">{item.idx}</span>
+            <a
+              href={item.href}
+              className={`no-underline font-medium tracking-[.14em] ${
+                i === 0 ? "text-amber hover:text-amber" : "text-[#FAFAFA] hover:text-maroon"
+              }`}
+            >
+              {item.label}
+            </a>
+          </motion.li>
+        ))}
+      </ul>
+    </header>
+  );
+}
+
+function ColumnHeader({ children }: { children: React.ReactNode }) {
+  const { hasFired, reducedMotion } = useTimelineBeat("colHeaders");
+  return (
+    <motion.div
+      initial="hidden"
+      animate={hasFired ? "shown" : "hidden"}
+      variants={FADE_UP_8}
+      transition={{ duration: reducedMotion ? 0 : 0.3, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function ColumnTitle({
+  className,
+  children,
+}: {
+  className: string;
+  children: React.ReactNode;
+}) {
+  const { hasFired, reducedMotion } = useTimelineBeat("colTitles");
+  return (
+    <h2 className={className}>
+      <motion.span
+        className="inline-block"
+        style={{ clipPath: "inset(0 100% 0 0)" }}
+        initial="hidden"
+        animate={hasFired ? "shown" : "hidden"}
+        variants={CLIP_WIPE}
+        transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeOut" }}
+      >
+        {children}
+      </motion.span>
+    </h2>
+  );
+}
+
+function ColumnBody({ children }: { children: React.ReactNode }) {
+  const { hasFired, reducedMotion } = useTimelineBeat("colBody");
+  return (
+    <motion.div
+      initial="hidden"
+      animate={hasFired ? "shown" : "hidden"}
+      variants={FADE_UP_8}
+      transition={{ duration: reducedMotion ? 0 : 0.35, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function About() {
   return (
+    <TimelineOrchestrator timeline={ABOUT_TIMELINE}>
     <div
-      className="flex flex-col bg-[#1A1A1A]"
+      className="isolate flex flex-col bg-[#1A1A1A]"
       style={{
         backgroundImage:
-          "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px)",
+          "linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)",
         backgroundSize: "80px 80px",
         backgroundPosition: "-1px -1px",
       }}
     >
+      <GridReveal />
       <Nav />
 
       {/* ══════════ § 01 — ABOUT ══════════ */}
@@ -105,66 +247,29 @@ export default function About() {
           <CrossMark className="right-[42px] bottom-8" light />
 
           {/* About top: title + TOC */}
-          <header className="grid grid-cols-2 gap-x-16 items-end pb-10 border-b border-[#FAFAFA]/20">
-            <div>
-              <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA]/70 mb-6">
-                <span className="inline-block w-[18px] h-px bg-amber align-middle" />
-                <span>What we do</span>
-              </div>
-              <h1 className="font-heading font-semibold text-[96px] leading-[.9] tracking-[-.025em] m-0 text-[#FAFAFA]">
-                The competition,<br />and our role in it<span className="text-amber">.</span>
-              </h1>
-            </div>
-            <ul className="list-none m-0 p-0 ml-auto max-w-[420px] mb-1.5" aria-label="About sections">
-              {[
-                { idx: "01", label: "The Competition", href: "#competition" },
-                { idx: "02", label: "What We Do", href: "#what-we-do" },
-                { idx: "03", label: "The Team", href: "#team" },
-                { idx: "04", label: "Our Team", href: "#our-team" },
-              ].map((item, i) => (
-                <motion.li
-                  key={item.idx}
-                  className={`flex items-baseline justify-between gap-3.5 py-2.5 border-t border-dashed border-[#FAFAFA]/15 font-mono text-[11px] tracking-[.16em] uppercase text-[#FAFAFA]/55 ${
-                    i === 3 ? "border-b" : ""
-                  }`}
-                  // Matches the home-page StatusPanel subsystem stagger
-                  // (initial { opacity: 0, y: 10 } → 0.22s easeOut, 0.16s interval).
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.22, delay: i * 0.16, ease: "easeOut" }}
-                >
-                  <span className="text-[#FAFAFA]/30">{item.idx}</span>
-                  <a
-                    href={item.href}
-                    className={`no-underline font-medium tracking-[.14em] ${
-                      i === 0 ? "text-amber hover:text-amber" : "text-[#FAFAFA] hover:text-maroon"
-                    }`}
-                  >
-                    {item.label}
-                  </a>
-                </motion.li>
-              ))}
-            </ul>
-          </header>
+          <AboutHeader />
 
           {/* Two-column body */}
           <div className="mt-16 grid grid-cols-[1fr_1px_1fr]">
             {/* ── LEFT: The Competition ── */}
             <article className="pr-12 scroll-mt-20" id="competition">
-              <div className="flex items-baseline justify-between gap-3.5 pb-3.5 border-b border-[#FAFAFA]/20 mb-7">
-                <span className="font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA] font-medium">
-                  <span className="text-amber">01</span>
-                  <span className="text-[#FAFAFA]/30 mx-1.5">/</span>
-                  The Competition
-                </span>
-                <span className="font-mono text-[10.5px] tracking-[.16em] uppercase text-[#FAFAFA]/35">
-                  External &middot; SPE / DSATS
-                </span>
-              </div>
+              <ColumnHeader>
+                <div className="flex items-baseline justify-between gap-3.5 pb-3.5 border-b border-[#FAFAFA]/20 mb-7">
+                  <span className="font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA] font-medium">
+                    <span className="text-amber">01</span>
+                    <span className="text-[#FAFAFA]/30 mx-1.5">/</span>
+                    The Competition
+                  </span>
+                  <span className="font-mono text-[10.5px] tracking-[.16em] uppercase text-[#FAFAFA]/35">
+                    External &middot; SPE / DSATS
+                  </span>
+                </div>
+              </ColumnHeader>
 
-              <h2 className="font-heading font-semibold text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
+              <ColumnTitle className="font-heading font-semibold text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
                 An international student drilling-rig competition<span className="text-amber">.</span>
-              </h2>
+              </ColumnTitle>
+              <ColumnBody>
               <p className="text-[18px] leading-[1.55] text-[#FAFAFA]/80 m-0 mb-7">
                 <strong className="text-[#FAFAFA] font-semibold">SPE Drillbotics</strong> &mdash; run by the Society of Petroleum
                 Engineers&apos; DSATS committee &mdash; challenges university teams to design,
@@ -250,6 +355,7 @@ export default function About() {
                   populated once the official 2026&ndash;27 schedule is released.
                 </p>
               </div>
+              </ColumnBody>
             </article>
 
             {/* ── CENTER DIVIDER ── */}
@@ -266,20 +372,23 @@ export default function About() {
 
             {/* ── RIGHT: What We Do ── */}
             <article className="pl-12 scroll-mt-20" id="what-we-do">
-              <div className="flex items-baseline justify-between gap-3.5 pb-3.5 border-b border-[#FAFAFA]/20 mb-7">
-                <span className="font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA] font-medium">
-                  <span className="text-amber">02</span>
-                  <span className="text-[#FAFAFA]/30 mx-1.5">/</span>
-                  What We Do
-                </span>
-                <span className="font-mono text-[10.5px] tracking-[.16em] uppercase text-[#FAFAFA]/35">
-                  Internal &middot; TAMU Drillbotics
-                </span>
-              </div>
+              <ColumnHeader>
+                <div className="flex items-baseline justify-between gap-3.5 pb-3.5 border-b border-[#FAFAFA]/20 mb-7">
+                  <span className="font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA] font-medium">
+                    <span className="text-amber">02</span>
+                    <span className="text-[#FAFAFA]/30 mx-1.5">/</span>
+                    What We Do
+                  </span>
+                  <span className="font-mono text-[10.5px] tracking-[.16em] uppercase text-[#FAFAFA]/35">
+                    Internal &middot; TAMU Drillbotics
+                  </span>
+                </div>
+              </ColumnHeader>
 
-              <h2 className="font-heading font-semibold text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
+              <ColumnTitle className="font-heading font-semibold text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
                 We build the rig (nearly) end to end.
-              </h2>
+              </ColumnTitle>
+              <ColumnBody>
               <p className="text-[18px] leading-[1.55] text-[#FAFAFA]/80 m-0 mb-7">
                 While we outsource the machining and components, the research, assembly, and testing happen right here at A&amp;M.
               </p>
@@ -337,6 +446,7 @@ export default function About() {
                   autonomy stack are tracking against the 2026&ndash;27 competition window.
                 </p>
               </div>
+              </ColumnBody>
             </article>
           </div>
         </div>
@@ -633,5 +743,6 @@ export default function About() {
 
       <Footer />
     </div>
+    </TimelineOrchestrator>
   );
 }

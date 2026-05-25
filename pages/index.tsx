@@ -3,8 +3,10 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import DisciplineConstellation from "@/components/DisciplineConstellation";
+import GridReveal from "@/components/GridReveal";
 import ProjectStatusDial from "@/components/ProjectStatusDial";
+import { TimelineOrchestrator, useTimelineBeat } from "@/components/TimelineOrchestrator";
+import { HERO_TIMELINE } from "@/lib/heroTimeline";
 
 function CrossMark({ className, light }: { className: string; light?: boolean }) {
   const color = light ? "bg-[#ffffff6e]" : "bg-ink-4";
@@ -16,26 +18,30 @@ function CrossMark({ className, light }: { className: string; light?: boolean })
   );
 }
 
-function HeroCrossMark({ className, delay }: { className: string; delay: number }) {
+function HeroCrossMark({ className, index }: { className: string; index: number }) {
+  const { hasFired } = useTimelineBeat("cornerCrosses");
+  // 100ms stagger between the four corners, preserving the original feel.
+  const baseDelay = index * 0.1;
   return (
     <span className={`absolute w-3.5 h-3.5 ${className}`} aria-hidden="true">
       <motion.span
         className="absolute left-0 right-0 top-1/2 h-px bg-ink-4 origin-left"
         initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 0.15, delay, ease: [0.16, 1, 0.3, 1] }}
+        animate={hasFired ? { scaleX: 1 } : { scaleX: 0 }}
+        transition={{ duration: 0.15, delay: baseDelay, ease: [0.16, 1, 0.3, 1] }}
       />
       <motion.span
         className="absolute top-0 bottom-0 left-1/2 w-px bg-ink-4 origin-top"
         initial={{ scaleY: 0 }}
-        animate={{ scaleY: 1 }}
-        transition={{ duration: 0.15, delay: delay + 0.1, ease: [0.16, 1, 0.3, 1] }}
+        animate={hasFired ? { scaleY: 1 } : { scaleY: 0 }}
+        transition={{ duration: 0.15, delay: baseDelay + 0.1, ease: [0.16, 1, 0.3, 1] }}
       />
     </span>
   );
 }
 
 function HeroGrid() {
+  const { hasFired } = useTimelineBeat("gridDraw");
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
       {Array.from({ length: 36 }, (_, i) => (
@@ -44,7 +50,7 @@ function HeroGrid() {
           className="absolute top-0 bottom-0 w-px origin-top"
           style={{ left: 80 * (i + 1) - 1, backgroundColor: "#EBEBEB" }}
           initial={{ scaleY: 0 }}
-          animate={{ scaleY: 1 }}
+          animate={hasFired ? { scaleY: 1 } : { scaleY: 0 }}
           transition={{ duration: 0.4, delay: i * 0.015, ease: [0.16, 1, 0.3, 1] }}
         />
       ))}
@@ -54,7 +60,7 @@ function HeroGrid() {
           className="absolute left-0 right-0 h-px origin-left"
           style={{ top: 80 * (i + 1) - 1, backgroundColor: "#EBEBEB" }}
           initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
+          animate={hasFired ? { scaleX: 1 } : { scaleX: 0 }}
           transition={{ duration: 0.5, delay: 0.08 + i * 0.02, ease: [0.16, 1, 0.3, 1] }}
         />
       ))}
@@ -277,6 +283,162 @@ function StatusPanel() {
   );
 }
 
+/* ════════ hero beat-gated pieces ════════ */
+
+const FADE_UP_8 = { hidden: { opacity: 0, y: 8 }, shown: { opacity: 1, y: 0 } };
+const CLIP_WIPE = {
+  hidden: { clipPath: "inset(0 100% 0 0)" },
+  shown: { clipPath: "inset(0 0 0 0)" },
+};
+
+function Eyebrow() {
+  const rect = useTimelineBeat("metadataRect");
+  const expand = useTimelineBeat("metadataExpand");
+  return (
+    <div className="flex items-center gap-3.5 font-mono text-[11.5px] tracking-[.18em] uppercase text-ink-2 mb-10">
+      <motion.span
+        className="inline-flex items-center gap-3.5"
+        initial="hidden"
+        animate={rect.hasFired ? "shown" : "hidden"}
+        variants={FADE_UP_8}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
+        <span className="inline-flex items-center gap-2 border border-rule-strong px-2.5 py-[5px] bg-white">
+          <span className="w-[7px] h-[7px] rounded-full bg-maroon shadow-[0_0_0_3px_#50000020]" />
+          RIG-02 &middot; BUILD CYCLE 1
+        </span>
+        <span className="text-ink-4">/</span>
+      </motion.span>
+      <motion.span
+        className="inline-block"
+        style={{ clipPath: "inset(0 100% 0 0)" }}
+        initial="hidden"
+        animate={expand.hasFired ? "shown" : "hidden"}
+        variants={CLIP_WIPE}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      >
+        SPE Drillbotics&reg; Competition 2026
+      </motion.span>
+    </div>
+  );
+}
+
+function Wordmark() {
+  const headline = useTimelineBeat("headlineReveal");
+  const label = useTimelineBeat("universityLabel");
+  const headlineState = headline.hasFired ? "shown" : "hidden";
+  const headlineTransition = { duration: 0.5, ease: "easeOut" } as const;
+  return (
+    <h1 className="font-heading font-bold text-[148px] leading-[.86] tracking-[-.025em] uppercase m-0 text-ink">
+      <span className="flex items-baseline gap-[18px]">
+        <motion.span
+          className="inline-block"
+          style={{ clipPath: "inset(0 100% 0 0)" }}
+          initial="hidden"
+          animate={headlineState}
+          variants={CLIP_WIPE}
+          transition={headlineTransition}
+        >
+          Tamu
+        </motion.span>
+        <motion.span
+          className="font-mono text-[13px] font-normal tracking-[.12em] text-ink-3 uppercase -translate-y-[90px] border-l border-rule-strong pl-3.5 leading-normal whitespace-nowrap inline-block"
+          style={{ clipPath: "inset(0 100% 0 0)" }}
+          initial="hidden"
+          animate={label.hasFired ? "shown" : "hidden"}
+          variants={CLIP_WIPE}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          Texas A&amp;M University
+          <span className="text-ink font-medium block">College Station, TX</span>
+        </motion.span>
+      </span>
+      <motion.span
+        className="inline-flex items-baseline pr-[0.08em]"
+        style={{ clipPath: "inset(0 100% 0 0)" }}
+        initial="hidden"
+        animate={headlineState}
+        variants={CLIP_WIPE}
+        transition={headlineTransition}
+      >
+        <span>Drillbotics</span>
+        <span className="text-maroon">.</span>
+      </motion.span>
+    </h1>
+  );
+}
+
+function Lede() {
+  const { hasFired } = useTimelineBeat("elevatorPitch");
+  return (
+    <motion.p
+      className="mt-12 max-w-[580px] text-[19px] leading-relaxed text-ink-2"
+      initial="hidden"
+      animate={hasFired ? "shown" : "hidden"}
+      variants={FADE_UP_8}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+    >
+      We{" "}
+      <strong className="text-[#500000] font-semibold">design</strong>,{" "}
+      <strong className="text-[#500000] font-semibold">build</strong>, and{" "}
+      <strong className="text-[#500000] font-semibold">program</strong> autonomous drilling rigs.
+      Steel, sensors, and machine learning — backed by industry.
+    </motion.p>
+  );
+}
+
+function Ctas() {
+  const { hasFired } = useTimelineBeat("ctas");
+  return (
+    <motion.div
+      className="mt-12 flex items-center gap-3.5"
+      initial="hidden"
+      animate={hasFired ? "shown" : "hidden"}
+      variants={FADE_UP_8}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
+      <Link
+        href="/engineering"
+        className="oct-clip font-heading text-sm tracking-[.14em] uppercase font-semibold px-7 py-[18px] bg-maroon text-[#FAFAFA] border border-maroon no-underline inline-flex items-center gap-3.5 hover:bg-maroon-ink hover:border-maroon-ink transition-all duration-150"
+      >
+        The Engineering
+        <span className="inline-block w-[22px] h-px bg-[#FAFAFA] relative">
+          <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-[#FAFAFA] rotate-45" />
+        </span>
+      </Link>
+      <Link
+        href="/apply#apply-form"
+        className="oct-outline-ink font-heading text-sm tracking-[.14em] uppercase font-semibold px-[22px] py-[18px] text-ink no-underline inline-flex items-center gap-2.5 hover:text-maroon transition-all duration-150"
+      >
+        Join the Team
+      </Link>
+    </motion.div>
+  );
+}
+
+function BottomMetadataInner() {
+  const { hasFired } = useTimelineBeat("bottomMetadata");
+  return (
+    <motion.div
+      className="max-w-[1440px] mx-auto px-14 py-2 flex items-center gap-6 font-mono text-[9.5px] tracking-[.16em] uppercase text-ink-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: hasFired ? 1 : 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
+      <span>
+        EST.{" "}
+        <span className="text-ink-2 font-medium tracking-[.12em]">2015</span>
+      </span>
+      <div className="ml-auto flex items-center gap-6">
+        <span className="inline-flex items-center gap-2 text-ink-3">
+          <span>Scroll</span>
+          <span className="w-[22px] h-px bg-ink-4" />
+        </span>
+      </div>
+    </motion.div>
+  );
+}
+
 const missionFade = {
   hidden: { opacity: 0, y: 20 },
   visible: (delay: number) => ({
@@ -347,16 +509,6 @@ function MissionSection() {
         {/* Intro block */}
         <header className="grid grid-cols-2 gap-x-16 items-end pb-12 border-b border-rule-strong">
           <div>
-            <motion.div
-              className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.18em] uppercase text-ink-2 mb-6"
-              variants={missionFade}
-              initial="hidden"
-              animate={bodyInView ? "visible" : "hidden"}
-              custom={0}
-            >
-              <span className="w-[7px] h-[7px] rounded-full bg-maroon shadow-[0_0_0_3px_#50000020]" />
-              <span>What we are building toward:</span>
-            </motion.div>
             <motion.h2
               className="font-heading font-semibold text-[72px] leading-[.94] tracking-[-.02em] m-0 text-ink"
               variants={missionFade}
@@ -374,7 +526,7 @@ function MissionSection() {
             animate={bodyInView ? "visible" : "hidden"}
             custom={0.22}
           >
-            A year-long engineering effort, three commitments. These shape every decision we make on the rig and in the lab.
+            A year-long engineering effort, three commitments to the team 
           </motion.p>
         </header>
 
@@ -448,72 +600,36 @@ export default function Home() {
   const heroStripOpacity = useTransform(heroProgress, [0, 0.2], [1, 0]);
 
   return (
-    <div className="flex flex-col">
-      <Nav />
-      {/* ══════════ HERO — 100vh minus nav ══════════ */}
-      <div ref={heroRef} className="h-[calc(100vh-57px)] flex flex-col relative bg-bg">
+    <TimelineOrchestrator timeline={HERO_TIMELINE}>
+      <div className="isolate flex flex-col">
+        <GridReveal lineColor="rgba(26,26,26,0.16)" />
+        <Nav />
+        {/* ══════════ HERO — 100vh minus nav ══════════ */}
+        <div ref={heroRef} className="h-[calc(100vh-57px)] flex flex-col relative bg-bg">
         <HeroGrid />
 
         <motion.main
           className="flex-1 max-w-[1440px] mx-auto w-full px-14 py-10 grid grid-cols-[minmax(0,1fr)_360px] gap-x-16 items-center relative"
           style={{ y: heroContentY, opacity: heroContentOpacity }}
         >
-          <HeroCrossMark className="left-[42px] top-[42px]" delay={0.1} />
-          <HeroCrossMark className="right-[42px] top-[42px]" delay={0.2} />
-          <HeroCrossMark className="left-[42px] bottom-[42px]" delay={0.3} />
-          <HeroCrossMark className="right-[42px] bottom-[42px]" delay={0.4} />
+          <HeroCrossMark className="left-[42px] top-[42px]" index={0} />
+          <HeroCrossMark className="right-[42px] top-[42px]" index={1} />
+          <HeroCrossMark className="left-[42px] bottom-[42px]" index={2} />
+          <HeroCrossMark className="right-[42px] bottom-[42px]" index={3} />
 
           {/* ── Left column ── */}
           <section className="flex flex-col justify-center">
             {/* Eyebrow */}
-            <div className="flex items-center gap-3.5 font-mono text-[11.5px] tracking-[.18em] uppercase text-ink-2 mb-10">
-              <span className="inline-flex items-center gap-2 border border-rule-strong px-2.5 py-[5px] bg-white">
-                <span className="w-[7px] h-[7px] rounded-full bg-maroon shadow-[0_0_0_3px_#50000020]" />
-                RIG-02 &middot; BUILD CYCLE 1
-              </span>
-              <span className="text-ink-4">/</span>
-              <span>SPE Drillbotics&reg; Competition 2026</span>
-            </div>
+            <Eyebrow />
 
             {/* Wordmark */}
-            <h1 className="font-heading font-bold text-[148px] leading-[.86] tracking-[-.025em] uppercase m-0 text-ink">
-              <span className="flex items-baseline gap-[18px]">
-                <span>Tamu</span>
-                <span className="font-mono text-[13px] font-normal tracking-[.12em] text-ink-3 uppercase -translate-y-[90px] border-l border-rule-strong pl-3.5 leading-normal whitespace-nowrap">
-                  Texas A&amp;M University
-                  <span className="text-ink font-medium block">College Station, TX</span>
-                </span>
-              </span>
-              <span className="flex items-baseline">
-                <span>Drillbotics</span>
-                <span className="text-maroon">.</span>
-              </span>
-            </h1>
+            <Wordmark />
 
             {/* Lede */}
-            <p className="mt-12 max-w-[580px] text-[19px] leading-relaxed text-ink-2">
-              We <strong className="text-ink font-semibold">design, build, and program</strong> autonomous drilling rigs.
-              Steel, sensors, and machine learning — backed by industry.
-            </p>
+            <Lede />
 
             {/* CTAs */}
-            <div className="mt-12 flex items-center gap-3.5">
-              <Link
-                href="/engineering"
-                className="oct-clip font-heading text-sm tracking-[.14em] uppercase font-semibold px-7 py-[18px] bg-maroon text-[#FAFAFA] border border-maroon no-underline inline-flex items-center gap-3.5 hover:bg-maroon-ink hover:border-maroon-ink transition-all duration-150"
-              >
-                See the Rig
-                <span className="inline-block w-[22px] h-px bg-[#FAFAFA] relative">
-                  <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-[#FAFAFA] rotate-45" />
-                </span>
-              </Link>
-              <Link
-                href="/apply#apply-form"
-                className="oct-outline-ink font-heading text-sm tracking-[.14em] uppercase font-semibold px-[22px] py-[18px] text-ink no-underline inline-flex items-center gap-2.5 hover:text-maroon transition-all duration-150"
-              >
-                Join the Team
-              </Link>
-            </div>
+            <Ctas />
           </section>
 
           {/* ── Right column: Status panel ── */}
@@ -526,25 +642,7 @@ export default function Home() {
           className="absolute bottom-8 left-0 right-0 border-t border-rule bg-bg/70"
           style={{ opacity: heroStripOpacity }}
         >
-          <div className="max-w-[1440px] mx-auto px-14 py-2 flex items-center gap-6 font-mono text-[9.5px] tracking-[.16em] uppercase text-ink-4">
-            <span className="inline-flex items-center gap-1.5">
-              <span className="text-ink-2 font-medium tracking-[.12em]">30.6280&deg;N</span>{" "}
-              96.3344&deg;W
-            </span>
-            <span className="w-px h-[9px] bg-rule" />
-            <span>College Station &middot; TX</span>
-            <span className="w-px h-[9px] bg-rule" />
-            <span>
-              EST.{" "}
-              <span className="text-ink-2 font-medium tracking-[.12em]">2015</span>
-            </span>
-            <div className="ml-auto flex items-center gap-6">
-              <span className="inline-flex items-center gap-2 text-ink-3">
-                <span>Scroll</span>
-                <span className="w-[22px] h-px bg-ink-4" />
-              </span>
-            </div>
-          </div>
+          <BottomMetadataInner />
         </motion.footer>
       </div>
 
@@ -670,132 +768,109 @@ export default function Home() {
         }}
       >
         {/* Section header bar */}
-        <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-[#ffffffa8]">
+        <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-[#ffffffb8]">
           <span className="inline-flex items-baseline gap-2.5 text-[#FAFAFA] font-medium">
             <span className="text-amber font-medium">&sect; 04</span> CTA
           </span>
-          <span className="flex-1 h-px bg-[#ffffff26]" />
+          <span className="flex-1 h-px bg-[#ffffff2e]" />
         </div>
 
-        <div className="max-w-[1440px] mx-auto px-14 py-[88px] pb-48 grid grid-cols-[1.45fr_1fr] gap-x-16 relative">
-          <CrossMark className="left-[42px] top-[42px]" light />
-          <CrossMark className="right-[42px] top-[42px]" light />
-          <CrossMark className="left-[42px] bottom-[42px]" light />
-          <CrossMark className="right-[42px] bottom-[42px]" light />
-
-          {/* Left column */}
-          <div className="min-w-0">
-            <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.18em] uppercase text-[#ffffffc4] mb-7">
-              <span className="w-[7px] h-[7px] rounded-full bg-amber shadow-[0_0_0_3px_#C8963E30]" />
-              <span>What&rsquo;s next</span>
+        <div className="max-w-[1440px] mx-auto px-14 pt-8 pb-24">
+          {/* Unified split panel */}
+          <div className="grid grid-cols-2 border border-[#ffffff2e]">
+            {/* Panel head — spans both columns */}
+            <div className="col-span-2 grid grid-cols-[1.35fr_minmax(0,560px)] items-end gap-x-12 px-12 py-9 border-b border-[#ffffff2e]">
+              <h2 className="font-heading font-semibold text-[72px] leading-[1] tracking-[-.025em] m-0 text-[#FAFAFA]">
+                Two ways in<span className="text-amber">.</span>
+              </h2>
+              <p className="text-[17px] leading-relaxed text-[#F2E4CC] m-0 mb-2">
+                Look under the hood, or pick up a torque wrench. Either route starts here.
+              </p>
             </div>
 
-            <h2 className="font-heading font-semibold text-[104px] leading-[.9] tracking-[-.025em] m-0 text-[#FAFAFA]">
-              Two ways<br />in<span className="text-amber">.</span>
-            </h2>
-
-            <p className="mt-7 max-w-[520px] text-[18px] leading-relaxed text-[#ffffffd0]">
-              Look under the hood, or pick up a torque wrench. Either route starts here.
-            </p>
-
-            {/* CTA cards */}
-            <div className="mt-16 grid grid-cols-2 border border-[#ffffff1f]">
-              {/* Card 1 — maroon */}
-              <Link
-                href="/engineering"
-                className="p-8 flex flex-col text-[#FAFAFA] no-underline min-h-[280px] group"
-              >
-                <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a] mb-9">
-                  <span className="font-heading text-sm text-[#FAFAFA] tracking-[.04em] font-medium">01</span>
-                  <span>The Rig</span>
-                </div>
-                <h3 className="font-heading font-semibold text-[38px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
-                  See the rig<span className="text-amber">.</span>
-                </h3>
-                <p className="text-[15.5px] leading-normal text-[#ffffffbf] m-0 mb-7 max-w-[340px]">
-                  Technical deep-dive: system architecture, sensor stack, control loop, and the rig itself.
-                </p>
-                <span className="oct-clip mt-auto self-start font-heading text-[13px] tracking-[.16em] uppercase font-semibold px-[22px] py-3.5 bg-[#FAFAFA] text-maroon border border-[#FAFAFA] inline-flex items-center gap-3.5 group-hover:bg-amber group-hover:border-amber group-hover:text-ink transition-all duration-150">
-                  See the Rig
-                  <span className="inline-block w-[22px] h-px bg-current relative">
-                    <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
-                  </span>
-                </span>
-              </Link>
-
-              {/* Card 2 — dark */}
-              <Link
-                href="/apply#apply-form"
-                className="p-8 flex flex-col text-[#FAFAFA] no-underline min-h-[280px] border-l border-[#ffffff1f] bg-ink group"
-              >
-                <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a] mb-9">
-                  <span className="font-heading text-sm text-[#FAFAFA] tracking-[.04em] font-medium">02</span>
-                  <span>The Team</span>
-                </div>
-                <h3 className="font-heading font-semibold text-[38px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
-                  Join the team<span className="text-amber">.</span>
-                </h3>
-                <p className="text-[15.5px] leading-normal text-[#ffffffbf] m-0 mb-7 max-w-[340px]">
-                  Open roles for the 2026–27 cycle across mech, embedded, controls, and ML. Build something real.
-                </p>
-                <span className="oct-outline-light mt-auto self-start font-heading text-[13px] tracking-[.16em] uppercase font-semibold px-[22px] py-3.5 text-[#FAFAFA] inline-flex items-center gap-3.5 group-hover:text-ink transition-all duration-150">
-                  Join the Team
-                  <span className="inline-block w-[22px] h-px bg-current relative">
-                    <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
-                  </span>
-                </span>
-              </Link>
-            </div>
-          </div>
-
-          {/* Right column — visual placeholder */}
-          <aside className="bg-ink border border-[#ffffff1f] flex flex-col min-h-[560px] overflow-hidden">
-            {/* Slot header */}
-            <div className="px-[18px] py-3.5 flex items-center justify-between border-b border-[#ffffff1a] font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a]">
-              <span className="text-[#FAFAFA]">A Network of Skills</span>
-              <span className="inline-flex items-center gap-1.5">
-                <span
-                  className="w-1.5 h-1.5 rounded-full bg-amber"
-                  style={{ animation: "pulse-dot 1.6s ease-in-out infinite" }}
-                />
-                Live
-              </span>
-            </div>
-
-            {/* Stage */}
-            <div
-              className="flex-1 relative flex items-center justify-center overflow-hidden"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to right, #ffffff0f 1px, transparent 1px), linear-gradient(to bottom, #ffffff0f 1px, transparent 1px)",
-                backgroundSize: "40px 40px",
-              }}
+            {/* Left column — See the rig */}
+            <Link
+              href="/engineering"
+              className="group flex flex-col gap-7 px-12 pt-9 pb-10 min-h-[420px] text-[#FAFAFA] no-underline transition-colors duration-150 hover:bg-[#ffffff0a]"
             >
-              {/* Dashed frame */}
-              <span className="absolute inset-6 border border-dashed border-[#ffffff33]" />
-
-              {/* Corner marks */}
-              <CrossMark className="left-2.5 top-2.5" light />
-              <CrossMark className="right-2.5 top-2.5" light />
-              <CrossMark className="left-2.5 bottom-2.5" light />
-              <CrossMark className="right-2.5 bottom-2.5" light />
-
-              {/* Discipline constellation */}
-              <div className="absolute inset-6 z-[2]">
-                <DisciplineConstellation />
+              <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#ffffffb8]">
+                <span className="font-medium text-[#FAFAFA]">
+                  01<span className="mx-1.5 text-[#ffffff59]">/</span>The Rig
+                </span>
+                <span className="text-amber">Technical</span>
               </div>
-            </div>
 
-            {/* Slot footer */}
-            <div className="px-[18px] py-3 flex items-center justify-between border-t border-[#ffffff1a] font-mono text-[10px] tracking-[.18em] uppercase text-[#ffffff6e]">
-              <span>Nodes <span className="text-[#ffffffbf]">34</span> &middot; Links <span className="text-[#ffffffbf]">69</span></span>
-              <span>Domains &middot; 6</span>
-            </div>
-          </aside>
+              <h3 className="font-heading font-semibold text-[44px] leading-none tracking-[-.015em] m-0 text-[#FAFAFA]">
+                See the rig<span className="text-amber">.</span>
+              </h3>
+
+              <ul className="list-none m-0 p-0 grid grid-cols-2 gap-x-10 gap-y-3.5">
+                {["System Architecture", "Sensor Stack", "Control Loop", "Live Build Progress"].map((item) => (
+                  <li
+                    key={item}
+                    className="pb-3 border-b border-dashed border-[#ffffff33] font-mono text-[12px] tracking-[.18em] uppercase text-[#F2E4CC]"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-auto flex items-center justify-between pt-2">
+                <span className="font-heading text-[15px] font-semibold tracking-[.16em] uppercase text-[#FAFAFA]">
+                  See the Rig
+                </span>
+                <span className="w-[52px] h-[52px] shrink-0 border border-[#FAFAFA] text-[#FAFAFA] flex items-center justify-center transition-colors duration-150 group-hover:bg-[#FAFAFA] group-hover:text-maroon">
+                  <span className="relative inline-block w-5 h-px bg-current">
+                    <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
+                  </span>
+                </span>
+              </div>
+            </Link>
+
+            {/* Right column — Join the team */}
+            <Link
+              href="/apply#apply-form"
+              className="group flex flex-col gap-7 px-12 pt-9 pb-10 min-h-[420px] text-[#FAFAFA] no-underline bg-ink border-l border-[#ffffff2e] transition-colors duration-150 hover:bg-[#161616]"
+            >
+              <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#ffffffb8]">
+                <span className="font-medium text-[#FAFAFA]">
+                  02<span className="mx-1.5 text-[#ffffff59]">/</span>The Team
+                </span>
+                <span className="text-amber">Recruiting</span>
+              </div>
+
+              <h3 className="font-heading font-semibold text-[44px] leading-none tracking-[-.015em] m-0 text-[#FAFAFA]">
+                Join the team<span className="text-amber">.</span>
+              </h3>
+
+              <ul className="list-none m-0 p-0 grid grid-cols-2 gap-x-10 gap-y-3.5">
+                {["No experience needed", "Open to all majors", "Real hardware", "2026 – 27 cycle"].map((item) => (
+                  <li
+                    key={item}
+                    className="pb-3 border-b border-dashed border-[#ffffff33] font-mono text-[12px] tracking-[.18em] uppercase text-[#F2E4CC]"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-auto flex items-center justify-between pt-2">
+                <span className="font-heading text-[15px] font-semibold tracking-[.16em] uppercase text-[#FAFAFA]">
+                  Join the Team
+                </span>
+                <span className="w-[52px] h-[52px] shrink-0 border border-[#FAFAFA] text-[#FAFAFA] flex items-center justify-center transition-colors duration-150 group-hover:bg-[#FAFAFA] group-hover:text-ink">
+                  <span className="relative inline-block w-5 h-px bg-current">
+                    <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
+                  </span>
+                </span>
+              </div>
+            </Link>
+          </div>
         </div>
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </TimelineOrchestrator>
   );
 }

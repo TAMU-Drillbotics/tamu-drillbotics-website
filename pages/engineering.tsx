@@ -1,15 +1,18 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { TimelineOrchestrator, useTimelineBeat } from "@/components/TimelineOrchestrator";
+import { ENGINEERING_HERO_TIMELINE } from "@/lib/engineeringHeroTimeline";
 
 // 3D rig viewer — client-only (three.js + WebGL). Pulsing skeleton matches the
 // viewer's dimensions so layout doesn't jump while the chunk + GLB load.
 const RigViewer = dynamic(() => import("@/components/RigViewer"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-[600px] bg-[#0A0A0A] rounded-lg overflow-hidden border border-[#500000]/20 animate-pulse" />
+    <div className="w-full h-full bg-[#0A0A0A] rounded-lg overflow-hidden border border-[#500000]/20 animate-pulse" />
   ),
 });
 
@@ -110,88 +113,32 @@ function SecTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ════════ § 01 — visualizer right panel ════════ */
-function RigOverviewPanel() {
-  const specs = [
-    ["Height", "1.20 M"],
-    ["Footprint", "0.60 × 0.60 M"],
-    ["Weight", "85 KG"],
-    ["Bit Type", "PDC · 12.5 MM"],
-    ["Drive", "BLDC · DIRECT"],
-    ["Sensors", "14 CH"],
-    ["Controller", "STM32H7"],
-    ["Est. Compl.", "Q1 / 2026"],
-  ];
-  return (
-    <aside className="border-l border-rule-strong pl-8 flex flex-col" aria-label="Rig Overview">
-      <div className="flex items-center justify-between font-mono text-[11px] tracking-[.18em] uppercase text-ink-3 pb-3.5 border-b border-rule-strong">
-        <span className="text-ink font-medium">Rig Overview</span>
-        <span className="inline-flex items-center gap-1.5">
-          <span
-            className="w-1.5 h-1.5 rounded-full bg-maroon"
-            style={{ animation: "pulse-dot 1.6s ease-in-out infinite" }}
-          />
-          In Build
-        </span>
-      </div>
-
-      <div className="py-5 border-b border-rule-strong">
-        <div className="font-mono text-[10px] tracking-[.22em] uppercase text-ink-3 mb-2">
-          TAMU Drillbotics /
-        </div>
-        <div className="font-heading text-[26px] font-semibold tracking-[.02em] text-ink leading-none">
-          RIG-<span className="text-maroon">02</span>
-        </div>
-      </div>
-
-      <ul className="list-none m-0 p-0">
-        {specs.map(([k, v]) => (
-          <li
-            key={k}
-            className="flex items-baseline justify-between py-3 border-b border-dashed border-rule-strong font-mono text-[10.5px] tracking-[.14em] uppercase"
-          >
-            <span className="text-ink-3">{k}</span>
-            <span className="font-heading text-[13px] font-medium tracking-[.04em] text-ink">{v}</span>
-          </li>
-        ))}
-      </ul>
-
-      <div className="pt-[18px] mt-auto border-t border-rule-strong">
-        <div className="flex justify-between items-baseline font-mono text-[10px] tracking-[.18em] uppercase text-ink-3 mb-2.5">
-          <span>Build Phase</span>
-          <span className="font-heading text-[16px] text-ink font-semibold tracking-[.02em]">02 / 04</span>
-        </div>
-        <div className="grid grid-cols-4 gap-1.5">
-          <span className="h-[5px] bg-ink" />
-          <span className="h-[5px] bg-maroon" />
-          <span className="h-[5px] bg-[#1a1a1a12]" />
-          <span className="h-[5px] bg-[#1a1a1a12]" />
-        </div>
-      </div>
-    </aside>
-  );
-}
-
-/* ════════ § 03 — mech ════════ */
-const mechCallouts = [
+/* ════════ § 01 — mech ════════ */
+const mechCallouts: {
+  id: string;
+  title: string;
+  sub: string;
+  status: string;
+  statusColor: "maroon" | "amber" | "grey";
+}[] = [
   {
     id: "M-01",
     title: "Drillstring",
-    sub: "PDC bit, length-matched shaft, mud-jacketed coupling. Tuned for clean cuttings transport.",
-    status: "Operational",
-    statusColor: "maroon" as const,
+    sub: "Hydraulic push-the-bit RSS — three steering wings on a 17-7 PH drive shaft inside a flexible nylon drill pipe.",
+    status: "In Build",
+    statusColor: "amber" as const,
   },
   {
     id: "M-02",
     title: "Frame",
-    sub: "8020 aluminum tower, FEA-validated, with sensor mounts on every face.",
+    sub: "6061-T6 aluminum T-slot tower, three stacked platforms, dual lead-screw vertical actuation near 700 lb.",
     status: "In Build",
     statusColor: "amber" as const,
   },
   {
     id: "M-03",
     title: "Safety",
-    sub: "Plexiglass enclosure, dual-channel interlock, hardware E-stop upstream of drivers.",
+    sub: "Polycarbonate enclosure, door interlocks, hardware + software E-stop, pressure seals designed to fail first.",
     status: "In Review",
     statusColor: "grey" as const,
   },
@@ -199,49 +146,66 @@ const mechCallouts = [
 
 const mechRef: { group: string; rows: [string, string][] }[] = [
   {
-    group: "Structure",
+    group: "Frame",
     rows: [
-      ["Frame", "8020 · 40 × 40"],
       ["Material", "6061-T6 AL"],
-      ["Max Deflection", "0.5 MM"],
-      ["Total Height", "1.20 M"],
+      ["Extrusion", "2 × 2 IN T-SLOT"],
+      ["Platforms", "3-TIER"],
+      ["Lift Capacity", "≈ 700 LB"],
+      ["Total Height", "≈ 60 IN"],
+    ],
+  },
+  {
+    group: "Drivetrain",
+    rows: [
+      ["Rotary Drive", "MAXON EC-i 40"],
+      ["Max Speed", "2500 RPM"],
+      ["Hoist", "2× NEMA-23"],
+      ["Coolant Pump", "SEAFLO 12 V"],
     ],
   },
   {
     group: "Drillstring",
     rows: [
-      ["Bit", "PDC · 12.5 MM"],
-      ["Shaft", "SS-316 · 8 MM"],
-      ["Mud Flow", "2.4 L / MIN"],
-      ["WOB Range", "5 – 35 N"],
+      ["Steering", "3-WING RSS"],
+      ["Drive Shaft", "17-7 PH SS"],
+      ["Drill Pipe", "FLEXIBLE NYLON"],
+      ["Hyd. Pressure", "≈ 2000 PSI"],
+      ["Bit", "TBD"],
     ],
   },
   {
     group: "Safety",
     rows: [
-      ["Enclosure", "PMMA · 8 MM"],
-      ["Interlock", "DUAL CH"],
-      ["E-Stop", "CAT-1"],
+      ["Enclosure", "POLYCARBONATE"],
+      ["E-Stop", "HW + SW"],
+      ["Seal Rating", "5000 PSI"],
     ],
   },
 ];
 
-/* ════════ § 04 — electronics ════════ */
-type SensorRow = { id: string; type: string; iface: string; rate: string; purpose: string; tbd?: boolean };
+/* ════════ § 03 — electronics ════════ */
+type SensorRow = { id: string; measure: string; component: string; detail: string };
 const sensors: SensorRow[] = [
-  { id: "PT-01", type: "Press.", iface: "I2C", rate: "200 Hz", purpose: "Mud Line" },
-  { id: "TQ-01", type: "Torque", iface: "SPI", rate: "1 kHz", purpose: "Bit Reaction" },
-  { id: "RPM-01", type: "Hall", iface: "GPIO", rate: "1 kHz", purpose: "Spindle" },
-  { id: "DPT-01", type: "Optical", iface: "UART", rate: "500 Hz", purpose: "Feed Depth" },
-  { id: "TBD", type: "—", iface: "—", rate: "—", purpose: "—", tbd: true },
-  { id: "TBD", type: "—", iface: "—", rate: "—", purpose: "—", tbd: true },
-  { id: "TBD", type: "—", iface: "—", rate: "—", purpose: "—", tbd: true },
-  { id: "TBD", type: "—", iface: "—", rate: "—", purpose: "—", tbd: true },
-  { id: "TBD", type: "—", iface: "—", rate: "—", purpose: "—", tbd: true },
-  { id: "TBD", type: "—", iface: "—", rate: "—", purpose: "—", tbd: true },
+  { id: "IMU-01", measure: "Orientation", component: "TDK ICM-20948", detail: "9-axis, in BHA" },
+  { id: "DEP-01", measure: "Depth (TVD)", component: "LPPS-36B", detail: "Linear position" },
+  { id: "TRQ-01", measure: "Torque", component: "FUTEK TFF400", detail: "Inline rotary" },
+  { id: "RPM-01", measure: "Rotary Speed", component: "US Digital E6", detail: "Optical encoder" },
+  { id: "WOB-01", measure: "Weight-on-Bit", component: "FUTEK LSB200", detail: "Load cell" },
+  { id: "TMP-01", measure: "Temperature", component: "DS18B20", detail: "Thermal monitor" },
+  { id: "VIB-01", measure: "Vibration", component: "ADXL356", detail: "MEMS, high-g" },
 ];
 
-/* ════════ § 08 — roadmap ════════ */
+type ActuatorRow = { id: string; subsystem: string; component: string; detail: string };
+const actuators: ActuatorRow[] = [
+  { id: "ROT-01", subsystem: "Bit Rotation", component: "Maxon EC-i 40 BLDC", detail: "High torque density, closed-loop" },
+  { id: "HST-01", subsystem: "Hoist · Z-Axis", component: "2× NEMA-23 + Ball Screw", detail: "Dual-motor synchronized lift" },
+  { id: "HYD-01", subsystem: "Hydraulic Control", component: "Danfoss PVG32 Monoblock", detail: "Proportional flow control" },
+  { id: "HYD-02", subsystem: "Wing Actuation", component: "3× Double-Acting Pistons", detail: "6 controllable ports" },
+  { id: "CLT-01", subsystem: "Coolant Loop", component: "Seaflo 12 V DC Pump", detail: "Continuous-duty centrifugal" },
+];
+
+/* ════════ § 06 — roadmap ════════ */
 type Phase = { num: string; name: string; date: string; status: string; kind: "done" | "active" | "next" | "planned" };
 const phases: Phase[] = [
   { num: "01", name: "Structural Assembly", date: "Sep · 2025", status: "Complete", kind: "done" },
@@ -255,6 +219,109 @@ const phases: Phase[] = [
 ];
 
 /* ═══════════════════════════════════════════════════════
+   § 01 hero — orchestrated entrance + scroll-driven collapse
+   ═══════════════════════════════════════════════════════
+
+   Layout strategy:
+   - The outer wrapper is 150dvh tall, giving the sticky stage 50dvh of
+     scroll travel to consume before it releases and § 03 flows in.
+   - The sticky stage pins at top: var(--nav-height), exactly the viewport
+     minus the nav, so it is the only thing on screen while pinned.
+   - The headline holds the stage's top 28vh; the render frame fills the
+     rest. Scroll progress drives the headline up by -28vh while the render
+     frame's top shrinks 28vh → 0, expanding into the freed space. Fully
+     reversible by scrolling back up.
+   - The entrance (headline wipe, render-frame fade) is a one-shot
+     orchestrated sequence, independent of scroll.
+   - prefers-reduced-motion: the entrance shows its final state at once;
+     the scroll-driven collapse still works, being user-initiated. */
+
+const HEADLINE_VH = 28;
+
+// The sticky stage stays pinned for the first 50dvh of the 150dvh wrapper's
+// scroll travel — scrollYProgress 0 → 1/3. The collapse completes within that
+// window so the headline is fully cleared right as the stage releases.
+const COLLAPSE_END = 1 / 3;
+
+function RigHero() {
+  const headlineBeat = useTimelineBeat("headlineReveal");
+  const frameBeat = useTimelineBeat("renderFrame");
+  const reducedMotion = headlineBeat.reducedMotion;
+
+  // Scroll-driven collapse. scrollYProgress (0 → 1) over the 150dvh wrapper
+  // drives the headline out and the render frame up. Raw motion values bound
+  // straight to style — no spring/smoothing layer (per spec; the resulting
+  // wheel-step lag is a known issue, addressed separately).
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: wrapperRef,
+    offset: ["start start", "end start"],
+  });
+  const headlineY = useTransform(
+    scrollYProgress,
+    [0, COLLAPSE_END],
+    ["0vh", `-${HEADLINE_VH}vh`],
+  );
+  const headlineOpacity = useTransform(scrollYProgress, [0, COLLAPSE_END], [1, 0]);
+  const renderFrameTop = useTransform(
+    scrollYProgress,
+    [0, COLLAPSE_END],
+    [`${HEADLINE_VH}vh`, "0vh"],
+  );
+
+  return (
+    <section ref={wrapperRef} className="relative" style={{ height: "150dvh" }}>
+      <div className="sticky top-[var(--nav-height)] h-[calc(100dvh-var(--nav-height))] max-w-[1440px] mx-auto px-14 pb-6">
+        <div className="relative w-full h-full overflow-hidden">
+          {/* Headline — slides up and fades out with scroll progress. A
+              SIBLING of the render frame; its motion never touches the frame. */}
+          <motion.div
+            className="absolute left-0 right-0 top-0 flex flex-col justify-end"
+            style={{
+              height: `${HEADLINE_VH}vh`,
+              y: headlineY,
+              opacity: headlineOpacity,
+            }}
+          >
+            {/* Registration crosses above the headline — same corner marks
+                used to frame the § sections. Inside the headline wrapper, so
+                they slide + fade out with it on scroll. */}
+            <Reg pos="tl" />
+            <Reg pos="tr" />
+            <h1 className="font-heading font-bold text-[148px] leading-[.86] tracking-[-.025em] uppercase m-0 text-ink">
+              <motion.span
+                className="inline-block"
+                initial={{ clipPath: "inset(0 100% 0 0)" }}
+                animate={{
+                  clipPath: headlineBeat.hasFired
+                    ? "inset(0 0 0 0)"
+                    : "inset(0 100% 0 0)",
+                }}
+                transition={{ duration: reducedMotion ? 0 : 0.5, ease: "easeOut" }}
+              >
+                The Rig<span className="text-maroon">.</span>
+              </motion.span>
+            </h1>
+          </motion.div>
+
+          {/* Render frame — always mounted. `top` shrinks 28vh → 0 with scroll;
+              opacity fades in once on the renderFrame beat, then holds at 1. */}
+          <motion.div
+            className="absolute left-0 right-0 bottom-0"
+            style={{ top: renderFrameTop }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: frameBeat.hasFired ? 1 : 0 }}
+            transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeOut" }}
+          >
+            <RigViewer />
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    PAGE
    ═══════════════════════════════════════════════════════ */
 export default function Engineering() {
@@ -263,49 +330,21 @@ export default function Engineering() {
       className="flex flex-col bg-bg"
       style={{
         backgroundImage:
-          "linear-gradient(to right, #1a1a1a09 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a09 1px, transparent 1px)",
+          "linear-gradient(to right, #1a1a1a15 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a15 1px, transparent 1px)",
         backgroundSize: "80px 80px",
         backgroundPosition: "-1px -1px",
       }}
     >
       <Nav />
 
-      {/* ════════ § 01 — VISUALIZER ════════ */}
-      <section>
-        <div className="relative max-w-[1440px] mx-auto px-14 pt-12 pb-16 grid grid-cols-[minmax(0,1fr)_380px] gap-x-12">
-          <Reg pos="tl" />
-          <Reg pos="tr" />
-          <Reg pos="bl" />
-          <Reg pos="br" />
+      {/* ════════ § 01 — VISUALIZER (orchestrated entrance + scroll-driven collapse) ════════ */}
+      <TimelineOrchestrator timeline={ENGINEERING_HERO_TIMELINE}>
+        <RigHero />
+      </TimelineOrchestrator>
 
-          <motion.div {...REVEAL}>
-            {/* Caption */}
-            <p
-              className="m-0 mb-3 text-[13px] tracking-[.02em]"
-              style={{
-                fontFamily: "var(--font-space-grotesk)",
-                color: "rgba(224,224,224,0.6)",
-              }}
-            >
-              
-            </p>
-
-            {/* Live 3D viewer (client-only) */}
-            <RigViewer />
-
-            {/* Interaction hints */}
-          </motion.div>
-
-          {/* Right rig overview panel */}
-          <motion.div {...REVEAL}>
-            <RigOverviewPanel />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ════════ § 03 — MECHANICAL ════════ */}
+      {/* ════════ § 01 — MECHANICAL ════════ */}
       <motion.section {...REVEAL}>
-        <SectionBar num="03" label="MECHANICAL" />
+        <SectionBar num="01" label="MECHANICAL" />
 
         <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
           <Reg pos="tl" />
@@ -321,24 +360,29 @@ export default function Engineering() {
           <div className="grid grid-cols-[1.15fr_1fr] gap-x-16 items-start pt-12">
             <motion.div {...fadeUp(0.1)}>
               <p className="text-[19px] leading-[1.55] text-ink font-medium m-0 mb-6">
-                The rig is a precision instrument scaled down — a 1.2-metre tower built to drill repeatable holes,
-                instrument every reaction, and survive autonomous operation.
+                The rig is a model-scale autonomous drilling system — a vertical aluminum tower built to drill into an
+                unknown rock block, then steer the bit through three target points with no human intervention.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-                The frame is fabricated from <strong className="text-ink font-semibold">8020 aluminum extrusion</strong>,
-                T-slot profiled for rapid iteration on sensor and bracket placement. FEA-driven structural analysis sets a
-                target deflection under 0.5 mm at peak weight-on-bit, validated against load-cell readings during dry runs.
+                The frame is a modular tower of <strong className="text-ink font-semibold">6061-T6 aluminum 2-by-2-inch
+                T-slot extrusion</strong>, joined with aluminum corner brackets and thread-locked fasteners. Three stacked
+                platforms separate the subsystems — a top actuation deck, a mid-frame elevator carrying the bottom-hole
+                assembly, and a bottom platform for fluid handling — and the T-slot profile lets sensor and bracket
+                placement be reconfigured throughout the build.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-                The <strong className="text-ink font-semibold">drillstring</strong> couples a PDC bit through a
-                length-matched shaft to a direct-drive BLDC, with a fluid jacket carrying drilling mud to clear cuttings.
-                Hydraulic flow is sized for an optimal jet impact factor; weight-on-bit and rotary speed are co-controlled
-                to keep the bit operating in its target torque envelope.
+                Vertical motion comes from two <strong className="text-ink font-semibold">NEMA-23 stepper motors</strong>
+                driving lead screws; sharing the load gives a lift capacity near 700 lb and sets weight-on-bit through the
+                elevator platform. A top-mounted Maxon EC-i 40 brushless DC motor spins the string at up to 2500 RPM. The
+                drillstring runs a 17-7 PH stainless drive shaft inside a flexible, non-rotating nylon pipe that doubles as
+                the drilling-fluid conduit.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0">
-                Safety is structural, not bolted on. A plexiglass enclosure contains debris under failure modes,
-                mechanical interlocks gate spin-up to a closed-and-latched door, and a hardware E-stop cuts power upstream
-                of every motor driver.
+                Steering uses a hydraulically actuated <strong className="text-ink font-semibold">push-the-bit rotary
+                steerable system</strong> — three independently controlled wings, each driven by a dedicated piston near
+                2000 psi, biasing the bit toward the commanded direction. Safety is built into the structure: a
+                polycarbonate enclosure contains debris, door interlocks gate operation, a hardware-and-software E-stop
+                cuts power, and the hydraulic seals are sized to fail before any structural component does.
               </p>
             </motion.div>
 
@@ -406,42 +450,131 @@ export default function Engineering() {
             ))}
           </motion.div>
 
-          {/* wireframe placeholder strip */}
+          {/* frame assembly drawing */}
           <motion.div
             {...fadeUp(0.18)}
-            className="mt-10 border border-rule-strong bg-white h-[140px] relative flex items-center justify-center overflow-hidden"
+            className="mt-10 border border-rule-strong bg-white"
           >
-            <span
-              className="absolute inset-0"
-              style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent 0 14px, #1a1a1a08 14px 15px)" }}
-              aria-hidden="true"
-            />
-            <span className="absolute left-2 top-2 w-3.5 h-3.5 text-ink-4" aria-hidden="true">
-              <span className="absolute left-0 right-0 top-1/2 h-px bg-current" />
-              <span className="absolute top-0 bottom-0 left-1/2 w-px bg-current" />
-            </span>
-            <span className="absolute right-2 top-2 w-3.5 h-3.5 text-ink-4" aria-hidden="true">
-              <span className="absolute left-0 right-0 top-1/2 h-px bg-current" />
-              <span className="absolute top-0 bottom-0 left-1/2 w-px bg-current" />
-            </span>
-            <span className="absolute left-2 bottom-2 w-3.5 h-3.5 text-ink-4" aria-hidden="true">
-              <span className="absolute left-0 right-0 top-1/2 h-px bg-current" />
-              <span className="absolute top-0 bottom-0 left-1/2 w-px bg-current" />
-            </span>
-            <span className="absolute right-2 bottom-2 w-3.5 h-3.5 text-ink-4" aria-hidden="true">
-              <span className="absolute left-0 right-0 top-1/2 h-px bg-current" />
-              <span className="absolute top-0 bottom-0 left-1/2 w-px bg-current" />
-            </span>
-            <span className="relative z-[2] font-mono text-[10.5px] tracking-[.22em] uppercase text-ink-3 bg-white px-4 py-1.5 border border-rule-strong">
-              <b className="text-ink font-medium">MECH-WF-01</b> &nbsp; · &nbsp; Structural wireframe · TBD
-            </span>
+            <div className="px-[18px] py-3.5 border-b border-rule-strong flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-ink-3">
+              <span className="text-ink font-medium">MECH-WF-01</span>
+              <span>Frame Assembly Drawing</span>
+            </div>
+            <div className="p-6">
+              <img
+                src="/rig-pictures/rig-drawing-report.png"
+                alt="Engineering drawing of the rig frame — dimensioned front elevation and isometric view"
+                className="block mx-auto w-full max-w-[760px] h-auto"
+              />
+            </div>
+            <div className="px-[18px] py-3 border-t border-rule-strong flex items-center justify-between font-mono text-[10px] tracking-[.18em] uppercase text-ink-4">
+              <span>Drawn &middot; B. Chacon</span>
+              <span className="text-ink-2">09 / 18 / 25</span>
+            </div>
+          </motion.div>
+
+          {/* drillstring assembly render — source image is portrait; rotated
+              90° into a horizontal strip via a swapped-dimension wrapper. */}
+          <motion.div
+            {...fadeUp(0.22)}
+            className="mt-10 border border-rule-strong bg-white"
+          >
+            <div className="px-[18px] py-3.5 border-b border-rule-strong flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-ink-3">
+              <span className="text-ink font-medium">MECH-DS-01</span>
+              <span>Drillstring Assembly</span>
+            </div>
+            <div className="p-6">
+              <div
+                className="relative mx-auto w-full overflow-hidden"
+                style={{ aspectRatio: "1117 / 209", maxWidth: "900px" }}
+              >
+                <img
+                  src="/rig-pictures/rig-drillstring.png"
+                  alt="Full drillstring assembly render — top drive, drive shaft, and bottom-hole assembly"
+                  className="absolute left-1/2 top-1/2"
+                  style={{
+                    height: "534.45%",
+                    width: "auto",
+                    maxWidth: "none",
+                    transform: "translate(-50%, -50%) rotate(90deg)",
+                  }}
+                />
+              </div>
+            </div>
+            <div className="px-[18px] py-3 border-t border-rule-strong flex items-center justify-between font-mono text-[10px] tracking-[.18em] uppercase text-ink-4">
+              <span>Drillstring &middot; Full Assembly</span>
+              <span className="text-ink-2">CAD · Render</span>
+            </div>
           </motion.div>
         </div>
       </motion.section>
 
-      {/* ════════ § 04 — ELECTRONICS ════════ */}
+      {/* ════════ § 02 — STEERING ════════ */}
       <motion.section {...REVEAL}>
-        <SectionBar num="04" label="ELECTRONICS" />
+        <SectionBar num="02" label="STEERING" />
+
+        <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
+          <Reg pos="tl" />
+          <Reg pos="tr" />
+          <Reg pos="bl" />
+          <Reg pos="br" />
+
+          <SecEyebrow>Rotary Steerable System</SecEyebrow>
+          <SecTitle>
+            Three wings, one trajectory<span className="text-maroon">.</span>
+          </SecTitle>
+
+          <div className="grid grid-cols-[1fr_1.2fr] gap-x-16 items-start pt-12">
+            <motion.div {...fadeUp(0.1)}>
+              <p className="text-[19px] leading-[1.55] text-ink font-medium m-0 mb-6">
+                Steering is where the rig earns its name. Once the bit enters the rock, a rotary steerable system bends
+                the well toward three target points — no tripping the string, no human hand on the controls.
+              </p>
+              <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
+                The RSS is a <strong className="text-ink font-semibold">push-the-bit</strong> design: three steering
+                wings spaced evenly around the bottom-hole assembly, each driven by its own hydraulic piston. A wedge
+                mechanism converts piston extension into radial wing deployment, forcing the wing against the wellbore
+                wall — and the reaction force biases the bit toward the commanded direction.
+              </p>
+              <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
+                Each wing is controlled independently through a hydraulic block that monitors flow and pressure. Those
+                readings estimate actuation force and wing extension, which in turn resolve the bit&apos;s toolface and
+                orientation relative to the formation. Fully retracted, the wing tips sit slightly proud of the BHA to
+                double as drilling stabilizers.
+              </p>
+              <p className="text-[17px] leading-[1.6] text-ink-2 m-0">
+                High-pressure hydraulics demand a deliberate failure mode. Yor-Lok fittings and stainless tubing carry
+                margin to roughly 9000 psi against a ~2000 psi working pressure, while the U-Cup piston seals are sized
+                as a <strong className="text-ink font-semibold">mechanical fuse</strong> — the weakest pressure
+                boundary, designed to fail before any machined steel component does.
+              </p>
+            </motion.div>
+
+            <motion.div {...fadeUp(0.2)}>
+              <div className="border border-rule-strong bg-white">
+                <div className="px-[18px] py-3.5 border-b border-rule-strong flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-ink-3">
+                  <span className="text-ink font-medium">RSS-XS-01</span>
+                  <span>Cross-Section</span>
+                </div>
+                <div className="p-6">
+                  <img
+                    src="/rig-pictures/rig-rss.png"
+                    alt="Cross-section of the rotary steerable system — drill pipe, high-pressure fitting, hydraulic piston, steering wing, and driveshaft"
+                    className="block mx-auto w-full h-auto"
+                  />
+                </div>
+                <div className="px-[18px] py-3 border-t border-rule-strong flex items-center justify-between font-mono text-[10px] tracking-[.18em] uppercase text-ink-4">
+                  <span>Push-the-Bit RSS</span>
+                  <span className="text-ink-2">BHA · Section</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* ════════ § 03 — ELECTRONICS ════════ */}
+      <motion.section {...REVEAL}>
+        <SectionBar num="03" label="ELECTRONICS" />
 
         <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
           <Reg pos="tl" />
@@ -457,32 +590,41 @@ export default function Engineering() {
           <div className="grid grid-cols-[1.15fr_1fr] gap-x-16 items-start pt-12">
             <motion.div {...fadeUp(0.1)}>
               <p className="text-[19px] leading-[1.55] text-ink font-medium m-0 mb-6">
-                Fourteen sensor channels feed a central electronics enclosure that converts physical reality into a 1 kHz
-                stream of state estimates — and back into commanded torque.
+                Seven sensor channels turn the rig&apos;s physical behavior into a measured state — orientation, depth,
+                torque, speed, weight-on-bit, temperature, and vibration — feeding the drives that steer and advance the
+                bit.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-                The <strong className="text-ink font-semibold">sensor stack</strong> spans pressure transducers on the mud
-                line, strain gauges and torque sensors at the bit, hall-effect encoders for RPM, optical depth measurement
-                at the feed, and a 6-axis IMU for vibration spectroscopy. Each is selected for sampling rate, noise floor,
-                and bus compatibility — not just on a parts-shelf basis.
+                The <strong className="text-ink font-semibold">sensor stack</strong> centers on a 9-axis ICM-20948 IMU in
+                the bottom-hole assembly, an LPPS-36B linear sensor for true vertical depth, a FUTEK TFF400 inline torque
+                sensor and US Digital E6 encoder at the drill motor, and a FUTEK LSB200 load cell reading weight-on-bit
+                between the hoist and the string. A DS18B20 tracks temperature and an ADXL356 MEMS accelerometer catches
+                high-g shock and vibration.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-                Motor drivers sit on an isolated 48-volt rail with independent fuses per channel. Logic-level signals are
-                opto-isolated before crossing into the high-current domain; every driver carries its own current sense,
-                fed back to the controller for closed-loop torque.
+                Actuation electronics close the loop around each motor. A <strong className="text-ink font-semibold">Maxon
+                EPOS4 Compact</strong> drive runs the rotary BLDC over EtherCAT, while Leadshine iCS-RS closed-loop drives
+                handle the hoist steppers. Hydraulic steering valves are positioned by a 16-bit ADC/DAC stage for
+                proportional solenoid current, with every solenoid channel opto-isolated from the logic side.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0">
-                The central <strong className="text-ink font-semibold">electronics enclosure</strong> houses the STM32H7
-                controller, CAN transceiver, sensor breakout, and power conditioning on a 4-layer custom carrier —
-                designed in-house, fabricated externally, hand-assembled in the lab.
+                A <strong className="text-ink font-semibold">Raspberry Pi 4</strong> handles supervisory logging, UI, and
+                diagnostics alongside a GPU-equipped main computer, with a custom PCB carrying the IMU/ADC front-end and a
+                CAN-FD transceiver. Everything runs off a 24 V DC bus through isolated DC-DC modules, resettable fuses, and
+                transient suppression. An optional Semtech SX1276 LoRa link is under evaluation to thin the wiring down the
+                drillstring.
               </p>
             </motion.div>
 
             <motion.div {...fadeUp(0.2)}>
+              <div className="flex items-baseline justify-between pb-3 font-mono text-[10px] tracking-[.22em] uppercase">
+                <span className="text-maroon">Sensors</span>
+                <span className="text-ink-3">7 Channels</span>
+              </div>
               <table className="w-full border-separate border-spacing-0 border border-rule-strong bg-white font-mono">
                 <thead>
                   <tr>
-                    {["Sensor", "Type", "I/F", "Rate", "Purpose"].map((h) => (
+                    {["ID", "Measurement", "Component", "Detail"].map((h) => (
                       <th
                         key={h}
                         className="text-left px-3.5 py-3 text-[9.5px] tracking-[.22em] uppercase text-maroon bg-[#fafafa] border-b border-rule-strong font-medium"
@@ -494,27 +636,18 @@ export default function Engineering() {
                 </thead>
                 <tbody>
                   {sensors.map((s, i) => (
-                    <tr key={i} className={s.tbd ? "" : ""}>
-                      <td
-                        className={`px-3.5 py-[11px] border-b border-dashed border-rule-strong last:border-b-0 ${
-                          s.tbd
-                            ? "font-heading text-[13px] font-medium text-ink-3 tracking-[.22em] uppercase"
-                            : "font-heading text-[13px] font-medium text-ink tracking-[.04em] uppercase"
-                        }`}
-                      >
+                    <tr key={i}>
+                      <td className="px-3.5 py-[11px] border-b border-dashed border-rule-strong last:border-b-0 font-heading text-[13px] font-medium text-ink tracking-[.04em] uppercase">
                         {s.id}
                       </td>
-                      <td className={`px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 ${s.tbd ? "text-ink-4" : "text-ink-2"}`}>
-                        {s.type}
+                      <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
+                        {s.measure}
                       </td>
-                      <td className={`px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 ${s.tbd ? "text-ink-4" : "text-ink-2"}`}>
-                        {s.iface}
+                      <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
+                        {s.component}
                       </td>
-                      <td className={`px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 ${s.tbd ? "text-ink-4" : "text-ink-2"}`}>
-                        {s.rate}
-                      </td>
-                      <td className={`px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 ${s.tbd ? "text-ink-4" : "text-ink-2"}`}>
-                        {s.purpose}
+                      <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
+                        {s.detail}
                       </td>
                     </tr>
                   ))}
@@ -522,12 +655,52 @@ export default function Engineering() {
               </table>
             </motion.div>
           </div>
+
+          {/* actuators table — mirrors the sensors table (report Table 2) */}
+          <motion.div {...fadeUp(0.15)} className="mt-12">
+            <div className="flex items-baseline justify-between pb-3 font-mono text-[10px] tracking-[.22em] uppercase">
+              <span className="text-maroon">Actuators</span>
+              <span className="text-ink-3">5 Drive Channels</span>
+            </div>
+            <table className="w-full border-separate border-spacing-0 border border-rule-strong bg-white font-mono">
+              <thead>
+                <tr>
+                  {["ID", "Subsystem", "Component", "Detail"].map((h) => (
+                    <th
+                      key={h}
+                      className="text-left px-3.5 py-3 text-[9.5px] tracking-[.22em] uppercase text-maroon bg-[#fafafa] border-b border-rule-strong font-medium"
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {actuators.map((a, i) => (
+                  <tr key={i}>
+                    <td className="px-3.5 py-[11px] border-b border-dashed border-rule-strong last:border-b-0 font-heading text-[13px] font-medium text-ink tracking-[.04em] uppercase">
+                      {a.id}
+                    </td>
+                    <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
+                      {a.subsystem}
+                    </td>
+                    <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
+                      {a.component}
+                    </td>
+                    <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
+                      {a.detail}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </motion.div>
         </div>
       </motion.section>
 
-      {/* ════════ § 05 — SOFTWARE ════════ */}
+      {/* ════════ § 04 — SOFTWARE ════════ */}
       <motion.section {...REVEAL}>
-        <SectionBar num="05" label="SOFTWARE" />
+        <SectionBar num="04" label="SOFTWARE" />
 
         <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
           <Reg pos="tl" />
@@ -543,14 +716,14 @@ export default function Engineering() {
           <div className="grid grid-cols-[1fr_1.2fr] gap-x-16 items-start pt-12">
             <motion.div {...fadeUp(0.1)}>
               <p className="text-[19px] leading-[1.55] text-ink font-medium m-0 mb-6">
-                A real-time control loop closes around every revolution of the bit — embedded C on bare-metal STM32,
-                deterministic to the microsecond.
+                A real-time control loop closes around every revolution of the bit — embedded C on an STM32
+                microcontroller, deterministic to the microsecond.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-                The firmware layer is built on FreeRTOS with priority-pinned tasks for sensor acquisition, control
-                compute, and CAN dispatch. <strong className="text-ink font-semibold">PID controllers</strong> regulate
-                three coupled axes: drill RPM, feed rate, and weight-on-bit — with cross-axis decoupling tuned during dry
-                runs.
+                The firmware layer runs priority-pinned tasks for sensor acquisition, control compute, and CAN dispatch.
+                <strong className="text-ink font-semibold"> PID controllers</strong> regulate the coupled drilling axes —
+                RPM, feed rate, and weight-on-bit — and drive the steering response that holds the bit on its commanded
+                trajectory.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
                 An <strong className="text-ink font-semibold">ML interfacing layer</strong> pipes a downsampled sensor
@@ -559,8 +732,9 @@ export default function Engineering() {
                 PID core, with the ML layer recommending, not commanding.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0">
-                Telemetry is broadcast over CAN to a host laptop running a Python dashboard; logs are written to a
-                removable SD card at 1 kHz for offline analysis and model training.
+                Telemetry is broadcast over CAN to a <strong className="text-ink font-semibold">Raspberry Pi 4</strong>
+                {" "}that handles logging, the operator UI, and diagnostics — capturing every run at 1 kHz for offline
+                analysis and model training.
               </p>
             </motion.div>
 
@@ -702,9 +876,9 @@ export default function Engineering() {
         </div>
       </motion.section>
 
-      {/* ════════ § 06 — DATA ════════ */}
+      {/* ════════ § 05 — DATA ════════ */}
       <motion.section {...REVEAL}>
-        <SectionBar num="06" label="DATA" />
+        <SectionBar num="05" label="DATA" />
 
         <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
           <Reg pos="tl" />
@@ -842,9 +1016,9 @@ export default function Engineering() {
         </div>
       </motion.section>
 
-      {/* ════════ § 08 — ROADMAP ════════ */}
+      {/* ════════ § 06 — ROADMAP ════════ */}
       <motion.section {...REVEAL}>
-        <SectionBar num="08" label="ROADMAP" />
+        <SectionBar num="06" label="ROADMAP" />
 
         <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
           <Reg pos="tl" />
@@ -941,7 +1115,7 @@ export default function Engineering() {
         </div>
       </motion.section>
 
-      {/* ════════ § 09 — CTA ════════ */}
+      {/* ════════ § 07 — CTA ════════ */}
       <motion.section
         {...REVEAL}
         className="bg-[#1A1A1A] text-[#FAFAFA] border-t border-rule-strong"
@@ -952,7 +1126,7 @@ export default function Engineering() {
           backgroundPosition: "-1px -1px",
         }}
       >
-        <SectionBar num="09" label="NEXT STEPS" dark />
+        <SectionBar num="07" label="NEXT STEPS" dark />
 
         <div className="relative max-w-[1440px] mx-auto px-14 py-[88px] grid grid-cols-[1.2fr_1fr] gap-x-16">
           <Reg pos="tl" light />

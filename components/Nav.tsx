@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from "next/link";
+import { motion } from 'framer-motion';
+import { useTimelineBeat } from '@/components/TimelineOrchestrator';
 
 export const NAV_HEIGHT_PX = 57;
 
@@ -14,7 +16,7 @@ const PAGE_LABELS: Record<string, string> = {
   '/sponsors': 'sponsors',
 };
 
-const REVEAL_HOLD_MS = 550;
+const REVEAL_HOLD_MS = 2400;
 
 type NavTheme = 'light' | 'maroon' | 'ink';
 
@@ -28,6 +30,7 @@ export default function Nav() {
   const { pathname } = useRouter();
   const [hovered, setHovered] = useState(false);
   const [autoReveal, setAutoReveal] = useState(true);
+  const navBeat = useTimelineBeat('navBar');
 
   const subdir = PAGE_LABELS[pathname] ?? '';
   const theme = themeForPath(pathname);
@@ -57,7 +60,15 @@ export default function Nav() {
   const markSquare = isDark ? 'bg-white' : 'bg-maroon';
 
   return (
-    <header className={headerClass}>
+    <motion.header
+      className={headerClass}
+      initial={{ opacity: 0, y: -8 }}
+      animate={{
+        opacity: navBeat.hasFired ? 1 : 0,
+        y: navBeat.hasFired ? 0 : -8,
+      }}
+      transition={{ duration: navBeat.reducedMotion ? 0 : 0.3, ease: 'easeOut' }}
+    >
       <div className="max-w-[1440px] mx-auto px-14 py-[18px] flex items-center gap-12">
         {/* Brand */}
         <Link
@@ -134,6 +145,6 @@ export default function Nav() {
           </Link>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

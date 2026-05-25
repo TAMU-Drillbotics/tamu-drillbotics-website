@@ -20,6 +20,13 @@
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
+/* Fallback for first paint before _app.tsx hydrates and sets the var from
+   NAV_HEIGHT_PX. Keep this in sync with components/Nav.tsx (single source of
+   truth lives in JS). */
+:root {
+  --nav-height: 57px;
+}
+
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
@@ -193,7 +200,7 @@
 
 /* ── Apply page: sketched underline draw ── */
 .sketched-underline {
-  transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1) 600ms;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1400ms;
 }
 @media (prefers-reduced-motion: reduce) {
   .sketched-underline {
@@ -210,9 +217,10 @@
   animation: ripple-highlight 4.8s linear infinite;
 }
 @keyframes ripple-highlight {
-  0%, 100% { border-color: var(--block-border-default); }
-  6%       { border-color: var(--block-border-highlight); }
-  12%      { border-color: var(--block-border-default); }
+  0%   { border-color: var(--block-border-default); }
+  10%  { border-color: var(--block-border-highlight); }
+  35%  { border-color: var(--block-border-default); }
+  100% { border-color: var(--block-border-default); }
 }
 @media (prefers-reduced-motion: reduce) {
   .ripple-block {

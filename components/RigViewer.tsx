@@ -48,6 +48,45 @@ function SaveInitialView() {
   return null;
 }
 
+// ── ADJUSTABLE: how far up the rig sits in the frame, as a fraction of frame
+// height (0 = no shift, 0.12 ≈ 12% up). The rig's bottom was being clipped.
+const FRAME_SHIFT = 0.04;
+
+// Pushes the rendered image up within the black frame so the rig's bottom
+// (and its contact shadow) isn't clipped.
+//
+// Earlier attempts moved the camera or the model — both failed because
+// <Stage> wraps the rig in drei's <Bounds observe>, which RE-FRAMES the rig
+// (moving the camera + OrbitControls target) on every canvas resize. The
+// engineering page resizes the canvas constantly while scrolling, so any
+// transform-based nudge gets continuously overwritten.
+//
+// This instead uses the camera's *view offset* — part of the projection
+// matrix, not the camera transform. <Bounds> never touches it, so the shift
+// survives every re-frame.
+//
+// Note: setViewOffset() also forces camera.aspect = fullWidth/fullHeight, so
+// it MUST be passed the real canvas dimensions (not 1,1 — that squares the
+// aspect and stretches the render) and re-applied whenever the canvas resizes.
+function FrameShift() {
+  const camera = useThree((s) => s.camera);
+  const size = useThree((s) => s.size);
+  useEffect(() => {
+    const cam = camera as THREE.PerspectiveCamera;
+    const { width, height } = size;
+    // Positive offsetY shifts the frustum window down → content renders higher.
+    // Scaling the offset by height keeps the shift a constant fraction of the
+    // frame regardless of resolution.
+    cam.setViewOffset(width, height, 0, height * FRAME_SHIFT, width, height);
+    cam.updateProjectionMatrix();
+    return () => {
+      cam.clearViewOffset();
+      cam.updateProjectionMatrix();
+    };
+  }, [camera, size]);
+  return null;
+}
+
 export default function RigViewer() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const controlsRef = useRef<OrbitControlsHandle | null>(null);
@@ -129,16 +168,37 @@ export default function RigViewer() {
   return (
     <div
       ref={wrapperRef}
-      className={`relative w-full h-[600px] bg-[#0A0A0A] rounded-lg overflow-hidden border transition-colors duration-200 ${
+      className={`relative w-full h-full bg-[#1A1A1A] rounded-lg overflow-hidden border transition-colors duration-200 ${
         isActive ? 'border-[#500000]/60' : 'border-[#500000]/20'
       }`}
     >
+      {/* Engineering grid — faint background layer behind the 3D model.
+          Sits before the (transparent, alpha:true) Canvas in DOM order so the
+          canvas paints over it; line spacing ~matches the site's coarse grid. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, rgba(250,250,250,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(250,250,250,0.04) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+        }}
+      />
+
       <Canvas
         // ── ADJUSTABLE: camera framing ──
-        camera={{ position: [4, 3, 4], fov: 45 }}
+        // <Stage>/<Bounds> auto-fits the distance; only this vector's
+        // DIRECTION matters (azimuth ~73°, elevation ~13°).
+        camera={{ position: [2.39, 0.59, 0.75], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
         shadows
+        // The render frame resizes continuously (animated CSS `top` in
+        // RigHero). R3F's default resize config debounces the ResizeObserver
+        // by 50ms — and that timer resets on every frame of the resize, so the
+        // drawing buffer only catches up once scroll/momentum fully settles
+        // (the ~1s "clunky" lag). debounce:0 re-measures every frame instead.
+        resize={{ debounce: 0 }}
       >
         <Suspense fallback={<Loader />}>
           <Stage
@@ -156,6 +216,8 @@ export default function RigViewer() {
           </Stage>
           {/* Captures the Stage-framed pose as the OrbitControls reset target. */}
           <SaveInitialView />
+          {/* Lifts the rendered rig up in the frame so its bottom isn't clipped. */}
+          <FrameShift />
         </Suspense>
 
         <OrbitControls

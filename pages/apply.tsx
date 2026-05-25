@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import GridReveal from "@/components/GridReveal";
 import { Hero } from "@/components/apply/Hero";
 import { Candidates } from "@/components/apply/Candidates";
 import { ApplicationForm } from "@/components/apply/ApplicationForm";
 import { FAQ } from "@/components/apply/FAQ";
+import { TimelineOrchestrator } from "@/components/TimelineOrchestrator";
+import { APPLY_TIMELINE } from "@/lib/applyTimeline";
 
 const APPLY_FORM_ID = "apply-form";
 
@@ -50,18 +53,20 @@ export default function Apply() {
   useApplyFormScroll();
 
   return (
+    <TimelineOrchestrator timeline={APPLY_TIMELINE}>
     <div className="flex flex-col">
       <Nav />
 
       <div
-        className="relative bg-[#1A1A1A] text-white overflow-hidden"
+        className="isolate relative bg-[#1A1A1A] text-white overflow-hidden"
         style={{
           backgroundImage:
-            "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px)",
+            "linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)",
           backgroundSize: "80px 80px",
           backgroundPosition: "-1px -1px",
         }}
       >
+        <GridReveal />
         <OuterCross className="left-[42px] top-[42px]" />
         <OuterCross className="right-[42px] top-[42px]" />
         <OuterCross className="left-[42px] bottom-[42px]" />
@@ -75,5 +80,6 @@ export default function Apply() {
 
       <Footer />
     </div>
+    </TimelineOrchestrator>
   );
 }

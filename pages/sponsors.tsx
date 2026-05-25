@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import GridReveal from "@/components/GridReveal";
 
 /* ═══════════════════════════════════════════════════════
    CONFIG — edit data here, not layout code
@@ -267,7 +268,8 @@ function LogoBox({
 
 export default function Sponsors() {
   return (
-    <div className="flex flex-col">
+    <div className="isolate flex flex-col">
+      <GridReveal lineColor="rgba(26,26,26,0.16)" />
       <Nav />
 
       {/* ══════════ § 01 — TIERS ══════════ */}

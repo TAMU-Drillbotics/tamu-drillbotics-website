@@ -1,4 +1,27 @@
+import { motion } from "framer-motion";
+import { useTimelineBeat } from "@/components/TimelineOrchestrator";
+
+const FADE_UP_8 = { hidden: { opacity: 0, y: 8 }, shown: { opacity: 1, y: 0 } };
+const CLIP_WIPE = {
+  hidden: { clipPath: "inset(0 100% 0 0)" },
+  shown: { clipPath: "inset(0 0 0 0)" },
+};
+
+const PHASES = [
+  { n: "01", name: "Applications", date: "TBD" },
+  { n: "02", name: "Interviews", date: "TBD" },
+  { n: "03", name: "Decisions", date: "TBD" },
+  { n: "04", name: "Onboarding", date: "TBD" },
+];
+
 export function Hero() {
+  const eyebrow = useTimelineBeat("eyebrow");
+  const headline = useTimelineBeat("headline");
+  const description = useTimelineBeat("description");
+  const timelineHeader = useTimelineBeat("timelineHeader");
+  const timelinePhases = useTimelineBeat("timelinePhases");
+  const scrollHint = useTimelineBeat("scrollHint");
+
   return (
     <section
       id="hero"
@@ -6,18 +29,39 @@ export function Hero() {
     >
         <div className="grid grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-x-16 items-end">
           <div>
-            <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.2em] uppercase text-[#FAFAFA]/70 mb-5">
+            <motion.div
+              className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.2em] uppercase text-[#FAFAFA]/70 mb-5"
+              initial="hidden"
+              animate={eyebrow.hasFired ? "shown" : "hidden"}
+              variants={FADE_UP_8}
+              transition={{ duration: eyebrow.reducedMotion ? 0 : 0.3, ease: "easeOut" }}
+            >
               <span className="inline-block w-[18px] h-px bg-amber align-middle" />
               JOIN THE TEAM
-            </div>
+            </motion.div>
             <h1
               className="font-heading font-semibold text-[128px] leading-[.98] tracking-[-.02em] m-0 text-white"
               style={{ textWrap: "balance" }}
             >
-              Build something real<span className="text-amber">.</span>
+              <motion.span
+                className="inline-block"
+                style={{ clipPath: "inset(0 100% 0 0)" }}
+                initial="hidden"
+                animate={headline.hasFired ? "shown" : "hidden"}
+                variants={CLIP_WIPE}
+                transition={{ duration: headline.reducedMotion ? 0 : 0.5, ease: "easeOut" }}
+              >
+                Build something real<span className="text-amber">.</span>
+              </motion.span>
             </h1>
           </div>
-          <div className="max-w-[440px] pb-3.5">
+          <motion.div
+            className="max-w-[440px] pb-3.5"
+            initial="hidden"
+            animate={description.hasFired ? "shown" : "hidden"}
+            variants={FADE_UP_8}
+            transition={{ duration: description.reducedMotion ? 0 : 0.35, ease: "easeOut" }}
+          >
             <p className="text-[18px] leading-[1.6] text-white font-medium m-0 mb-[18px]">
               Drillbotics gives you the project that proves you can build. Real
               hardware, real deadlines, real systems that break.
@@ -26,14 +70,20 @@ export function Hero() {
               Applications open each fall. No prior engineering experience
               required for most roles.
             </p>
-          </div>
+          </motion.div>
         </div>
 
         <div
           className="mt-12 pt-5 border-t border-white/[0.18]"
           aria-label="2026–27 recruitment timeline"
         >
-          <div className="flex items-baseline justify-between font-mono text-[10.5px] tracking-[.2em] uppercase text-[#FAFAFA]/70 mb-[18px]">
+          <motion.div
+            className="flex items-baseline justify-between font-mono text-[10.5px] tracking-[.2em] uppercase text-[#FAFAFA]/70 mb-[18px]"
+            initial="hidden"
+            animate={timelineHeader.hasFired ? "shown" : "hidden"}
+            variants={FADE_UP_8}
+            transition={{ duration: timelineHeader.reducedMotion ? 0 : 0.3, ease: "easeOut" }}
+          >
             <span className="text-white font-medium">
               2026 &ndash; 27 Timeline
               <span className="text-white/[0.32] mx-2">/</span>
@@ -51,17 +101,23 @@ export function Hero() {
               />
               Awaiting Dates
             </span>
-          </div>
+          </motion.div>
           <div className="grid grid-cols-4">
-            {[
-              { n: "01", name: "Applications", date: "TBD" },
-              { n: "02", name: "Interviews", date: "TBD" },
-              { n: "03", name: "Decisions", date: "TBD" },
-              { n: "04", name: "Onboarding", date: "TBD" },
-            ].map((p, i) => (
-              <div
+            {PHASES.map((p, i) => (
+              <motion.div
                 key={p.n}
                 className={`relative pt-1.5 pb-1 px-[18px] border-l ${i === 0 ? "border-amber" : "border-white/[0.18]"}`}
+                initial={{ opacity: 0, x: -16 }}
+                animate={
+                  timelinePhases.hasFired
+                    ? { opacity: 1, x: 0 }
+                    : { opacity: 0, x: -16 }
+                }
+                transition={{
+                  duration: timelinePhases.reducedMotion ? 0 : 0.4,
+                  delay: timelinePhases.reducedMotion ? 0 : i * 0.12,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
               >
                 <div className="font-mono text-[10px] text-amber tracking-[.22em] font-medium mb-2">
                   {p.n}
@@ -72,12 +128,18 @@ export function Hero() {
                 <div className="font-mono text-[11px] text-[#FAFAFA]/70 tracking-[.16em]">
                   {p.date}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
 
-        <div className="mt-auto flex items-center gap-4 font-mono text-[11px] tracking-[.24em] uppercase text-amber">
+        <motion.div
+          className="mt-auto flex items-center gap-4 font-mono text-[11px] tracking-[.24em] uppercase text-amber"
+          initial="hidden"
+          animate={scrollHint.hasFired ? "shown" : "hidden"}
+          variants={FADE_UP_8}
+          transition={{ duration: scrollHint.reducedMotion ? 0 : 0.3, ease: "easeOut" }}
+        >
           <span>SCROLL &darr;</span>
           <span
             className="flex-1 h-px"
@@ -86,7 +148,7 @@ export function Hero() {
                 "linear-gradient(to right, rgba(200,150,62,0.5), transparent)",
             }}
           />
-        </div>
+        </motion.div>
 
     </section>
   );
