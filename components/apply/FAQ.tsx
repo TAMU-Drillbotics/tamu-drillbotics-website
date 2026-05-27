@@ -33,10 +33,6 @@ export function FAQ() {
         {/* Intro */}
         <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-x-16 items-end mb-12">
           <div>
-            <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.2em] uppercase text-[#FAFAFA]/70 mb-5">
-              <span className="inline-block w-[18px] h-px bg-amber align-middle" />
-              QUESTIONS
-            </div>
             <h2
               className="font-heading font-semibold text-[56px] leading-[.98] tracking-[-.02em] m-0 text-white"
               style={{ textWrap: "balance" }}

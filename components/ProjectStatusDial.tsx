@@ -29,9 +29,9 @@ const buildStatus: BuildStatus = {
 
 const subsystems: Subsystem[] = [
   { name: "Hoist / Elevator", progress: 100, status: "OPERATIONAL" },
-  { name: "Drivetrain",       progress: 35,  status: "IN BUILD" },
+  { name: "Drillstring",       progress: 35,  status: "IN BUILD" },
   { name: "Sensor Array",     progress: 20,  status: "IN DESIGN" },
-  { name: "Control S/W",      progress: 25,  status: "PROTOTYPING" },
+  { name: "Control System",      progress: 25,  status: "RESEARCH" },
   { name: "Autonomy / ML",    progress: 10,  status: "RESEARCH" },
 ];
 

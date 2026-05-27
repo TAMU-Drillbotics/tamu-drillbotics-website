@@ -75,7 +75,7 @@ const pillars = [
     heading: "Build full-stack engineers",
     body: "Students who understand mechanical design, embedded systems, edge computing, and machine learning not as separate disciplines, but as complementing fields that the industry increasingly demands together.",
     tagLabel: "Disciplines",
-    tags: ["MECH", "EMBEDDED", "EDGE", "ML"],
+    tags: ["MECHANICAL","PETROLEUM", "ELECTRICAL", "CS"],
   },
   {
     num: "02",
@@ -83,15 +83,15 @@ const pillars = [
     heading: "Bring autonomy to oil & gas",
     body: "The industry runs on some of the most complex and dangerous operations on earth. We’re building the next generation of engineers who automate them.",
     tagLabel: "Domain",
-    tags: ["UPSTREAM", "DRILLING", "SAFETY-CRITICAL"],
+    tags: ["UPSTREAM", "DOWNSTREAM", "DRILLING"],
   },
   {
     num: "03",
     vector: " /Engineering",
     heading: "Start small, think at scale",
-    body: "Our rig is scaled-down, but the control systems, sensor fusion, and ML pipelines we develop mirror what’s being deployed in the field today.",
+    body: "Our rig is scaled-down, but the control systems, sensor fusion, and ML pipelines we develop mirror what’s being deployed in industry today.",
     tagLabel: "Stack",
-    tags: ["CONTROL", "SENSOR FUSION", "ML PIPELINES"],
+    tags: ["STM32", "PyTorch", "CUDA"],
   },
 ];
 
@@ -107,9 +107,9 @@ const sponsors = [
 
 const subsystems = [
   { name: "Hoist / Elevator", progress: 100, status: "OPERATIONAL" },
-  { name: "Drivetrain", progress: 35, status: "IN BUILD" },
+  { name: "Drillstring", progress: 35, status: "IN BUILD" },
   { name: "Sensor Array", progress: 20, status: "IN DESIGN" },
-  { name: "Control S/W", progress: 25, status: "PROTOTYPING" },
+  { name: "Control System", progress: 25, status: "PROTOTYPING" },
   { name: "Autonomy / ML", progress: 10, status: "RESEARCH" },
   { name: "Mud System", progress: 0, status: "NOT STARTED" },
   { name: "Bit Cooling", progress: 0, status: "NOT STARTED" },
@@ -317,7 +317,7 @@ function Eyebrow() {
         variants={CLIP_WIPE}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
-        SPE Drillbotics&reg; Competition 2026
+        SPE Drillbotics&reg;
       </motion.span>
     </div>
   );
@@ -399,18 +399,23 @@ function Ctas() {
     >
       <Link
         href="/engineering"
-        className="oct-clip font-heading text-sm tracking-[.14em] uppercase font-semibold px-7 py-[18px] bg-maroon text-[#FAFAFA] border border-maroon no-underline inline-flex items-center gap-3.5 hover:bg-maroon-ink hover:border-maroon-ink transition-all duration-150"
+        className="hero-btn hero-btn--maroon font-heading tracking-[.14em] uppercase"
       >
-        The Engineering
-        <span className="inline-block w-[22px] h-px bg-[#FAFAFA] relative">
-          <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-[#FAFAFA] rotate-45" />
+        <span className="hero-btn-outer">
+          <span className="hero-btn-inner">
+            <span>The Engineering</span>
+          </span>
         </span>
       </Link>
       <Link
-        href="/apply#apply-form"
-        className="oct-outline-ink font-heading text-sm tracking-[.14em] uppercase font-semibold px-[22px] py-[18px] text-ink no-underline inline-flex items-center gap-2.5 hover:text-maroon transition-all duration-150"
+        href="/about#team"
+        className="hero-btn font-heading tracking-[.14em] uppercase"
       >
-        Join the Team
+        <span className="hero-btn-outer">
+          <span className="hero-btn-inner">
+            <span>The Team</span>
+          </span>
+        </span>
       </Link>
     </motion.div>
   );
@@ -526,7 +531,6 @@ function MissionSection() {
             animate={bodyInView ? "visible" : "hidden"}
             custom={0.22}
           >
-            A year-long engineering effort, three commitments to the team 
           </motion.p>
         </header>
 
@@ -614,8 +618,6 @@ export default function Home() {
         >
           <HeroCrossMark className="left-[42px] top-[42px]" index={0} />
           <HeroCrossMark className="right-[42px] top-[42px]" index={1} />
-          <HeroCrossMark className="left-[42px] bottom-[42px]" index={2} />
-          <HeroCrossMark className="right-[42px] bottom-[42px]" index={3} />
 
           {/* ── Left column ── */}
           <section className="flex flex-col justify-center">
@@ -784,14 +786,13 @@ export default function Home() {
                 Two ways in<span className="text-amber">.</span>
               </h2>
               <p className="text-[17px] leading-relaxed text-[#F2E4CC] m-0 mb-2">
-                Look under the hood, or pick up a torque wrench. Either route starts here.
               </p>
             </div>
 
             {/* Left column — See the rig */}
             <Link
               href="/engineering"
-              className="group flex flex-col gap-7 px-12 pt-9 pb-10 min-h-[420px] text-[#FAFAFA] no-underline transition-colors duration-150 hover:bg-[#ffffff0a]"
+              className="group flex flex-col gap-7 px-12 pt-9 pb-10 min-h-[420px] text-[#FAFAFA] no-underline"
             >
               <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#ffffffb8]">
                 <span className="font-medium text-[#FAFAFA]">
@@ -805,7 +806,7 @@ export default function Home() {
               </h3>
 
               <ul className="list-none m-0 p-0 grid grid-cols-2 gap-x-10 gap-y-3.5">
-                {["System Architecture", "Sensor Stack", "Control Loop", "Live Build Progress"].map((item) => (
+                {["System Architecture", "Sensor Stack", "Controls", "3D build render"].map((item) => (
                   <li
                     key={item}
                     className="pb-3 border-b border-dashed border-[#ffffff33] font-mono text-[12px] tracking-[.18em] uppercase text-[#F2E4CC]"
@@ -830,7 +831,7 @@ export default function Home() {
             {/* Right column — Join the team */}
             <Link
               href="/apply#apply-form"
-              className="group flex flex-col gap-7 px-12 pt-9 pb-10 min-h-[420px] text-[#FAFAFA] no-underline bg-ink border-l border-[#ffffff2e] transition-colors duration-150 hover:bg-[#161616]"
+              className="group flex flex-col gap-7 px-12 pt-9 pb-10 min-h-[420px] text-[#FAFAFA] no-underline bg-ink border-l border-[#ffffff2e]"
             >
               <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#ffffffb8]">
                 <span className="font-medium text-[#FAFAFA]">
@@ -844,7 +845,7 @@ export default function Home() {
               </h3>
 
               <ul className="list-none m-0 p-0 grid grid-cols-2 gap-x-10 gap-y-3.5">
-                {["No experience needed", "Open to all majors", "Real hardware", "2026 – 27 cycle"].map((item) => (
+                {["No prior experience needed", "Open to all majors", "hands-on", "2026 – 27 cycle"].map((item) => (
                   <li
                     key={item}
                     className="pb-3 border-b border-dashed border-[#ffffff33] font-mono text-[12px] tracking-[.18em] uppercase text-[#F2E4CC]"
@@ -858,7 +859,7 @@ export default function Home() {
                 <span className="font-heading text-[15px] font-semibold tracking-[.16em] uppercase text-[#FAFAFA]">
                   Join the Team
                 </span>
-                <span className="w-[52px] h-[52px] shrink-0 border border-[#FAFAFA] text-[#FAFAFA] flex items-center justify-center transition-colors duration-150 group-hover:bg-[#FAFAFA] group-hover:text-ink">
+                <span className="w-[52px] h-[52px] shrink-0 border border-[#FAFAFA] text-[#FAFAFA] flex items-center justify-center transition-colors duration-150 group-hover:bg-amber group-hover:border-amber group-hover:text-ink">
                   <span className="relative inline-block w-5 h-px bg-current">
                     <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
                   </span>

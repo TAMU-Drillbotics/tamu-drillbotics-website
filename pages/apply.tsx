@@ -54,7 +54,7 @@ export default function Apply() {
 
   return (
     <TimelineOrchestrator timeline={APPLY_TIMELINE}>
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-[#1A1A1A]">
       <Nav />
 
       <div

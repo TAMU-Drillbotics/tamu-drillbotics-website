@@ -60,7 +60,7 @@ const president = {
   name: "Jacob Pekala",
   role: "President & Mechanical Lead",
   bio:
-    "I joined Drillbotics because I wanted to build something that actually works — not a simulation, not a paper, a machine that drills into rock. My goal for this team is simple: every member walks away with proof they can ship a real engineering system. We’re building a competition rig, but what we’re really building is engineers who can own a problem from first sketch to final test.",
+    "As a senior petroleum engineering student and president of the Texas A&M Drillbotics team, I oversee both the technical and business development efforts that keep our team moving forward. Currently, we are focused on manufacturing components for our drilling rig, expanding our sponsor network, and broadening our reach through outreach activities.",
 };
 
 const teamLeads: Array<{ name: string; role: string; tbd?: boolean; photo?: string }> = [
@@ -261,7 +261,7 @@ export default function About() {
                     The Competition
                   </span>
                   <span className="font-mono text-[10.5px] tracking-[.16em] uppercase text-[#FAFAFA]/35">
-                    External &middot; SPE / DSATS
+                    External
                   </span>
                 </div>
               </ColumnHeader>
@@ -271,8 +271,8 @@ export default function About() {
               </ColumnTitle>
               <ColumnBody>
               <p className="text-[18px] leading-[1.55] text-[#FAFAFA]/80 m-0 mb-7">
-                <strong className="text-[#FAFAFA] font-semibold">SPE Drillbotics</strong> &mdash; run by the Society of Petroleum
-                Engineers&apos; DSATS committee &mdash; challenges university teams to design,
+                <strong className="text-[#FAFAFA] font-semibold">SPE Drillbotics</strong>, run by the Society of Petroleum
+                Engineers&apos; DSATS committee, challenges university teams to design,
                 build, and operate a miniature autonomous drilling rig from scratch.
               </p>
 
@@ -302,7 +302,7 @@ export default function About() {
               {/* Keyline: Competition format */}
               <div className="mt-9 pt-[18px] border-t border-[#FAFAFA]/15">
                 <div className="flex items-baseline justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#FAFAFA]/35 mb-2">
-                  <span>Competition &middot; Format</span>
+                  <span>Competition Guidelines</span>
                 </div>
                 <ul className="list-none m-0 p-0">
                   {[
@@ -380,13 +380,13 @@ export default function About() {
                     What We Do
                   </span>
                   <span className="font-mono text-[10.5px] tracking-[.16em] uppercase text-[#FAFAFA]/35">
-                    Internal &middot; TAMU Drillbotics
+                    Internal
                   </span>
                 </div>
               </ColumnHeader>
 
               <ColumnTitle className="font-heading font-semibold text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
-                We build the rig (nearly) end to end.
+                We build the rig (nearly) end to end<span className="text-amber">.</span>
               </ColumnTitle>
               <ColumnBody>
               <p className="text-[18px] leading-[1.55] text-[#FAFAFA]/80 m-0 mb-7">
@@ -409,7 +409,7 @@ export default function About() {
               <div className="mt-9 pt-[18px] border-t border-[#FAFAFA]/15">
                 <div className="flex items-baseline justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#FAFAFA]/35 mb-2">
                   <span>Build &middot; Subsystems</span>
-                  <span>Owned In-House</span>
+                  
                 </div>
                 <ul className="list-none m-0 p-0">
                   {teams.map((group, i) => (

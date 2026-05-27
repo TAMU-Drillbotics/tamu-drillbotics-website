@@ -156,15 +156,6 @@ const mechRef: { group: string; rows: [string, string][] }[] = [
     ],
   },
   {
-    group: "Drivetrain",
-    rows: [
-      ["Rotary Drive", "MAXON EC-i 40"],
-      ["Max Speed", "2500 RPM"],
-      ["Hoist", "2× NEMA-23"],
-      ["Coolant Pump", "SEAFLO 12 V"],
-    ],
-  },
-  {
     group: "Drillstring",
     rows: [
       ["Steering", "3-WING RSS"],
@@ -172,14 +163,6 @@ const mechRef: { group: string; rows: [string, string][] }[] = [
       ["Drill Pipe", "FLEXIBLE NYLON"],
       ["Hyd. Pressure", "≈ 2000 PSI"],
       ["Bit", "TBD"],
-    ],
-  },
-  {
-    group: "Safety",
-    rows: [
-      ["Enclosure", "POLYCARBONATE"],
-      ["E-Stop", "HW + SW"],
-      ["Seal Rating", "5000 PSI"],
     ],
   },
 ];
@@ -205,18 +188,6 @@ const actuators: ActuatorRow[] = [
   { id: "CLT-01", subsystem: "Coolant Loop", component: "Seaflo 12 V DC Pump", detail: "Continuous-duty centrifugal" },
 ];
 
-/* ════════ § 06 — roadmap ════════ */
-type Phase = { num: string; name: string; date: string; status: string; kind: "done" | "active" | "next" | "planned" };
-const phases: Phase[] = [
-  { num: "01", name: "Structural Assembly", date: "Sep · 2025", status: "Complete", kind: "done" },
-  { num: "02", name: "Hoist / Elevator", date: "Oct · 2025", status: "Complete", kind: "done" },
-  { num: "03", name: "Drivetrain Bring-up", date: "Nov · 2025 – Jan · 2026", status: "In Progress", kind: "active" },
-  { num: "04", name: "Sensor Array Install", date: "Feb · 2026", status: "Next", kind: "next" },
-  { num: "05", name: "Control S/W Integration", date: "Mar · 2026", status: "Planned", kind: "planned" },
-  { num: "06", name: "ML Pipeline Deploy", date: "Apr · 2026", status: "Planned", kind: "planned" },
-  { num: "07", name: "Autonomous Testing", date: "May · 2026", status: "Planned", kind: "planned" },
-  { num: "08", name: "Competition Readiness", date: "Jun · 2026", status: "Planned", kind: "planned" },
-];
 
 /* ═══════════════════════════════════════════════════════
    § 01 hero — orchestrated entrance + scroll-driven collapse
@@ -352,7 +323,6 @@ export default function Engineering() {
           <Reg pos="bl" />
           <Reg pos="br" />
 
-          <SecEyebrow>Mechanical Engineering</SecEyebrow>
           <SecTitle>
             Materials, design, physics<span className="text-maroon">.</span>
           </SecTitle>
@@ -367,15 +337,13 @@ export default function Engineering() {
                 The frame is a modular tower of <strong className="text-ink font-semibold">6061-T6 aluminum 2-by-2-inch
                 T-slot extrusion</strong>, joined with aluminum corner brackets and thread-locked fasteners. Three stacked
                 platforms separate the subsystems — a top actuation deck, a mid-frame elevator carrying the bottom-hole
-                assembly, and a bottom platform for fluid handling — and the T-slot profile lets sensor and bracket
+                assembly, and a bottom platform for fluid handling and rock drilling— and the T-slot profile lets sensor and bracket
                 placement be reconfigured throughout the build.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-                Vertical motion comes from two <strong className="text-ink font-semibold">NEMA-23 stepper motors</strong>
+                Vertical motion comes from two <strong className="text-ink font-semibold">NEMA-32 stepper motors </strong>
                 driving lead screws; sharing the load gives a lift capacity near 700 lb and sets weight-on-bit through the
-                elevator platform. A top-mounted Maxon EC-i 40 brushless DC motor spins the string at up to 2500 RPM. The
-                drillstring runs a 17-7 PH stainless drive shaft inside a flexible, non-rotating nylon pipe that doubles as
-                the drilling-fluid conduit.
+                elevator platform. (tbd)
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0">
                 Steering uses a hydraulically actuated <strong className="text-ink font-semibold">push-the-bit rotary
@@ -518,7 +486,6 @@ export default function Engineering() {
           <Reg pos="bl" />
           <Reg pos="br" />
 
-          <SecEyebrow>Rotary Steerable System</SecEyebrow>
           <SecTitle>
             Three wings, one trajectory<span className="text-maroon">.</span>
           </SecTitle>
@@ -526,8 +493,8 @@ export default function Engineering() {
           <div className="grid grid-cols-[1fr_1.2fr] gap-x-16 items-start pt-12">
             <motion.div {...fadeUp(0.1)}>
               <p className="text-[19px] leading-[1.55] text-ink font-medium m-0 mb-6">
-                Steering is where the rig earns its name. Once the bit enters the rock, a rotary steerable system bends
-                the well toward three target points — no tripping the string, no human hand on the controls.
+                Steering. Once the bit enters the rock, a rotary steerable system bends
+                the well toward three target points — no tripping the string, no human intervention.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
                 The RSS is a <strong className="text-ink font-semibold">push-the-bit</strong> design: three steering
@@ -562,10 +529,6 @@ export default function Engineering() {
                     className="block mx-auto w-full h-auto"
                   />
                 </div>
-                <div className="px-[18px] py-3 border-t border-rule-strong flex items-center justify-between font-mono text-[10px] tracking-[.18em] uppercase text-ink-4">
-                  <span>Push-the-Bit RSS</span>
-                  <span className="text-ink-2">BHA · Section</span>
-                </div>
               </div>
             </motion.div>
           </div>
@@ -582,7 +545,6 @@ export default function Engineering() {
           <Reg pos="bl" />
           <Reg pos="br" />
 
-          <SecEyebrow>Electronics Stack</SecEyebrow>
           <SecTitle>
             From signal to actuator<span className="text-maroon">.</span>
           </SecTitle>
@@ -708,7 +670,6 @@ export default function Engineering() {
           <Reg pos="bl" />
           <Reg pos="br" />
 
-          <SecEyebrow>Software Stack &amp; Control Loop</SecEyebrow>
           <SecTitle>
             Code that controls steel<span className="text-maroon">.</span>
           </SecTitle>
@@ -741,7 +702,7 @@ export default function Engineering() {
             <motion.div {...fadeUp(0.2)}>
               <div className="border border-rule-strong bg-white relative">
                 <div className="px-[18px] py-3.5 border-b border-rule flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-ink-3">
-                  <span className="text-ink">CTRL-LOOP · CL-001</span>
+                  <span className="text-ink">CTRL-LOOP</span>
                   <span className="inline-flex items-center gap-1.5">
                     <span
                       className="w-1.5 h-1.5 rounded-full bg-maroon"
@@ -764,6 +725,17 @@ export default function Engineering() {
                     >
                       <path d="M0,0 L10,5 L0,10 Z" fill="#500000" />
                     </marker>
+                    <marker
+                      id="loop-arrow-amber"
+                      viewBox="0 0 10 10"
+                      refX="9"
+                      refY="5"
+                      markerWidth="8"
+                      markerHeight="8"
+                      orient="auto-start-reverse"
+                    >
+                      <path d="M0,0 L10,5 L0,10 Z" fill="#C8963E" />
+                    </marker>
                     <pattern id="loop-grid" width="40" height="40" patternUnits="userSpaceOnUse">
                       <path d="M40 0H0V40" fill="none" stroke="#1a1a1a09" strokeWidth="1" />
                     </pattern>
@@ -771,19 +743,16 @@ export default function Engineering() {
 
                   <rect width="640" height="420" fill="url(#loop-grid)" />
 
-                  <text x="320" y="200" textAnchor="middle" fontFamily="JetBrains Mono" fontSize="10" fill="#6b6b6b" letterSpacing="3">
-                    CONTROL · LOOP
-                  </text>
                   <text x="320" y="220" textAnchor="middle" fontFamily="Chakra Petch" fontSize="20" fontWeight="600" fill="#1A1A1A">
                     1 kHz
                   </text>
-                  <text x="320" y="240" textAnchor="middle" fontFamily="JetBrains Mono" fontSize="9" fill="#a5a5a5" letterSpacing="3">
+                  <text x="320" y="260" textAnchor="middle" fontFamily="JetBrains Mono" fontSize="9" fill="#a5a5a5" letterSpacing="3">
                     CLOSED · DETERMINISTIC
                   </text>
 
                   {/* nodes */}
                   {[
-                    { x: 50, y: 40, stage: "01", title: "SENSORS", sub: "14 CH · ACQ", maroonBorder: false, amber: false },
+                    { x: 50, y: 40, stage: "01", title: "SENSORS", sub: "7 CH · ACQ", maroonBorder: false, amber: false },
                     { x: 240, y: 20, stage: "02", title: "CONDITION", sub: "FILTER · SCALE", maroonBorder: false, amber: false },
                     { x: 430, y: 40, stage: "03", title: "PID CORE", sub: "3-AXIS · COUPLED", maroonBorder: false, amber: false },
                     { x: 430, y: 320, stage: "04", title: "ML INFER", sub: "ADVISORY · TRIM", maroonBorder: false, amber: true },
@@ -837,12 +806,8 @@ export default function Engineering() {
                     stroke="#C8963E"
                     strokeWidth="1.2"
                     strokeDasharray="3 3"
-                    markerEnd="url(#loop-arrow)"
+                    markerEnd="url(#loop-arrow-amber)"
                   />
-                  <text x="350" y="220" fontFamily="JetBrains Mono" fontSize="9" fill="#a07217" letterSpacing="2">
-                    ADVISORY
-                  </text>
-
                   <text x="20" y="412" fontFamily="JetBrains Mono" fontSize="9" fill="#a5a5a5" letterSpacing="2">
                     DWG · CL-001
                   </text>
@@ -886,7 +851,6 @@ export default function Engineering() {
           <Reg pos="bl" />
           <Reg pos="br" />
 
-          <SecEyebrow>Data &amp; Machine Learning</SecEyebrow>
           <SecTitle>
             Sensor fusion meets machine learning<span className="text-maroon">.</span>
           </SecTitle>
@@ -905,15 +869,44 @@ export default function Engineering() {
               </p>
               <div className="mt-auto border border-rule bg-[#fafafa] h-[160px] relative flex items-center justify-center">
                 <svg viewBox="0 0 320 140" className="w-[88%] h-[88%]" xmlns="http://www.w3.org/2000/svg">
-                  <g stroke="#1a1a1a26" fill="none" strokeWidth="1">
-                    <path d="M0 80 Q 40 30 80 75 T 160 70 T 240 80 T 320 75" />
-                    <path d="M0 95 Q 40 60 80 90 T 160 85 T 240 95 T 320 90" stroke="#C8963E55" />
-                    <path d="M0 65 Q 40 100 80 60 T 160 55 T 240 70 T 320 60" stroke="#1a1a1a44" />
+                  <g fill="none" strokeWidth="1">
+                    <motion.path
+                      d="M0 80 Q 40 30 80 75 T 160 70 T 240 80 T 320 75"
+                      stroke="#1a1a1a26"
+                      initial={{ pathLength: 0 }}
+                      whileInView={{ pathLength: 1 }}
+                      viewport={{ once: true, margin: "-80px" }}
+                      transition={{ duration: 0.9, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                    <motion.path
+                      d="M0 95 Q 40 60 80 90 T 160 85 T 240 95 T 320 90"
+                      stroke="#C8963E55"
+                      initial={{ pathLength: 0 }}
+                      whileInView={{ pathLength: 1 }}
+                      viewport={{ once: true, margin: "-80px" }}
+                      transition={{ duration: 0.9, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                    <motion.path
+                      d="M0 65 Q 40 100 80 60 T 160 55 T 240 70 T 320 60"
+                      stroke="#1a1a1a44"
+                      initial={{ pathLength: 0 }}
+                      whileInView={{ pathLength: 1 }}
+                      viewport={{ once: true, margin: "-80px" }}
+                      transition={{ duration: 0.9, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    />
                   </g>
-                  <path d="M0 80 Q 40 50 80 78 T 160 72 T 240 82 T 320 78" stroke="#500000" strokeWidth="1.8" fill="none" />
+                  <motion.path
+                    d="M0 80 Q 40 50 80 78 T 160 72 T 240 82 T 320 78"
+                    stroke="#500000"
+                    strokeWidth="1.8"
+                    fill="none"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.8, delay: 1, ease: [0.16, 1, 0.3, 1] }}
+                  />
                   <g fontFamily="JetBrains Mono" fontSize="8" fill="#6b6b6b" letterSpacing="2">
-                    <text x="6" y="14">RAW · STREAMS</text>
-                    <text x="220" y="130">FUSED · ESTIMATE</text>
+                    <text x="6" y="14">RAW STREAMS</text>
                   </g>
                 </svg>
               </div>
@@ -932,25 +925,64 @@ export default function Engineering() {
               </p>
               <div className="mt-auto border border-rule bg-[#fafafa] h-[160px] relative flex items-center justify-center">
                 <svg viewBox="0 0 320 140" className="w-[88%] h-[88%]" xmlns="http://www.w3.org/2000/svg">
-                  <g fontFamily="JetBrains Mono" fontSize="7" fill="#6b6b6b" letterSpacing="2">
-                    <rect x="14" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" strokeWidth="1" />
-                    <text x="20" y="74">RUNS · CSV</text>
-                    <rect x="100" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" strokeWidth="1" />
-                    <text x="108" y="74">TRAIN · PT</text>
-                    <rect x="186" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" strokeWidth="1" />
-                    <text x="192" y="74">EVAL · CV</text>
-                    <rect x="252" y="50" width="56" height="40" fill="#fff" stroke="#500000" strokeWidth="1.5" />
-                    <text x="258" y="74" fill="#500000">CKPT</text>
-                  </g>
-                  <g stroke="#500000" strokeWidth="1.2" fill="none">
-                    <path d="M70 70 L100 70" />
-                    <path d="M156 70 L186 70" />
-                    <path d="M242 70 L252 70" />
-                  </g>
-                  <g fontFamily="JetBrains Mono" fontSize="8" fill="#a07217" letterSpacing="2">
-                    <text x="6" y="14">PIPELINE · TR-001</text>
-                    <text x="240" y="130">REGISTRY</text>
-                  </g>
+                  {/* connectors */}
+                  {[
+                    { d: "M70 70 L90 70", delay: 1.9 },
+                    { d: "M150 70 L170 70", delay: 2.1 },
+                    { d: "M230 70 L250 70", delay: 2.3 },
+                  ].map((c) => (
+                    <motion.path
+                      key={c.d}
+                      d={c.d}
+                      stroke="#500000"
+                      strokeWidth="1.2"
+                      fill="none"
+                      initial={{ pathLength: 0 }}
+                      whileInView={{ pathLength: 1 }}
+                      viewport={{ once: true, margin: "-80px" }}
+                      transition={{ duration: 0.18, delay: c.delay, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                  ))}
+                  {/* boxes */}
+                  {[
+                    { x: 10, label: "RUN CSV", delay: 1.8, accent: false },
+                    { x: 90, label: "TRAIN", delay: 2.0, accent: false },
+                    { x: 170, label: "EVAL", delay: 2.2, accent: false },
+                    { x: 250, label: "CKPT", delay: 2.4, accent: true },
+                  ].map((b) => (
+                    <motion.g
+                      key={b.label}
+                      initial={{ opacity: 0, y: 6 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-80px" }}
+                      transition={{ duration: 0.25, delay: b.delay, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <rect
+                        x={b.x}
+                        y={50}
+                        width={60}
+                        height={40}
+                        fill="#fff"
+                        stroke={b.accent ? "#500000" : "#1a1a1a"}
+                        strokeWidth={b.accent ? 1.5 : 1}
+                      />
+                      <text
+                        x={b.x + 30}
+                        y={70}
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fontFamily="JetBrains Mono"
+                        fontSize="8"
+                        letterSpacing="1.5"
+                        fill={b.accent ? "#500000" : "#6b6b6b"}
+                      >
+                        {b.label}
+                      </text>
+                    </motion.g>
+                  ))}
+                  <text x="6" y="14" fontFamily="JetBrains Mono" fontSize="8" fill="#a07217" letterSpacing="2">
+                    PIPELINE
+                  </text>
                 </svg>
               </div>
             </motion.div>
@@ -967,26 +999,98 @@ export default function Engineering() {
               </p>
               <div className="mt-auto border border-rule bg-[#fafafa] h-[160px] relative flex items-center justify-center">
                 <svg viewBox="0 0 320 140" className="w-[88%] h-[88%]" xmlns="http://www.w3.org/2000/svg">
-                  <g fontFamily="JetBrains Mono" fontSize="7" fill="#6b6b6b" letterSpacing="2">
-                    <rect x="14" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" strokeWidth="1" />
-                    <text x="20" y="74">FRAME · IN</text>
-                    <rect x="100" y="50" width="56" height="40" fill="#fff" stroke="#C8963E" strokeWidth="1.5" />
-                    <text x="108" y="74" fill="#a07217">CUDA · INF</text>
-                    <rect x="186" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" strokeWidth="1" />
-                    <text x="194" y="74">TRIM · OUT</text>
-                    <rect x="252" y="50" width="56" height="40" fill="#fff" stroke="#1a1a1a" strokeWidth="1" />
-                    <text x="262" y="74">PID</text>
-                  </g>
-                  <g stroke="#500000" strokeWidth="1.2" fill="none">
-                    <path d="M70 70 L100 70" />
-                    <path d="M156 70 L186 70" />
-                    <path d="M242 70 L252 70" />
-                  </g>
-                  <path d="M70 110 L308 110" stroke="#1a1a1a44" strokeWidth="1" strokeDasharray="3 3" fill="none" />
-                  <g fontFamily="JetBrains Mono" fontSize="8" fill="#a07217" letterSpacing="2">
-                    <text x="6" y="14">PIPELINE · IN-001</text>
-                    <text x="200" y="130">BUDGET · &lt; 800µs</text>
-                  </g>
+                  {/* connectors */}
+                  {[
+                    { d: "M70 70 L90 70", delay: 2.7 },
+                    { d: "M150 70 L170 70", delay: 2.9 },
+                    { d: "M230 70 L250 70", delay: 3.1 },
+                  ].map((c) => (
+                    <motion.path
+                      key={c.d}
+                      d={c.d}
+                      stroke="#500000"
+                      strokeWidth="1.2"
+                      fill="none"
+                      initial={{ pathLength: 0 }}
+                      whileInView={{ pathLength: 1 }}
+                      viewport={{ once: true, margin: "-80px" }}
+                      transition={{ duration: 0.18, delay: c.delay, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                  ))}
+                  {/* boxes */}
+                  {[
+                    { x: 10, label: "FRAME IN", delay: 2.6, accent: "none" as const },
+                    { x: 90, label: "CUDA INF", delay: 2.8, accent: "amber" as const },
+                    { x: 170, label: "TRIM OUT", delay: 3.0, accent: "none" as const },
+                    { x: 250, label: "PID", delay: 3.2, accent: "none" as const },
+                  ].map((b) => {
+                    const stroke =
+                      b.accent === "amber" ? "#C8963E" : "#1a1a1a";
+                    const textFill =
+                      b.accent === "amber" ? "#a07217" : "#6b6b6b";
+                    const strokeWidth = b.accent === "amber" ? 1.5 : 1;
+                    return (
+                      <motion.g
+                        key={b.label}
+                        initial={{ opacity: 0, y: 6 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: 0.25, delay: b.delay, ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        <rect
+                          x={b.x}
+                          y={50}
+                          width={60}
+                          height={40}
+                          fill="#fff"
+                          stroke={stroke}
+                          strokeWidth={strokeWidth}
+                        />
+                        <text
+                          x={b.x + 30}
+                          y={70}
+                          textAnchor="middle"
+                          dominantBaseline="central"
+                          fontFamily="JetBrains Mono"
+                          fontSize="8"
+                          letterSpacing="1.5"
+                          fill={textFill}
+                        >
+                          {b.label}
+                        </text>
+                      </motion.g>
+                    );
+                  })}
+                  {/* budget line */}
+                  <motion.path
+                    d="M10 115 L310 115"
+                    stroke="#1a1a1a44"
+                    strokeWidth="1"
+                    strokeDasharray="3 3"
+                    fill="none"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.55, delay: 3.45, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                  <text x="6" y="14" fontFamily="JetBrains Mono" fontSize="8" fill="#a07217" letterSpacing="2">
+                    PIPELINE · IN-001
+                  </text>
+                  <motion.text
+                    x="310"
+                    y="132"
+                    textAnchor="end"
+                    fontFamily="JetBrains Mono"
+                    fontSize="8"
+                    fill="#a07217"
+                    letterSpacing="2"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.3, delay: 4.0, ease: "easeOut" }}
+                  >
+                    BUDGET · &lt; 800µs
+                  </motion.text>
                 </svg>
               </div>
             </motion.div>
@@ -1016,105 +1120,6 @@ export default function Engineering() {
         </div>
       </motion.section>
 
-      {/* ════════ § 06 — ROADMAP ════════ */}
-      <motion.section {...REVEAL}>
-        <SectionBar num="06" label="ROADMAP" />
-
-        <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
-          <Reg pos="tl" />
-          <Reg pos="tr" />
-          <Reg pos="bl" />
-          <Reg pos="br" />
-
-          <SecEyebrow>2025–26 Build Cycle</SecEyebrow>
-          <SecTitle>
-            What&rsquo;s next<span className="text-maroon">.</span>
-          </SecTitle>
-
-          <div className="pt-12">
-            <motion.div
-              {...fadeUp(0.1)}
-              className="flex items-center justify-between pb-[18px] border-b border-rule-strong mb-8 font-mono text-[10.5px] tracking-[.18em] uppercase text-ink-3"
-            >
-              <span className="font-heading text-[28px] text-ink font-semibold tracking-[.02em]">
-                <span className="text-maroon">34</span> %
-              </span>
-              <span className="flex-1 mx-8 h-1 bg-[#1a1a1a12] relative">
-                <motion.i
-                  className="absolute left-0 top-0 bottom-0 bg-maroon origin-left block"
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ width: "34%" }}
-                />
-                <span className="absolute -top-1.5 w-0.5 h-4 bg-ink" style={{ left: "34%" }}>
-                  <span className="absolute -left-[3px] -top-[3px] w-2 h-2 border border-ink bg-white" />
-                </span>
-              </span>
-              <span>Cycle Completion · Wk 14 / 32</span>
-            </motion.div>
-
-            <motion.div {...fadeUp(0.18)} className="grid grid-cols-8 border border-rule-strong bg-white">
-              {phases.map((p, i) => {
-                const numColor =
-                  p.kind === "done"
-                    ? "text-ink"
-                    : p.kind === "active"
-                    ? "text-amber"
-                    : p.kind === "next"
-                    ? "text-ink-2"
-                    : "text-ink-4";
-                const statusColor =
-                  p.kind === "done"
-                    ? "text-maroon"
-                    : p.kind === "active"
-                    ? "text-[#a07217]"
-                    : p.kind === "next"
-                    ? "text-ink-2"
-                    : "text-ink-3";
-                const dotColor =
-                  p.kind === "done"
-                    ? "bg-maroon"
-                    : p.kind === "active"
-                    ? "bg-amber"
-                    : p.kind === "next"
-                    ? "bg-ink-2"
-                    : "bg-ink-4";
-                const isActive = p.kind === "active";
-                return (
-                  <div
-                    key={p.num}
-                    className={`px-[18px] py-[22px] pb-5 relative flex flex-col min-h-[200px] ${
-                      i < phases.length - 1 ? "border-r border-rule-strong" : ""
-                    } ${isActive ? "bg-[#fff7ee] border-t-2 border-t-amber -mt-[2px]" : ""}`}
-                  >
-                    {/* tiny vertical tick above each phase */}
-                    <span
-                      className={`absolute left-1/2 top-0 w-px h-3 -translate-x-1/2 -translate-y-1/2 ${
-                        p.kind === "done" ? "bg-maroon" : p.kind === "active" ? "bg-amber" : "bg-ink-4"
-                      }`}
-                      aria-hidden="true"
-                    />
-                    <div className={`font-heading text-[36px] font-semibold leading-none tracking-[.01em] mb-3.5 ${numColor}`}>
-                      {p.num}
-                    </div>
-                    <h4 className={`font-heading text-[13px] font-medium leading-[1.2] m-0 mb-3 tracking-[.04em] uppercase ${isActive ? "text-ink" : "text-ink"}`}>
-                      {p.name}
-                    </h4>
-                    <div className="font-mono text-[10px] tracking-[.18em] uppercase text-ink-3 mb-auto">{p.date}</div>
-                    <div className={`mt-[18px] inline-flex items-center gap-2 font-mono text-[9.5px] tracking-[.22em] uppercase ${statusColor}`}>
-                      <span className={`w-2 h-2 ${dotColor}`} />
-                      {p.status}
-                    </div>
-                  </div>
-                );
-              })}
-            </motion.div>
-          </div>
-        </div>
-      </motion.section>
-
       {/* ════════ § 07 — CTA ════════ */}
       <motion.section
         {...REVEAL}
@@ -1135,18 +1140,11 @@ export default function Engineering() {
           <Reg pos="br" light />
 
           <div>
-            <motion.div
-              {...fadeUp(0)}
-              className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.18em] uppercase text-[#ffffffc4] mb-6"
-            >
-              <span className="w-[7px] h-[7px] rounded-full bg-amber" style={{ boxShadow: "0 0 0 3px #C8963E30" }} />
-              <span>You&rsquo;ve seen the spec sheet</span>
-            </motion.div>
             <motion.h2
               {...fadeUp(0.1)}
               className="font-heading font-semibold text-[88px] leading-[.92] tracking-[-.025em] m-0 text-[#FAFAFA]"
             >
-              Now build it<br />with us<span className="text-amber">.</span>
+              Build it<br />with us<span className="text-amber">.</span>
             </motion.h2>
             <motion.p
               {...fadeUp(0.2)}
@@ -1165,7 +1163,7 @@ export default function Engineering() {
             >
               <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a] mb-6">
                 <span className="font-heading text-sm text-[#FAFAFA] tracking-[.04em] font-medium">01</span>
-                <span>The Team</span>
+                
               </div>
               <h3 className="font-heading font-semibold text-[30px] leading-[1.02] tracking-[-.012em] m-0 mb-2.5 text-[#FAFAFA]">
                 Want to build this<span className="text-amber">?</span>
@@ -1173,7 +1171,7 @@ export default function Engineering() {
               <p className="text-[14.5px] leading-[1.5] text-[#ffffffbf] m-0 mb-6 max-w-[380px]">
                 Open roles across mechanical, electrical, software, and ML. Find where you fit.
               </p>
-              <span className="oct-clip mt-auto self-start font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold px-[18px] py-3 bg-[#FAFAFA] text-maroon border border-[#FAFAFA] inline-flex items-center gap-3.5 transition-all duration-150 group-hover:bg-amber group-hover:border-amber group-hover:text-ink">
+              <span className="oct-clip mt-auto self-start font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold px-[18px] py-3 bg-maroon text-[#FAFAFA] border border-[#FAFAFA] inline-flex items-center gap-3.5 transition-colors duration-150 group-hover:bg-[#FAFAFA] group-hover:text-maroon">
                 Apply Now
                 <span className="inline-block w-[22px] h-px bg-current relative">
                   <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
@@ -1188,7 +1186,6 @@ export default function Engineering() {
             >
               <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a] mb-6">
                 <span className="font-heading text-sm text-[#FAFAFA] tracking-[.04em] font-medium">02</span>
-                <span>The Partners</span>
               </div>
               <h3 className="font-heading font-semibold text-[30px] leading-[1.02] tracking-[-.012em] m-0 mb-2.5 text-[#FAFAFA]">
                 Support the work<span className="text-amber">.</span>
@@ -1196,7 +1193,7 @@ export default function Engineering() {
               <p className="text-[14.5px] leading-[1.5] text-[#ffffffbf] m-0 mb-6 max-w-[380px]">
                 Sponsor a year of engineering, R&amp;D, and student development.
               </p>
-              <span className="oct-outline-light mt-auto self-start font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold px-[18px] py-3 text-[#FAFAFA] inline-flex items-center gap-3.5 transition-all duration-150 group-hover:text-ink">
+              <span className="oct-outline-light !bg-transparent mt-auto self-start font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold px-[18px] py-3 text-[#FAFAFA] inline-flex items-center gap-3.5 transition-all duration-150 group-hover:text-ink group-hover:[&::after]:!bg-amber">
                 Become a Sponsor
                 <span className="inline-block w-[22px] h-px bg-current relative">
                   <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />

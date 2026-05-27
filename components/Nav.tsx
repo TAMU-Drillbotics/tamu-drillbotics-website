@@ -119,7 +119,18 @@ export default function Nav() {
               ? 'absolute left-0 right-0 -bottom-[19px] h-0.5 bg-amber'
               : 'absolute left-0 right-0 -bottom-[19px] h-0.5 bg-maroon';
             return (
-              <Link key={href} href={href} className={linkClass}>
+              <Link
+                key={href}
+                href={href}
+                onClick={() => {
+                  if (active) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  } else {
+                    window.scrollTo({ top: 0 });
+                  }
+                }}
+                className={linkClass}
+              >
                 {label}
                 {active && <span className={barClass} />}
               </Link>
@@ -136,12 +147,13 @@ export default function Nav() {
             />
             2026 Season &middot; Active
           </span>
-          <Link href="/apply#apply-form" className={`sb-btn${isDark ? ' sb-btn--on-dark' : ''}`}>
-            <span className="sb-fill" />
-            <span className="sb-content">
-              <span className="sb-text-black">Join the Team<span className="sb-arrow">&rarr;</span></span>
-              <span className="sb-text-white">Join the Team<span className="sb-arrow">&rarr;</span></span>
-            </span>
+          <Link
+            href="/apply#apply-form"
+            className={`jtt-btn font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold no-underline ${
+              isDark ? 'text-white' : 'text-ink'
+            }`}
+          >
+            Join the Team
           </Link>
         </div>
       </div>

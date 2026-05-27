@@ -42,30 +42,30 @@ const sponsorTiers: { tier: TierKey; companies: Company[] }[] = [
 const benefits = [
   {
     label: "VISIBILITY",
-    title: "Logo on every surface we produce.",
+    title: "Logos!",
     description:
-      "Logo placement on all team materials, website, and competition deliverables.",
-    chips: ["WEB", "PRINT", "REPORTS", "RIG"],
+      "Logo placement on team materials, website, competition deliverables, and future O&G conferences.",
+    chips: ["WEB", "RIG"],
   },
   {
     label: "TALENT PIPELINE",
-    title: "Direct access to recruiting-ready engineers.",
+    title: "Direct access to top Engineering Students at Texas A&M.",
     description:
-      "Direct access to engineering students across mechanical, electrical, CS, and data science.",
-    chips: ["MECH", "EE", "CS", "DATA"],
+      "Commonly considered the #1 ranked Petroleum Engineering program in the US, we attract the best and brightest students from across the College of Engineering.",
+    chips: ["MECH", "EE", "CSCE", "DATA"],
   },
   {
     label: "R&D EXPOSURE",
     title: "See how students approach autonomous drilling.",
     description:
-      "See how students approach autonomous drilling with modern ML and control systems.",
+      "Students build a scaled-down autonomous drilling rig, and develop the control systems, sensor fusion, and machine learning pipelines to make it work.",
     chips: ["CONTROL", "SENSOR FUSION", "ML"],
   },
   {
     label: "STEM IMPACT",
     title: "Tax-deductible contribution to STEM at Texas A&M.",
     description:
-      "Tax-deductible contribution supporting STEM education at Texas A&M.",
+      "Companies can make tax‑deductible contributions to STEM at Texas A&M through the Texas A&M Foundation; we can work with you and the university to structure this correctly.",
     chips: ["501(C)(3)", "TAMU FOUNDATION"],
   },
 ];
@@ -403,14 +403,14 @@ export default function Sponsors() {
                 {...fadeUp(0.1)}
                 className="font-heading font-semibold text-[64px] leading-[.94] tracking-[-.02em] m-0 text-ink"
               >
-                Why partner<br />with us<span className="text-maroon">.</span>
+                Why partner<br />with us<span className="text-maroon">?</span>
               </motion.h2>
             </div>
             <motion.p
               {...fadeUp(0.2)}
               className="text-[17px] leading-relaxed text-ink-2 max-w-[460px] ml-auto mb-2"
             >
-              A measured exchange. Sponsors gain visibility, recruitment access, and a direct line into student R&amp;D &mdash; and support a working STEM program at Texas A&amp;M.
+              Sponsors gain visibility, recruitment access, and a direct line into student R&amp;D &mdash; and support a working STEM program at Texas A&amp;M.
             </motion.p>
           </header>
 
@@ -438,7 +438,6 @@ export default function Sponsors() {
                   </div>
                   <h3 className="font-heading font-semibold text-[28px] leading-[1.1] tracking-[-.01em] m-0 mt-2 text-ink max-w-[440px]">
                     {b.title.endsWith(".") ? b.title.slice(0, -1) : b.title}
-                    <span className="text-maroon">.</span>
                   </h3>
                   <p className="text-[16px] leading-[1.55] text-ink-2 m-0 max-w-[480px]">
                     {b.description}
@@ -486,13 +485,6 @@ export default function Sponsors() {
 
           {/* Left */}
           <div>
-            <motion.div
-              {...fadeUp(0)}
-              className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.18em] uppercase text-[#ffffffc4] mb-6"
-            >
-              <span className="w-[7px] h-[7px] rounded-full bg-amber shadow-[0_0_0_3px_#C8963E30]" />
-              <span>Sponsorship inquiries</span>
-            </motion.div>
             <motion.h2
               {...fadeUp(0.1)}
               className="font-heading font-semibold text-[60px] leading-[.96] tracking-[-.02em] m-0 text-[#FAFAFA] max-w-[540px]"

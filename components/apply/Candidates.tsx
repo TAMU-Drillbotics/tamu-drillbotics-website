@@ -59,10 +59,6 @@ export function Candidates() {
         {/* Intro */}
         <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-x-16 items-start mb-16">
           <div>
-            <div className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.2em] uppercase text-[#FAFAFA]/70 mb-5">
-              <span className="inline-block w-[18px] h-px bg-amber align-middle" />
-              WHO WE WANT
-            </div>
             <h2
               className="font-heading font-semibold text-[56px] leading-[.98] tracking-[-.02em] m-0 text-white"
               style={{ textWrap: "balance" }}
@@ -73,11 +69,6 @@ export function Candidates() {
             </h2>
           </div>
           <div className="max-w-[540px] pt-[22px]">
-            <p className="text-[18px] leading-[1.6] text-[#FAFAFA]/70 m-0">
-              The team pulls from across the College of Engineering and beyond.
-              Each subteam has roles that match different disciplines, and most
-              don&rsquo;t require prior experience.
-            </p>
           </div>
         </div>
 
@@ -129,8 +120,8 @@ export function Candidates() {
             <span className="text-amber">.</span>
           </div>
           <p className="text-[15.5px] leading-[1.6] text-[#FAFAFA]/70 m-0 max-w-[560px]">
-            Most subteams take on first-year students. Bring curiosity and
-            willingness to learn &mdash; we&rsquo;ll teach the rest.
+            Most subteams take on undergraduate students. Bring curiosity and
+            willingness to learn.
           </p>
         </div>
 
