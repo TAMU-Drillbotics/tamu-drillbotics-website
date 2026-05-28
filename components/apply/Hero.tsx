@@ -25,9 +25,9 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative max-w-[1440px] mx-auto px-14 pt-[120px] pb-8 flex flex-col min-h-[calc(100svh-58px)]"
+      className="relative max-w-[1440px] mx-auto px-5 md:px-14 pt-16 md:pt-[120px] pb-8 flex flex-col min-h-[calc(100svh-58px)]"
     >
-        <div className="grid grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-x-16 items-end">
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-y-8 gap-x-8 md:gap-x-16 items-end">
           <div>
             <motion.div
               className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.2em] uppercase text-[#FAFAFA]/70 mb-5"
@@ -40,7 +40,7 @@ export function Hero() {
               JOIN THE TEAM
             </motion.div>
             <h1
-              className="font-heading font-semibold text-[128px] leading-[.98] tracking-[-.02em] m-0 text-white"
+              className="font-heading font-semibold text-[48px] md:text-[128px] leading-[.98] tracking-[-.02em] m-0 text-white"
               style={{ textWrap: "balance" }}
             >
               <motion.span
@@ -102,7 +102,7 @@ export function Hero() {
               Awaiting Dates
             </span>
           </motion.div>
-          <div className="grid grid-cols-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-4 md:gap-x-0">
             {PHASES.map((p, i) => (
               <motion.div
                 key={p.n}
@@ -134,7 +134,7 @@ export function Hero() {
         </div>
 
         <motion.div
-          className="mt-auto flex items-center gap-4 font-mono text-[11px] tracking-[.24em] uppercase text-amber"
+          className="hidden md:flex mt-auto items-center gap-4 font-mono text-[11px] tracking-[.24em] uppercase text-amber"
           initial="hidden"
           animate={scrollHint.hasFired ? "shown" : "hidden"}
           variants={FADE_UP_8}

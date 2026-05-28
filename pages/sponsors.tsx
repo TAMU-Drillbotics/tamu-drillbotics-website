@@ -109,7 +109,7 @@ function SectionHeader({
   return (
     <div className={wrap}>
       <div
-        className={`max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase ${baseText}`}
+        className={`max-w-[1440px] mx-auto px-5 md:px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase ${baseText}`}
       >
         <motion.span
           className={`inline-flex items-baseline gap-2.5 font-medium ${tag}`}
@@ -163,7 +163,7 @@ type TierSpec = {
 const tierSpec: Record<TierKey, TierSpec> = {
   // PLATINUM — metallic sheen, most prominent
   PLATINUM: {
-    nameSize: "text-[56px]",
+    nameSize: "text-[36px] md:text-[56px]",
     nameClass:
       "font-extrabold bg-clip-text text-transparent bg-[linear-gradient(120deg,#1A1A1A_0%,#5e5e5e_38%,#cfcfcf_50%,#5e5e5e_62%,#1A1A1A_100%)] drop-shadow-[0_1px_0_rgba(255,255,255,0.6)]",
     weightW: "w-[140px]",
@@ -181,7 +181,7 @@ const tierSpec: Record<TierKey, TierSpec> = {
   },
   // GOLD — amber brand color
   GOLD: {
-    nameSize: "text-[40px]",
+    nameSize: "text-[28px] md:text-[40px]",
     nameClass: "font-semibold text-[#C8963E]",
     weightW: "w-24",
     weightH: "h-1.5",
@@ -195,7 +195,7 @@ const tierSpec: Record<TierKey, TierSpec> = {
   },
   // SILVER — cool steel
   SILVER: {
-    nameSize: "text-[32px]",
+    nameSize: "text-[24px] md:text-[32px]",
     nameClass: "font-semibold text-[#8B9097]",
     weightW: "w-[72px]",
     weightH: "h-1",
@@ -274,18 +274,18 @@ export default function Sponsors() {
 
       {/* ══════════ § 01 — TIERS ══════════ */}
       <section className="relative">
-        <div className="max-w-[1440px] mx-auto px-14 py-20 pb-24 relative">
-          <CrossMark className="left-[42px] top-[42px]" />
-          <CrossMark className="right-[42px] top-[42px]" />
-          <CrossMark className="left-[42px] bottom-[42px]" />
-          <CrossMark className="right-[42px] bottom-[42px]" />
+        <div className="max-w-[1440px] mx-auto px-5 md:px-14 py-12 md:py-20 pb-16 md:pb-24 relative">
+          <CrossMark className="hidden md:block left-[42px] top-[42px]" />
+          <CrossMark className="hidden md:block right-[42px] top-[42px]" />
+          <CrossMark className="hidden md:block left-[42px] bottom-[42px]" />
+          <CrossMark className="hidden md:block right-[42px] bottom-[42px]" />
 
           {/* Intro */}
-          <header className="grid grid-cols-2 gap-x-16 items-end pb-14 border-b border-rule-strong">
+          <header className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8 md:gap-x-16 items-end pb-10 md:pb-14 border-b border-rule-strong">
             <div>
               <motion.h1
                 {...fadeUp(0.1)}
-                className="font-heading font-semibold text-[84px] leading-[.92] tracking-[-.022em] m-0 text-ink"
+                className="font-heading font-semibold text-[40px] md:text-[84px] leading-[.92] tracking-[-.022em] m-0 text-ink"
               >
                 Backed by<br />industry<span className="text-maroon">.</span>
               </motion.h1>
@@ -310,7 +310,7 @@ export default function Sponsors() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.55, delay: i * 0.1, ease: "easeOut" }}
-                  className={`grid grid-cols-[260px_1fr] gap-x-16 py-14 ${
+                  className={`grid grid-cols-1 md:grid-cols-[260px_1fr] gap-y-8 gap-x-8 md:gap-x-16 py-10 md:py-14 ${
                     last ? "" : "border-b border-dashed border-rule-strong"
                   }`}
                 >
@@ -390,18 +390,18 @@ export default function Sponsors() {
           label="Value"
         />
 
-        <div className="max-w-[1440px] mx-auto px-14 py-20 pb-24 relative">
-          <CrossMark className="left-[42px] top-[42px]" />
-          <CrossMark className="right-[42px] top-[42px]" />
-          <CrossMark className="left-[42px] bottom-[42px]" />
-          <CrossMark className="right-[42px] bottom-[42px]" />
+        <div className="max-w-[1440px] mx-auto px-5 md:px-14 py-12 md:py-20 pb-16 md:pb-24 relative">
+          <CrossMark className="hidden md:block left-[42px] top-[42px]" />
+          <CrossMark className="hidden md:block right-[42px] top-[42px]" />
+          <CrossMark className="hidden md:block left-[42px] bottom-[42px]" />
+          <CrossMark className="hidden md:block right-[42px] bottom-[42px]" />
 
           {/* Intro */}
-          <header className="grid grid-cols-2 gap-x-16 items-end pb-12 border-b border-rule-strong">
+          <header className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8 md:gap-x-16 items-end pb-8 md:pb-12 border-b border-rule-strong">
             <div>
               <motion.h2
                 {...fadeUp(0.1)}
-                className="font-heading font-semibold text-[64px] leading-[.94] tracking-[-.02em] m-0 text-ink"
+                className="font-heading font-semibold text-[36px] md:text-[64px] leading-[.94] tracking-[-.02em] m-0 text-ink"
               >
                 Why partner<br />with us<span className="text-maroon">?</span>
               </motion.h2>
@@ -415,7 +415,7 @@ export default function Sponsors() {
           </header>
 
           {/* 2x2 grid */}
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-1 md:grid-cols-2">
             {benefits.map((b, i) => {
               const isRightCol = i % 2 === 1;
               const isBottomRow = i >= benefits.length - 2;
@@ -426,8 +426,8 @@ export default function Sponsors() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
-                  className={`p-12 pt-12 pb-10 flex flex-col gap-[18px] min-h-[260px] ${
-                    isRightCol ? "" : "border-r border-dashed border-rule-strong"
+                  className={`p-7 md:p-12 md:pt-12 md:pb-10 flex flex-col gap-[18px] min-h-[200px] md:min-h-[260px] ${
+                    isRightCol ? "" : "md:border-r border-dashed border-rule-strong"
                   } ${isBottomRow ? "" : "border-b border-dashed border-rule-strong"}`}
                 >
                   <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-ink-3">
@@ -477,17 +477,17 @@ export default function Sponsors() {
           label="Contact"
         />
 
-        <div className="max-w-[1440px] mx-auto px-14 py-16 pb-16 grid grid-cols-2 gap-x-16 items-center relative">
-          <CrossMark className="left-8 top-6" light />
-          <CrossMark className="right-8 top-6" light />
-          <CrossMark className="left-8 bottom-6" light />
-          <CrossMark className="right-8 bottom-6" light />
+        <div className="max-w-[1440px] mx-auto px-5 md:px-14 py-12 md:py-16 pb-12 md:pb-16 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8 md:gap-x-16 items-center relative">
+          <CrossMark className="hidden md:block left-8 top-6" light />
+          <CrossMark className="hidden md:block right-8 top-6" light />
+          <CrossMark className="hidden md:block left-8 bottom-6" light />
+          <CrossMark className="hidden md:block right-8 bottom-6" light />
 
           {/* Left */}
           <div>
             <motion.h2
               {...fadeUp(0.1)}
-              className="font-heading font-semibold text-[60px] leading-[.96] tracking-[-.02em] m-0 text-[#FAFAFA] max-w-[540px]"
+              className="font-heading font-semibold text-[36px] md:text-[60px] leading-[.96] tracking-[-.02em] m-0 text-[#FAFAFA] max-w-[540px]"
             >
               Interested in partnering<span className="text-amber">?</span>
             </motion.h2>
@@ -505,7 +505,7 @@ export default function Sponsors() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.55, delay: 0.15, ease: "easeOut" }}
-            className="grid grid-cols-2 border border-[#ffffff1f]"
+            className="grid grid-cols-1 md:grid-cols-2 border border-[#ffffff1f]"
           >
             <a
               className="group p-7 pt-[30px] flex flex-col text-[#FAFAFA] no-underline min-h-[240px]"

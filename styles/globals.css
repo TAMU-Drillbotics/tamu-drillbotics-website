@@ -103,11 +103,17 @@
 
 .oct-outline-ink             { background-color: #1a1a1a55; }
 .oct-outline-ink::after      { background-color: #FAFAFA; }
-.oct-outline-ink:hover       { background-color: #500000; }
+@media (hover: hover) and (pointer: fine) {
+  .oct-outline-ink:hover     { background-color: #500000; }
+}
+.oct-outline-ink:active      { background-color: #500000; }
 
 .oct-outline-light           { background-color: #FAFAFA; }
 .oct-outline-light::after    { background-color: #1A1A1A; }
-.group:hover .oct-outline-light::after { background-color: #FAFAFA; }
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .oct-outline-light::after { background-color: #FAFAFA; }
+}
+.group:active .oct-outline-light::after  { background-color: #FAFAFA; }
 
 /* ── Hero CTA pill buttons (uiverse 3D pill — FColombati) ── */
 .hero-btn {
@@ -151,7 +157,15 @@
     0 0.01em 0.01em -0.01em rgba(5, 5, 5, 0.5),
     0.15em 0.3em 0.1em -0.01em rgba(5, 5, 5, 0.25);
 }
-.hero-btn:hover .hero-btn-outer {
+@media (hover: hover) and (pointer: fine) {
+  .hero-btn:hover .hero-btn-outer {
+    box-shadow:
+      0 0 0 0 rgba(5, 5, 5, 1),
+      0 0 0 0 rgba(5, 5, 5, 0.5),
+      0 0 0 0 rgba(5, 5, 5, 0.25);
+  }
+}
+.hero-btn:active .hero-btn-outer {
   box-shadow:
     0 0 0 0 rgba(5, 5, 5, 1),
     0 0 0 0 rgba(5, 5, 5, 0.5),
@@ -181,7 +195,23 @@
     0.12em 0.12em 0.12em inset rgba(255, 255, 255, 0.25),
     -0.075em -0.25em 0.25em 0.1em inset rgba(5, 5, 5, 0.25);
 }
-.hero-btn:hover .hero-btn-inner {
+@media (hover: hover) and (pointer: fine) {
+  .hero-btn:hover .hero-btn-inner {
+    clip-path: inset(
+      clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px)
+        clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px) round 100em
+    );
+    box-shadow:
+      0.1em 0.15em 0.05em 0 inset rgba(5, 5, 5, 0.75),
+      -0.025em -0.03em 0.05em 0.025em inset rgba(5, 5, 5, 0.5),
+      0.25em 0.25em 0.2em 0 inset rgba(5, 5, 5, 0.5),
+      0 0 0.05em 0.5em inset rgba(255, 255, 255, 0.15),
+      0 0 0 0 inset rgba(255, 255, 255, 1),
+      0.12em 0.12em 0.12em inset rgba(255, 255, 255, 0.25),
+      -0.075em -0.12em 0.2em 0.1em inset rgba(5, 5, 5, 0.25);
+  }
+}
+.hero-btn:active .hero-btn-inner {
   clip-path: inset(
     clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px)
       clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px) round 100em
@@ -209,7 +239,12 @@
   text-shadow: rgba(0, 0, 0, 0.1) 0 0 0.1em;
   user-select: none;
 }
-.hero-btn:hover .hero-btn-inner > span {
+@media (hover: hover) and (pointer: fine) {
+  .hero-btn:hover .hero-btn-inner > span {
+    transform: scale(0.975);
+  }
+}
+.hero-btn:active .hero-btn-inner > span {
   transform: scale(0.975);
 }
 .hero-btn:active .hero-btn-inner {
@@ -227,6 +262,141 @@
   background-image: linear-gradient(135deg, rgba(255, 240, 240, 1), rgba(220, 195, 195, 1));
 }
 
+/* ── Bottom CTA cards (FColombati 3D pill — large rounded card) ── */
+.cta-btn {
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  position: relative;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.75);
+  box-shadow:
+    -0.15em -0.15em 0.15em -0.075em rgba(5, 5, 5, 0.25),
+    0.0375em 0.0375em 0.0675em 0 rgba(5, 5, 5, 0.1);
+  display: block;
+  text-decoration: none;
+  font-size: 16px;
+}
+.cta-btn::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: calc(100% + 0.3em);
+  height: calc(100% + 0.3em);
+  top: -0.15em;
+  left: -0.15em;
+  border-radius: inherit;
+  background: linear-gradient(-135deg, rgba(5, 5, 5, 0.5), transparent 20%, transparent 100%);
+  filter: blur(0.0125em);
+  opacity: 0.25;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.cta-btn-outer {
+  position: relative;
+  z-index: 1;
+  border-radius: inherit;
+  display: block;
+  transition: box-shadow 300ms ease;
+  will-change: box-shadow;
+  box-shadow:
+    0 0.05em 0.05em -0.01em rgba(5, 5, 5, 1),
+    0 0.01em 0.01em -0.01em rgba(5, 5, 5, 0.5),
+    0.15em 0.3em 0.1em -0.01em rgba(5, 5, 5, 0.25);
+}
+@media (hover: hover) and (pointer: fine) {
+  .cta-btn:hover .cta-btn-outer {
+    box-shadow:
+      0 0 0 0 rgba(5, 5, 5, 1),
+      0 0 0 0 rgba(5, 5, 5, 0.5),
+      0 0 0 0 rgba(5, 5, 5, 0.25);
+  }
+}
+.cta-btn:active .cta-btn-outer {
+  box-shadow:
+    0 0 0 0 rgba(5, 5, 5, 1),
+    0 0 0 0 rgba(5, 5, 5, 0.5),
+    0 0 0 0 rgba(5, 5, 5, 0.25);
+}
+.cta-btn-inner {
+  position: relative;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 28px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-height: 300px;
+  background-image: linear-gradient(135deg, rgba(230, 230, 230, 1), rgba(180, 180, 180, 1));
+  transition:
+    box-shadow 300ms ease,
+    clip-path 250ms ease,
+    background-image 250ms ease,
+    transform 250ms ease;
+  will-change: box-shadow, clip-path, background-image, transform;
+  overflow: clip;
+  clip-path: inset(0 0 0 0 round 20px);
+  box-shadow:
+    0 0 0 0 inset rgba(5, 5, 5, 0.1),
+    -0.05em -0.05em 0.05em 0 inset rgba(5, 5, 5, 0.25),
+    0 0 0 0 inset rgba(5, 5, 5, 0.1),
+    0 0 0.05em 0.2em inset rgba(255, 255, 255, 0.25),
+    0.025em 0.05em 0.1em 0 inset rgba(255, 255, 255, 1),
+    0.12em 0.12em 0.12em inset rgba(255, 255, 255, 0.25),
+    -0.075em -0.25em 0.25em 0.1em inset rgba(5, 5, 5, 0.25);
+}
+@media (hover: hover) and (pointer: fine) {
+  .cta-btn:hover .cta-btn-inner {
+    clip-path: inset(
+      clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px)
+        clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px) round 20px
+    );
+    box-shadow:
+      0.1em 0.15em 0.05em 0 inset rgba(5, 5, 5, 0.75),
+      -0.025em -0.03em 0.05em 0.025em inset rgba(5, 5, 5, 0.5),
+      0.25em 0.25em 0.2em 0 inset rgba(5, 5, 5, 0.5),
+      0 0 0.05em 0.5em inset rgba(255, 255, 255, 0.15),
+      0 0 0 0 inset rgba(255, 255, 255, 1),
+      0.12em 0.12em 0.12em inset rgba(255, 255, 255, 0.25),
+      -0.075em -0.12em 0.2em 0.1em inset rgba(5, 5, 5, 0.25);
+  }
+}
+.cta-btn:active .cta-btn-inner {
+  clip-path: inset(
+    clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px)
+      clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px) round 20px
+  );
+  box-shadow:
+    0.1em 0.15em 0.05em 0 inset rgba(5, 5, 5, 0.75),
+    -0.025em -0.03em 0.05em 0.025em inset rgba(5, 5, 5, 0.5),
+    0.25em 0.25em 0.2em 0 inset rgba(5, 5, 5, 0.5),
+    0 0 0.05em 0.5em inset rgba(255, 255, 255, 0.15),
+    0 0 0 0 inset rgba(255, 255, 255, 1),
+    0.12em 0.12em 0.12em inset rgba(255, 255, 255, 0.25),
+    -0.075em -0.12em 0.2em 0.1em inset rgba(5, 5, 5, 0.25);
+  transform: scale(0.99);
+}
+
+@media (min-width: 768px) {
+  .cta-btn-inner {
+    padding: 36px 44px 40px;
+    gap: 28px;
+    min-height: 380px;
+  }
+}
+
+/* Maroon variant — "See the rig" */
+.cta-btn--maroon {
+  background-color: rgba(40, 0, 0, 0.85);
+}
+.cta-btn--maroon .cta-btn-inner {
+  background-image: linear-gradient(135deg, #7a1414, #3a0000);
+}
+
+/* Deeper grey variant — "Join the team" */
+.cta-btn--grey .cta-btn-inner {
+  background-image: linear-gradient(135deg, #b8b8b8, #6b6b6b);
+}
+
 /* ── Nav "Join the Team" button (uiverse-style shine + silver glow) ── */
 .jtt-btn {
   position: relative;
@@ -240,11 +410,13 @@
   box-shadow: 0 0 0 0 transparent;
   transition: background-color 0.2s ease-in, box-shadow 0.2s ease-in, color 0.2s ease-in;
 }
-.jtt-btn:hover {
-  background: #8a8a8a;
-  color: #ffffff;
-  box-shadow: 0 0 18px 2px rgba(210, 210, 210, 0.95), 0 0 36px 10px rgba(180, 180, 180, 0.6);
-  transition: background-color 0.2s ease-out, box-shadow 0.2s ease-out, color 0.2s ease-out;
+@media (hover: hover) and (pointer: fine) {
+  .jtt-btn:hover {
+    background: #8a8a8a;
+    color: #ffffff;
+    box-shadow: 0 0 18px 2px rgba(210, 210, 210, 0.95), 0 0 36px 10px rgba(180, 180, 180, 0.6);
+    transition: background-color 0.2s ease-out, box-shadow 0.2s ease-out, color 0.2s ease-out;
+  }
 }
 .jtt-btn::before {
   content: '';
@@ -260,12 +432,25 @@
   transform: skewX(-20deg);
   pointer-events: none;
 }
-.jtt-btn:hover::before {
-  animation: jtt-sh 0.5s linear;
+@media (hover: hover) and (pointer: fine) {
+  .jtt-btn:hover::before {
+    animation: jtt-sh 0.5s linear;
+  }
+  .jtt-btn:active {
+    box-shadow: 0 0 0 0 transparent;
+    transition: box-shadow 0.2s ease-in;
+  }
 }
-.jtt-btn:active {
-  box-shadow: 0 0 0 0 transparent;
-  transition: box-shadow 0.2s ease-in;
+@media (hover: none) {
+  .jtt-btn:active {
+    background: #8a8a8a;
+    color: #ffffff;
+    box-shadow: 0 0 18px 2px rgba(210, 210, 210, 0.95), 0 0 36px 10px rgba(180, 180, 180, 0.6);
+    transition: background-color 0.2s ease-out, box-shadow 0.2s ease-out, color 0.2s ease-out;
+  }
+  .jtt-btn:active::before {
+    animation: jtt-sh 0.5s linear;
+  }
 }
 @keyframes jtt-sh {
   from { opacity: 0; left: 0%; }
@@ -315,7 +500,10 @@
   pointer-events: none;
   will-change: height;
 }
-.sb-btn:hover .sb-fill { height: 100%; }
+@media (hover: hover) and (pointer: fine) {
+  .sb-btn:hover .sb-fill { height: 100%; }
+}
+.sb-btn:active .sb-fill { height: 100%; }
 
 .sb-content {
   position: relative;
@@ -346,7 +534,10 @@
   clip-path: inset(100% -18px 0 0);
   transition: clip-path 0.55s cubic-bezier(0.65, 0, 0.35, 1);
 }
-.sb-btn:hover .sb-text-white { clip-path: inset(0 -18px 0 0); }
+@media (hover: hover) and (pointer: fine) {
+  .sb-btn:hover .sb-text-white { clip-path: inset(0 -18px 0 0); }
+}
+.sb-btn:active .sb-text-white { clip-path: inset(0 -18px 0 0); }
 
 .sb-arrow {
   display: inline-block;
@@ -358,7 +549,12 @@
   40%  { transform: translateX(10px); }
   100% { transform: translateX(0); }
 }
-.sb-btn:hover .sb-arrow {
+@media (hover: hover) and (pointer: fine) {
+  .sb-btn:hover .sb-arrow {
+    animation: arrow-nudge 0.65s cubic-bezier(0.4, 0, 0.2, 1) 0.55s 1;
+  }
+}
+.sb-btn:active .sb-arrow {
   animation: arrow-nudge 0.65s cubic-bezier(0.4, 0, 0.2, 1) 0.55s 1;
 }
 
@@ -423,4 +619,18 @@ html, body {
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   display: none;
+}
+
+/* Mobile: lock horizontal scroll/swipe — any overflow past the viewport width
+   gets clipped instead of becoming a draggable side-scroll. `overflow-x:
+   clip` (not `hidden`) is critical here: `hidden` forces overflow-y from
+   `visible` to `auto`, which makes html/body their own scroll containers and
+   breaks `position: sticky` on the nav. `clip` blocks horizontal overflow
+   without creating a scroll container, so sticky still anchors to the
+   viewport. */
+@media (max-width: 767px) {
+  html, body {
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+  }
 }

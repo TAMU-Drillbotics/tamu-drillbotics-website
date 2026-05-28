@@ -6,6 +6,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { TimelineOrchestrator, useTimelineBeat } from "@/components/TimelineOrchestrator";
 import { ENGINEERING_HERO_TIMELINE } from "@/lib/engineeringHeroTimeline";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // 3D rig viewer — client-only (three.js + WebGL). Pulsing skeleton matches the
 // viewer's dimensions so layout doesn't jump while the chunk + GLB load.
@@ -31,6 +32,37 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.45, delay, ease: "easeOut" as const },
 });
 
+// Variants for the § 05 DATA section. The grid wrapper triggers the whole
+// sequence via whileInView; children inherit and animate from their own
+// variants so the chained delays preserve the desktop timing on mobile too.
+const DATA_CARD_VARIANTS = (delay: number) => ({
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, delay, ease: "easeOut" as const },
+  },
+});
+const DATA_PATH_VARIANTS = (delay: number, duration = 0.9) => ({
+  hidden: { pathLength: 0 },
+  visible: {
+    pathLength: 1,
+    transition: { duration, delay, ease: [0.16, 1, 0.3, 1] as const },
+  },
+});
+const DATA_BOX_VARIANTS = (delay: number) => ({
+  hidden: { opacity: 0, y: 6 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.25, delay, ease: [0.16, 1, 0.3, 1] as const },
+  },
+});
+const DATA_FADE_VARIANTS = (delay: number, duration = 0.3) => ({
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration, delay, ease: "easeOut" as const } },
+});
+
 /* ════════ small helpers ════════ */
 function Reg({ pos, light = false }: { pos: "tl" | "tr" | "bl" | "br"; light?: boolean }) {
   const place =
@@ -43,7 +75,7 @@ function Reg({ pos, light = false }: { pos: "tl" | "tr" | "bl" | "br"; light?: b
       : "right-[42px] bottom-[42px]";
   const color = light ? "bg-[#ffffff8a]" : "bg-ink-4";
   return (
-    <span className={`absolute w-3.5 h-3.5 ${place}`} aria-hidden="true">
+    <span className={`hidden md:block absolute w-3.5 h-3.5 ${place}`} aria-hidden="true">
       <span className={`absolute left-0 right-0 top-1/2 h-px ${color}`} />
       <span className={`absolute top-0 bottom-0 left-1/2 w-px ${color}`} />
     </span>
@@ -63,7 +95,7 @@ function SectionBar({
   const numColor = dark ? "text-amber" : "text-maroon";
   const rule = dark ? "bg-[#ffffff1f]" : "bg-rule-strong";
   return (
-    <div className="max-w-[1440px] mx-auto px-14">
+    <div className="max-w-[1440px] mx-auto px-5 md:px-14">
       <div className="flex items-center gap-[18px] py-3.5 font-mono text-[10px] tracking-[.18em] uppercase">
         <motion.span
           className={`inline-flex items-baseline gap-2.5 font-medium ${tag}`}
@@ -106,44 +138,38 @@ function SecTitle({ children }: { children: React.ReactNode }) {
   return (
     <motion.h2
       {...fadeUp(0.08)}
-      className="font-heading font-semibold text-[72px] leading-[.94] tracking-[-.02em] m-0 text-ink"
+      className="font-heading font-semibold text-[36px] md:text-[72px] leading-[.94] tracking-[-.02em] m-0 text-ink"
     >
       {children}
     </motion.h2>
   );
 }
 
-/* ════════ § 01 — mech ════════ */
-const mechCallouts: {
-  id: string;
-  title: string;
-  sub: string;
-  status: string;
-  statusColor: "maroon" | "amber" | "grey";
-}[] = [
-  {
-    id: "M-01",
-    title: "Drillstring",
-    sub: "Hydraulic push-the-bit RSS — three steering wings on a 17-7 PH drive shaft inside a flexible nylon drill pipe.",
-    status: "In Build",
-    statusColor: "amber" as const,
-  },
-  {
-    id: "M-02",
-    title: "Frame",
-    sub: "6061-T6 aluminum T-slot tower, three stacked platforms, dual lead-screw vertical actuation near 700 lb.",
-    status: "In Build",
-    statusColor: "amber" as const,
-  },
-  {
-    id: "M-03",
-    title: "Safety",
-    sub: "Polycarbonate enclosure, door interlocks, hardware + software E-stop, pressure seals designed to fail first.",
-    status: "In Review",
-    statusColor: "grey" as const,
-  },
-];
+// Minimal status chip for sections describing planned-but-not-yet-deployed
+// systems (e.g. the ML control loop, sensor-fusion pipeline). Reuses the
+// existing `amber-pulse` keyframe so it reads as a live status indicator,
+// not ornamentation.
+function RoadmapChip() {
+  return (
+    <motion.div
+      {...fadeUp(0.04)}
+      className="inline-flex items-center gap-2 border border-amber/60 px-2.5 py-1 font-mono text-[10px] tracking-[.22em] uppercase text-ink-2 mb-5"
+    >
+      <span
+        aria-hidden="true"
+        className="inline-block w-1.5 h-1.5 rounded-full bg-amber"
+        style={{
+          boxShadow:
+            '0 0 0 2px rgba(200,150,62,0.18), 0 0 6px rgba(200,150,62,0.55)',
+          animation: 'amber-pulse 2.4s ease-in-out infinite',
+        }}
+      />
+      <span>Planned &middot; Not yet deployed</span>
+    </motion.div>
+  );
+}
 
+/* ════════ § 01 — mech ════════ */
 const mechRef: { group: string; rows: [string, string][] }[] = [
   {
     group: "Frame",
@@ -215,6 +241,7 @@ const HEADLINE_VH = 28;
 const COLLAPSE_END = 1 / 3;
 
 function RigHero() {
+  const isMobile = useIsMobile();
   const headlineBeat = useTimelineBeat("headlineReveal");
   const frameBeat = useTimelineBeat("renderFrame");
   const reducedMotion = headlineBeat.reducedMotion;
@@ -240,9 +267,57 @@ function RigHero() {
     [`${HEADLINE_VH}vh`, "0vh"],
   );
 
+  if (isMobile) {
+    return (
+      <section className="relative">
+        <div className="max-w-[1440px] mx-auto px-5 pt-10 pb-4">
+          <h1 className="font-heading font-bold text-[56px] leading-[.86] tracking-[-.025em] uppercase m-0 text-ink mb-3">
+            <motion.span
+              className="inline-block"
+              initial={{ clipPath: "inset(0 100% 0 0)" }}
+              animate={{
+                clipPath: headlineBeat.hasFired
+                  ? "inset(0 0 0 0)"
+                  : "inset(0 100% 0 0)",
+              }}
+              transition={{ duration: reducedMotion ? 0 : 0.5, ease: "easeOut" }}
+            >
+              The Rig<span className="text-maroon">.</span>
+            </motion.span>
+          </h1>
+          {/* Mobile: pre-rendered turntable video instead of live WebGL.
+              The full RigViewer (13 MB Draco-compressed GLB + warehouse HDRI
+              + per-frame shading) was unplayably heavy on phones; this is the
+              same camera path baked into a 2.9 MB MP4 / 5.1 MB WebM that costs
+              the device almost nothing to play. Generated by
+              scripts/render-rig-video.mjs. */}
+          <motion.div
+            className="w-full h-[60svh] bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#500000]/20"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: frameBeat.hasFired ? 1 : 0 }}
+            transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeOut" }}
+          >
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              className="block w-full h-full object-contain"
+              aria-label="Autonomous drilling rig 3D model, turntable view"
+            >
+              <source src="/models/rig-loop.webm" type="video/webm" />
+              <source src="/models/rig-loop.mp4" type="video/mp4" />
+            </video>
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section ref={wrapperRef} className="relative" style={{ height: "150dvh" }}>
-      <div className="sticky top-[var(--nav-height)] h-[calc(100dvh-var(--nav-height))] max-w-[1440px] mx-auto px-14 pb-6">
+      <div className="sticky top-[var(--nav-height)] h-[calc(100dvh-var(--nav-height))] max-w-[1440px] mx-auto px-5 md:px-14 pb-6">
         <div className="relative w-full h-full overflow-hidden">
           {/* Headline — slides up and fades out with scroll progress. A
               SIBLING of the render frame; its motion never touches the frame. */}
@@ -259,7 +334,7 @@ function RigHero() {
                 they slide + fade out with it on scroll. */}
             <Reg pos="tl" />
             <Reg pos="tr" />
-            <h1 className="font-heading font-bold text-[148px] leading-[.86] tracking-[-.025em] uppercase m-0 text-ink">
+            <h1 className="font-heading font-bold text-[56px] md:text-[148px] leading-[.86] tracking-[-.025em] uppercase m-0 text-ink">
               <motion.span
                 className="inline-block"
                 initial={{ clipPath: "inset(0 100% 0 0)" }}
@@ -317,7 +392,7 @@ export default function Engineering() {
       <motion.section {...REVEAL}>
         <SectionBar num="01" label="MECHANICAL" />
 
-        <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
+        <div className="relative max-w-[1440px] mx-auto px-5 md:px-14 pt-12 md:pt-20 pb-16 md:pb-24">
           <Reg pos="tl" />
           <Reg pos="tr" />
           <Reg pos="bl" />
@@ -327,26 +402,26 @@ export default function Engineering() {
             Materials, design, physics<span className="text-maroon">.</span>
           </SecTitle>
 
-          <div className="grid grid-cols-[1.15fr_1fr] gap-x-16 items-start pt-12">
+          <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr] gap-y-8 gap-x-8 md:gap-x-16 items-start pt-8 md:pt-12">
             <motion.div {...fadeUp(0.1)}>
               <p className="text-[19px] leading-[1.55] text-ink font-medium m-0 mb-6">
                 The rig is a model-scale autonomous drilling system — a vertical aluminum tower built to drill into an
                 unknown rock block, then steer the bit through three target points with no human intervention.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-                The frame is a modular tower of <strong className="text-ink font-semibold">6061-T6 aluminum 2-by-2-inch
+              <span className="text-amber">(tbd)</span> The frame is a modular tower of <strong className="text-ink font-semibold">6061-T6 aluminum 2-by-2-inch
                 T-slot extrusion</strong>, joined with aluminum corner brackets and thread-locked fasteners. Three stacked
                 platforms separate the subsystems — a top actuation deck, a mid-frame elevator carrying the bottom-hole
                 assembly, and a bottom platform for fluid handling and rock drilling— and the T-slot profile lets sensor and bracket
                 placement be reconfigured throughout the build.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-                Vertical motion comes from two <strong className="text-ink font-semibold">NEMA-32 stepper motors </strong>
+              <span className="text-amber">(tbd)</span> Vertical motion comes from two <strong className="text-ink font-semibold">NEMA-32 stepper motors </strong>
                 driving lead screws; sharing the load gives a lift capacity near 700 lb and sets weight-on-bit through the
                 elevator platform. (tbd)
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0">
-                Steering uses a hydraulically actuated <strong className="text-ink font-semibold">push-the-bit rotary
+              <span className="text-amber">(tbd)</span> Steering uses a hydraulically actuated <strong className="text-ink font-semibold">push-the-bit rotary
                 steerable system</strong> — three independently controlled wings, each driven by a dedicated piston near
                 2000 psi, biasing the bit toward the commanded direction. Safety is built into the structure: a
                 polycarbonate enclosure contains debris, door interlocks gate operation, a hardware-and-software E-stop
@@ -387,36 +462,6 @@ export default function Engineering() {
               </div>
             </motion.div>
           </div>
-
-          {/* callouts strip */}
-          <motion.div {...fadeUp(0.1)} className="mt-14 grid grid-cols-3 border border-rule-strong bg-white">
-            {mechCallouts.map((c, i) => (
-              <div
-                key={c.id}
-                className={`p-6 pb-[22px] relative ${i < mechCallouts.length - 1 ? "border-r border-rule-strong" : ""}`}
-              >
-                <div className="flex items-center justify-between mb-3.5 font-mono text-[10px] tracking-[.22em] uppercase text-ink-3">
-                  <span className="text-maroon">{c.id}</span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <span
-                      className={`w-1.5 h-1.5 rounded-full ${
-                        c.statusColor === "maroon"
-                          ? "bg-maroon"
-                          : c.statusColor === "amber"
-                          ? "bg-amber"
-                          : "bg-ink-4"
-                      }`}
-                    />
-                    {c.status}
-                  </span>
-                </div>
-                <h3 className="font-heading font-semibold text-[22px] text-ink tracking-[.01em] m-0 mb-2">
-                  {c.title}
-                </h3>
-                <p className="text-[14px] leading-[1.5] text-ink-2 m-0">{c.sub}</p>
-              </div>
-            ))}
-          </motion.div>
 
           {/* frame assembly drawing */}
           <motion.div
@@ -480,7 +525,7 @@ export default function Engineering() {
       <motion.section {...REVEAL}>
         <SectionBar num="02" label="STEERING" />
 
-        <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
+        <div className="relative max-w-[1440px] mx-auto px-5 md:px-14 pt-12 md:pt-20 pb-16 md:pb-24">
           <Reg pos="tl" />
           <Reg pos="tr" />
           <Reg pos="bl" />
@@ -490,7 +535,7 @@ export default function Engineering() {
             Three wings, one trajectory<span className="text-maroon">.</span>
           </SecTitle>
 
-          <div className="grid grid-cols-[1fr_1.2fr] gap-x-16 items-start pt-12">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-y-8 gap-x-8 md:gap-x-16 items-start pt-8 md:pt-12">
             <motion.div {...fadeUp(0.1)}>
               <p className="text-[19px] leading-[1.55] text-ink font-medium m-0 mb-6">
                 Steering. Once the bit enters the rock, a rotary steerable system bends
@@ -539,7 +584,7 @@ export default function Engineering() {
       <motion.section {...REVEAL}>
         <SectionBar num="03" label="ELECTRONICS" />
 
-        <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
+        <div className="relative max-w-[1440px] mx-auto px-5 md:px-14 pt-12 md:pt-20 pb-16 md:pb-24">
           <Reg pos="tl" />
           <Reg pos="tr" />
           <Reg pos="bl" />
@@ -549,28 +594,28 @@ export default function Engineering() {
             From signal to actuator<span className="text-maroon">.</span>
           </SecTitle>
 
-          <div className="grid grid-cols-[1.15fr_1fr] gap-x-16 items-start pt-12">
+          <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr] gap-y-8 gap-x-8 md:gap-x-16 items-start pt-8 md:pt-12">
             <motion.div {...fadeUp(0.1)}>
               <p className="text-[19px] leading-[1.55] text-ink font-medium m-0 mb-6">
-                Seven sensor channels turn the rig&apos;s physical behavior into a measured state — orientation, depth,
+              Seven sensor channels turn the rig&apos;s physical behavior into a measured state — orientation, depth,
                 torque, speed, weight-on-bit, temperature, and vibration — feeding the drives that steer and advance the
                 bit.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-                The <strong className="text-ink font-semibold">sensor stack</strong> centers on a 9-axis ICM-20948 IMU in
+              <span className="text-amber">(tbd)</span> The <strong className="text-ink font-semibold">sensor stack</strong> centers on a 9-axis ICM-20948 IMU in
                 the bottom-hole assembly, an LPPS-36B linear sensor for true vertical depth, a FUTEK TFF400 inline torque
                 sensor and US Digital E6 encoder at the drill motor, and a FUTEK LSB200 load cell reading weight-on-bit
                 between the hoist and the string. A DS18B20 tracks temperature and an ADXL356 MEMS accelerometer catches
                 high-g shock and vibration.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-                Actuation electronics close the loop around each motor. A <strong className="text-ink font-semibold">Maxon
+              <span className="text-amber">(tbd)</span> Actuation electronics close the loop around each motor. A <strong className="text-ink font-semibold">Maxon
                 EPOS4 Compact</strong> drive runs the rotary BLDC over EtherCAT, while Leadshine iCS-RS closed-loop drives
                 handle the hoist steppers. Hydraulic steering valves are positioned by a 16-bit ADC/DAC stage for
                 proportional solenoid current, with every solenoid channel opto-isolated from the logic side.
-              </p>
+              </p>   
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0">
-                A <strong className="text-ink font-semibold">Raspberry Pi 4</strong> handles supervisory logging, UI, and
+              <span className="text-amber">(tbd)</span> A <strong className="text-ink font-semibold">Raspberry Pi 4</strong> handles supervisory logging, UI, and
                 diagnostics alongside a GPU-equipped main computer, with a custom PCB carrying the IMU/ADC front-end and a
                 CAN-FD transceiver. Everything runs off a 24 V DC bus through isolated DC-DC modules, resettable fuses, and
                 transient suppression. An optional Semtech SX1276 LoRa link is under evaluation to thin the wiring down the
@@ -664,17 +709,20 @@ export default function Engineering() {
       <motion.section {...REVEAL}>
         <SectionBar num="04" label="SOFTWARE" />
 
-        <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
+        <div className="relative max-w-[1440px] mx-auto px-5 md:px-14 pt-12 md:pt-20 pb-16 md:pb-24">
           <Reg pos="tl" />
           <Reg pos="tr" />
           <Reg pos="bl" />
           <Reg pos="br" />
 
+          <div>
+            <RoadmapChip />
+          </div>
           <SecTitle>
             Code that controls steel<span className="text-maroon">.</span>
           </SecTitle>
 
-          <div className="grid grid-cols-[1fr_1.2fr] gap-x-16 items-start pt-12">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-y-8 gap-x-8 md:gap-x-16 items-start pt-8 md:pt-12">
             <motion.div {...fadeUp(0.1)}>
               <p className="text-[19px] leading-[1.55] text-ink font-medium m-0 mb-6">
                 A real-time control loop closes around every revolution of the bit — embedded C on an STM32
@@ -754,8 +802,8 @@ export default function Engineering() {
                   {[
                     { x: 50, y: 40, stage: "01", title: "SENSORS", sub: "7 CH · ACQ", maroonBorder: false, amber: false },
                     { x: 240, y: 20, stage: "02", title: "CONDITION", sub: "FILTER · SCALE", maroonBorder: false, amber: false },
-                    { x: 430, y: 40, stage: "03", title: "PID CORE", sub: "3-AXIS · COUPLED", maroonBorder: false, amber: false },
-                    { x: 430, y: 320, stage: "04", title: "ML INFER", sub: "ADVISORY · TRIM", maroonBorder: false, amber: true },
+                    { x: 430, y: 40, stage: "03", title: "P.I.D CORE", sub: "3-AXIS · COUPLED", maroonBorder: false, amber: false },
+                    { x: 430, y: 320, stage: "04", title: "M.L INFERENCE", sub: "ADVISORY · TRIM", maroonBorder: false, amber: true },
                     { x: 240, y: 340, stage: "05", title: "COMMANDS", sub: "CAN · DISPATCH", maroonBorder: false, amber: false },
                     { x: 50, y: 320, stage: "06", title: "DRILL", sub: "PHYSICAL · WORLD", maroonBorder: true, amber: false },
                   ].map((n) => {
@@ -816,7 +864,7 @@ export default function Engineering() {
                   </text>
                 </svg>
 
-                <div className="grid grid-cols-4 border-t border-rule">
+                <div className="grid grid-cols-2 md:grid-cols-4 border-t border-rule">
                   {[
                     { k: "Sampling", v: "10", u: "kHz" },
                     { k: "Control", v: "1", u: "kHz" },
@@ -825,7 +873,7 @@ export default function Engineering() {
                   ].map((s, i, arr) => (
                     <div
                       key={s.k}
-                      className={`px-4 py-3.5 font-mono ${i < arr.length - 1 ? "border-r border-dashed border-rule-strong" : ""}`}
+                      className={`px-4 py-3.5 font-mono border-dashed border-rule-strong ${i < arr.length - 1 ? "md:border-r" : ""}`}
                     >
                       <span className="block text-[9.5px] tracking-[.22em] uppercase text-ink-3 mb-1.5">{s.k}</span>
                       <span className="font-heading text-[20px] font-semibold text-ink tracking-[.02em]">
@@ -845,19 +893,36 @@ export default function Engineering() {
       <motion.section {...REVEAL}>
         <SectionBar num="05" label="DATA" />
 
-        <div className="relative max-w-[1440px] mx-auto px-14 pt-20 pb-24">
+        <div className="relative max-w-[1440px] mx-auto px-5 md:px-14 pt-12 md:pt-20 pb-16 md:pb-24">
           <Reg pos="tl" />
           <Reg pos="tr" />
           <Reg pos="bl" />
           <Reg pos="br" />
 
+          <div>
+            <RoadmapChip />
+          </div>
           <SecTitle>
             Sensor fusion meets machine learning<span className="text-maroon">.</span>
           </SecTitle>
 
-          <div className="grid grid-cols-3 gap-x-8 pt-12">
+          {/* All animations in this section fire from the same parent
+              viewport trigger so the chained delays sequence the same way on
+              mobile (where the cards stack and each card alone wouldn't
+              otherwise cover its individual viewport margin) as on desktop.
+              Children just declare variants — they inherit "hidden" →
+              "visible" from this parent. */}
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-8 pt-8 md:pt-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.05 }}
+          >
             {/* D-01 */}
-            <motion.div {...fadeUp(0.1)} className="border border-rule-strong bg-white p-6 flex flex-col">
+            <motion.div
+              variants={DATA_CARD_VARIANTS(0.1)}
+              className="border border-rule-strong bg-white p-6 flex flex-col"
+            >
               <div className="font-mono text-[10px] tracking-[.22em] uppercase text-maroon mb-3.5">D-01 · Sensor Fusion</div>
               <h3 className="font-heading font-semibold text-[24px] text-ink m-0 mb-3.5 tracking-[.01em] leading-[1.05]">
                 Unified state from messy reality.
@@ -873,26 +938,17 @@ export default function Engineering() {
                     <motion.path
                       d="M0 80 Q 40 30 80 75 T 160 70 T 240 80 T 320 75"
                       stroke="#1a1a1a26"
-                      initial={{ pathLength: 0 }}
-                      whileInView={{ pathLength: 1 }}
-                      viewport={{ once: true, margin: "-80px" }}
-                      transition={{ duration: 0.9, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      variants={DATA_PATH_VARIANTS(0.45)}
                     />
                     <motion.path
                       d="M0 95 Q 40 60 80 90 T 160 85 T 240 95 T 320 90"
                       stroke="#C8963E55"
-                      initial={{ pathLength: 0 }}
-                      whileInView={{ pathLength: 1 }}
-                      viewport={{ once: true, margin: "-80px" }}
-                      transition={{ duration: 0.9, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      variants={DATA_PATH_VARIANTS(0.45)}
                     />
                     <motion.path
                       d="M0 65 Q 40 100 80 60 T 160 55 T 240 70 T 320 60"
                       stroke="#1a1a1a44"
-                      initial={{ pathLength: 0 }}
-                      whileInView={{ pathLength: 1 }}
-                      viewport={{ once: true, margin: "-80px" }}
-                      transition={{ duration: 0.9, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      variants={DATA_PATH_VARIANTS(0.45)}
                     />
                   </g>
                   <motion.path
@@ -900,10 +956,7 @@ export default function Engineering() {
                     stroke="#500000"
                     strokeWidth="1.8"
                     fill="none"
-                    initial={{ pathLength: 0 }}
-                    whileInView={{ pathLength: 1 }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.8, delay: 1, ease: [0.16, 1, 0.3, 1] }}
+                    variants={DATA_PATH_VARIANTS(1, 0.8)}
                   />
                   <g fontFamily="JetBrains Mono" fontSize="8" fill="#6b6b6b" letterSpacing="2">
                     <text x="6" y="14">RAW STREAMS</text>
@@ -913,7 +966,7 @@ export default function Engineering() {
             </motion.div>
 
             {/* D-02 */}
-            <motion.div {...fadeUp(0.18)} className="border border-rule-strong bg-white p-6 flex flex-col">
+            <motion.div variants={DATA_CARD_VARIANTS(0.18)} className="border border-rule-strong bg-white p-6 flex flex-col">
               <div className="font-mono text-[10px] tracking-[.22em] uppercase text-maroon mb-3.5">D-02 · Model Training</div>
               <h3 className="font-heading font-semibold text-[24px] text-ink m-0 mb-3.5 tracking-[.01em] leading-[1.05]">
                 Offline, dataset-driven, reproducible.
@@ -937,10 +990,7 @@ export default function Engineering() {
                       stroke="#500000"
                       strokeWidth="1.2"
                       fill="none"
-                      initial={{ pathLength: 0 }}
-                      whileInView={{ pathLength: 1 }}
-                      viewport={{ once: true, margin: "-80px" }}
-                      transition={{ duration: 0.18, delay: c.delay, ease: [0.16, 1, 0.3, 1] }}
+                      variants={DATA_PATH_VARIANTS(c.delay, 0.18)}
                     />
                   ))}
                   {/* boxes */}
@@ -952,10 +1002,7 @@ export default function Engineering() {
                   ].map((b) => (
                     <motion.g
                       key={b.label}
-                      initial={{ opacity: 0, y: 6 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: "-80px" }}
-                      transition={{ duration: 0.25, delay: b.delay, ease: [0.16, 1, 0.3, 1] }}
+                      variants={DATA_BOX_VARIANTS(b.delay)}
                     >
                       <rect
                         x={b.x}
@@ -988,7 +1035,7 @@ export default function Engineering() {
             </motion.div>
 
             {/* D-03 */}
-            <motion.div {...fadeUp(0.26)} className="border border-rule-strong bg-white p-6 flex flex-col">
+            <motion.div variants={DATA_CARD_VARIANTS(0.26)} className="border border-rule-strong bg-white p-6 flex flex-col">
               <div className="font-mono text-[10px] tracking-[.22em] uppercase text-maroon mb-3.5">D-03 · Real-Time Inference</div>
               <h3 className="font-heading font-semibold text-[24px] text-ink m-0 mb-3.5 tracking-[.01em] leading-[1.05]">
                 On-rig, low-latency, advisory.
@@ -1011,10 +1058,7 @@ export default function Engineering() {
                       stroke="#500000"
                       strokeWidth="1.2"
                       fill="none"
-                      initial={{ pathLength: 0 }}
-                      whileInView={{ pathLength: 1 }}
-                      viewport={{ once: true, margin: "-80px" }}
-                      transition={{ duration: 0.18, delay: c.delay, ease: [0.16, 1, 0.3, 1] }}
+                      variants={DATA_PATH_VARIANTS(c.delay, 0.18)}
                     />
                   ))}
                   {/* boxes */}
@@ -1032,10 +1076,7 @@ export default function Engineering() {
                     return (
                       <motion.g
                         key={b.label}
-                        initial={{ opacity: 0, y: 6 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-80px" }}
-                        transition={{ duration: 0.25, delay: b.delay, ease: [0.16, 1, 0.3, 1] }}
+                        variants={DATA_BOX_VARIANTS(b.delay)}
                       >
                         <rect
                           x={b.x}
@@ -1068,10 +1109,7 @@ export default function Engineering() {
                     strokeWidth="1"
                     strokeDasharray="3 3"
                     fill="none"
-                    initial={{ pathLength: 0 }}
-                    whileInView={{ pathLength: 1 }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.55, delay: 3.45, ease: [0.16, 1, 0.3, 1] }}
+                    variants={DATA_PATH_VARIANTS(3.45, 0.55)}
                   />
                   <text x="6" y="14" fontFamily="JetBrains Mono" fontSize="8" fill="#a07217" letterSpacing="2">
                     PIPELINE · IN-001
@@ -1084,123 +1122,15 @@ export default function Engineering() {
                     fontSize="8"
                     fill="#a07217"
                     letterSpacing="2"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.3, delay: 4.0, ease: "easeOut" }}
+                    variants={DATA_FADE_VARIANTS(4.0)}
                   >
                     BUDGET · &lt; 800µs
                   </motion.text>
                 </svg>
               </div>
             </motion.div>
-          </div>
-
-          {/* metrics strip */}
-          <motion.div {...fadeUp(0.18)} className="mt-10 border border-rule-strong bg-white grid grid-cols-5">
-            {[
-              { k: "Model Accuracy", v: "94.2", u: "%" },
-              { k: "Inference Latency", v: "612", u: "µs" },
-              { k: "Throughput", v: "1.4", u: "TF" },
-              { k: "Dataset Hours", v: "218", u: "hr" },
-              { k: "Param Count", v: "2.1", u: "M" },
-            ].map((m, i, arr) => (
-              <div
-                key={m.k}
-                className={`px-5 py-[18px] font-mono ${i < arr.length - 1 ? "border-r border-dashed border-rule-strong" : ""}`}
-              >
-                <span className="block text-[9.5px] tracking-[.22em] uppercase text-ink-3 mb-2">{m.k}</span>
-                <span className="font-heading text-[26px] font-semibold text-ink tracking-[.01em]">
-                  {m.v}
-                  <span className="font-mono text-[11px] text-ink-3 ml-1 tracking-[.14em]">{m.u}</span>
-                </span>
-              </div>
-            ))}
           </motion.div>
-        </div>
-      </motion.section>
 
-      {/* ════════ § 07 — CTA ════════ */}
-      <motion.section
-        {...REVEAL}
-        className="bg-[#1A1A1A] text-[#FAFAFA] border-t border-rule-strong"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #ffffff0a 1px, transparent 1px), linear-gradient(to bottom, #ffffff0a 1px, transparent 1px)",
-          backgroundSize: "80px 80px",
-          backgroundPosition: "-1px -1px",
-        }}
-      >
-        <SectionBar num="07" label="NEXT STEPS" dark />
-
-        <div className="relative max-w-[1440px] mx-auto px-14 py-[88px] grid grid-cols-[1.2fr_1fr] gap-x-16">
-          <Reg pos="tl" light />
-          <Reg pos="tr" light />
-          <Reg pos="bl" light />
-          <Reg pos="br" light />
-
-          <div>
-            <motion.h2
-              {...fadeUp(0.1)}
-              className="font-heading font-semibold text-[88px] leading-[.92] tracking-[-.025em] m-0 text-[#FAFAFA]"
-            >
-              Build it<br />with us<span className="text-amber">.</span>
-            </motion.h2>
-            <motion.p
-              {...fadeUp(0.2)}
-              className="mt-6 max-w-[480px] text-[17px] leading-[1.55] text-[#ffffffd0]"
-            >
-              If the depth here resonates, there are two ways to move from spectator to participant. Pick the one that
-              fits.
-            </motion.p>
-          </div>
-
-          <motion.div {...fadeUp(0.15)} className="grid grid-cols-1 gap-3.5 self-start mt-12">
-            {/* Card 01 — maroon (no hover-darken) */}
-            <Link
-              href="/apply#apply-form"
-              className="p-8 pb-7 flex flex-col text-[#FAFAFA] no-underline min-h-[230px] bg-maroon group"
-            >
-              <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a] mb-6">
-                <span className="font-heading text-sm text-[#FAFAFA] tracking-[.04em] font-medium">01</span>
-                
-              </div>
-              <h3 className="font-heading font-semibold text-[30px] leading-[1.02] tracking-[-.012em] m-0 mb-2.5 text-[#FAFAFA]">
-                Want to build this<span className="text-amber">?</span>
-              </h3>
-              <p className="text-[14.5px] leading-[1.5] text-[#ffffffbf] m-0 mb-6 max-w-[380px]">
-                Open roles across mechanical, electrical, software, and ML. Find where you fit.
-              </p>
-              <span className="oct-clip mt-auto self-start font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold px-[18px] py-3 bg-maroon text-[#FAFAFA] border border-[#FAFAFA] inline-flex items-center gap-3.5 transition-colors duration-150 group-hover:bg-[#FAFAFA] group-hover:text-maroon">
-                Apply Now
-                <span className="inline-block w-[22px] h-px bg-current relative">
-                  <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
-                </span>
-              </span>
-            </Link>
-
-            {/* Card 02 — dark (no hover-darken) */}
-            <Link
-              href="/sponsors"
-              className="p-8 pb-7 flex flex-col text-[#FAFAFA] no-underline min-h-[230px] bg-[#0d0d0d] border border-[#ffffff1f] group"
-            >
-              <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a] mb-6">
-                <span className="font-heading text-sm text-[#FAFAFA] tracking-[.04em] font-medium">02</span>
-              </div>
-              <h3 className="font-heading font-semibold text-[30px] leading-[1.02] tracking-[-.012em] m-0 mb-2.5 text-[#FAFAFA]">
-                Support the work<span className="text-amber">.</span>
-              </h3>
-              <p className="text-[14.5px] leading-[1.5] text-[#ffffffbf] m-0 mb-6 max-w-[380px]">
-                Sponsor a year of engineering, R&amp;D, and student development.
-              </p>
-              <span className="oct-outline-light !bg-transparent mt-auto self-start font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold px-[18px] py-3 text-[#FAFAFA] inline-flex items-center gap-3.5 transition-all duration-150 group-hover:text-ink group-hover:[&::after]:!bg-amber">
-                Become a Sponsor
-                <span className="inline-block w-[22px] h-px bg-current relative">
-                  <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
-                </span>
-              </span>
-            </Link>
-          </motion.div>
         </div>
       </motion.section>
 

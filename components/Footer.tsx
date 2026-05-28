@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#141414] text-[#ffffffa8] border-t border-[#ffffff14]">
       {/* Top row */}
-      <div className="max-w-[1440px] mx-auto px-14 pt-9 pb-7 grid grid-cols-[1fr_auto_auto] items-center gap-12">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-14 pt-9 pb-7 grid grid-cols-1 md:grid-cols-[1fr_auto_auto] items-start md:items-center gap-y-6 md:gap-x-12">
         {/* Brand */}
         <div className="flex items-center gap-3 font-heading font-semibold tracking-[.04em] text-sm uppercase text-[#FAFAFA]">
           <span className="w-[18px] h-[18px] bg-maroon relative shrink-0" aria-hidden="true">
@@ -17,7 +17,7 @@ export default function Footer() {
         </div>
 
         {/* Nav */}
-        <nav className="flex gap-7 font-heading text-xs tracking-[.16em] uppercase font-medium" aria-label="Footer">
+        <nav className="flex flex-wrap gap-5 md:gap-7 font-heading text-xs tracking-[.16em] uppercase font-medium" aria-label="Footer">
           <Link href="/" className="text-[#ffffffc4] no-underline hover:text-[#FAFAFA] transition-colors">Home</Link>
           <Link href="/about" className="text-[#ffffffc4] no-underline hover:text-[#FAFAFA] transition-colors">About</Link>
           <Link href="/engineering" className="text-[#ffffffc4] no-underline hover:text-[#FAFAFA] transition-colors">The Rig</Link>
@@ -43,7 +43,7 @@ export default function Footer() {
       <div className="max-w-[1440px] mx-auto h-px bg-[#ffffff14]" />
 
       {/* Bottom row */}
-      <div className="max-w-[1440px] mx-auto px-14 py-[22px] pb-7 grid grid-cols-[auto_1fr_auto] items-start gap-12 font-mono text-[10.5px] tracking-[.14em] uppercase text-[#ffffff7a] leading-relaxed">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-14 py-[22px] pb-7 grid grid-cols-1 md:grid-cols-[auto_1fr_auto] items-start gap-y-4 md:gap-12 font-mono text-[10.5px] tracking-[.14em] uppercase text-[#ffffff7a] leading-relaxed">
         <span className="max-w-[560px]">
           <strong className="text-[#ffffffbf] font-medium tracking-[.12em]">Drillbotics&reg;</strong> is a registered trademark of Rig Operations, LLC.
           <span className="block mt-1.5 text-[#ffffff5a] tracking-[.14em]">

@@ -329,7 +329,7 @@ function Wordmark() {
   const headlineState = headline.hasFired ? "shown" : "hidden";
   const headlineTransition = { duration: 0.5, ease: "easeOut" } as const;
   return (
-    <h1 className="font-heading font-bold text-[148px] leading-[.86] tracking-[-.025em] uppercase m-0 text-ink">
+    <h1 className="font-heading font-bold text-[56px] md:text-[148px] leading-[.86] tracking-[-.025em] uppercase m-0 text-ink">
       <span className="flex items-baseline gap-[18px]">
         <motion.span
           className="inline-block"
@@ -342,7 +342,7 @@ function Wordmark() {
           Tamu
         </motion.span>
         <motion.span
-          className="font-mono text-[13px] font-normal tracking-[.12em] text-ink-3 uppercase -translate-y-[90px] border-l border-rule-strong pl-3.5 leading-normal whitespace-nowrap inline-block"
+          className="font-mono text-[11px] md:text-[13px] font-normal tracking-[.12em] text-ink-3 uppercase -translate-y-[32px] md:-translate-y-[90px] border-l border-rule-strong pl-2 md:pl-3.5 leading-normal whitespace-nowrap inline-block"
           style={{ clipPath: "inset(0 100% 0 0)" }}
           initial="hidden"
           animate={label.hasFired ? "shown" : "hidden"}
@@ -372,7 +372,7 @@ function Lede() {
   const { hasFired } = useTimelineBeat("elevatorPitch");
   return (
     <motion.p
-      className="mt-12 max-w-[580px] text-[19px] leading-relaxed text-ink-2"
+      className="mt-6 md:mt-12 max-w-[580px] text-[16px] md:text-[19px] leading-relaxed text-ink-2"
       initial="hidden"
       animate={hasFired ? "shown" : "hidden"}
       variants={FADE_UP_8}
@@ -391,7 +391,7 @@ function Ctas() {
   const { hasFired } = useTimelineBeat("ctas");
   return (
     <motion.div
-      className="mt-12 flex items-center gap-3.5"
+      className="mt-8 md:mt-12 flex flex-wrap items-center gap-3.5"
       initial="hidden"
       animate={hasFired ? "shown" : "hidden"}
       variants={FADE_UP_8}
@@ -425,7 +425,7 @@ function BottomMetadataInner() {
   const { hasFired } = useTimelineBeat("bottomMetadata");
   return (
     <motion.div
-      className="max-w-[1440px] mx-auto px-14 py-2 flex items-center gap-6 font-mono text-[9.5px] tracking-[.16em] uppercase text-ink-4"
+      className="max-w-[1440px] mx-auto px-5 md:px-14 py-2 flex items-center gap-6 font-mono text-[9.5px] tracking-[.16em] uppercase text-ink-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: hasFired ? 1 : 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
@@ -487,7 +487,7 @@ function MissionSection() {
     <section className="relative">
       {/* Section header bar */}
       <div ref={headerRef} className="bg-bg/85 overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-ink-3">
+        <div className="max-w-[1440px] mx-auto px-5 md:px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-ink-3">
           <motion.span
             className="inline-flex items-baseline gap-2.5 text-ink font-medium"
             initial={{ opacity: 0 }}
@@ -505,17 +505,17 @@ function MissionSection() {
         </div>
       </div>
 
-      <div ref={bodyRef} className="max-w-[1440px] mx-auto px-14 py-20 pb-10 relative">
-        <CrossMark className="left-[42px] top-8" />
-        <CrossMark className="right-[42px] top-8" />
-        <CrossMark className="left-[42px] bottom-8" />
-        <CrossMark className="right-[42px] bottom-8" />
+      <div ref={bodyRef} className="max-w-[1440px] mx-auto px-5 md:px-14 py-12 md:py-20 pb-10 relative">
+        <CrossMark className="hidden md:block left-[42px] top-8" />
+        <CrossMark className="hidden md:block right-[42px] top-8" />
+        <CrossMark className="hidden md:block left-[42px] bottom-8" />
+        <CrossMark className="hidden md:block right-[42px] bottom-8" />
 
         {/* Intro block */}
-        <header className="grid grid-cols-2 gap-x-16 items-end pb-12 border-b border-rule-strong">
+        <header className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8 md:gap-x-16 items-end pb-8 md:pb-12 border-b border-rule-strong">
           <div>
             <motion.h2
-              className="font-heading font-semibold text-[72px] leading-[.94] tracking-[-.02em] m-0 text-ink"
+              className="font-heading font-semibold text-[40px] md:text-[72px] leading-[.94] tracking-[-.02em] m-0 text-ink"
               variants={missionFade}
               initial="hidden"
               animate={bodyInView ? "visible" : "hidden"}
@@ -540,7 +540,7 @@ function MissionSection() {
             <motion.li
               ref={pillarRefs[i]}
               key={pillar.num}
-              className="grid grid-cols-[220px_1fr] gap-x-16 py-14 relative"
+              className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-y-4 gap-x-8 md:gap-x-16 py-10 md:py-14 relative"
               variants={missionFade}
               initial="hidden"
               animate={bodyInView ? "visible" : "hidden"}
@@ -550,7 +550,7 @@ function MissionSection() {
               <div className="flex flex-col items-start gap-3.5">
                 <motion.span
                   style={{ color: pillarNumColors[i] }}
-                  className="font-heading font-semibold text-[84px] leading-[.85] tracking-[-.02em]"
+                  className="font-heading font-semibold text-[44px] md:text-[84px] leading-[.85] tracking-[-.02em]"
                 >
                   {pillar.num}
                 </motion.span>
@@ -613,11 +613,11 @@ export default function Home() {
         <HeroGrid />
 
         <motion.main
-          className="flex-1 max-w-[1440px] mx-auto w-full px-14 py-10 grid grid-cols-[minmax(0,1fr)_360px] gap-x-16 items-center relative"
+          className="flex-1 max-w-[1440px] mx-auto w-full px-5 md:px-14 pt-14 pb-10 md:py-10 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_360px] gap-x-8 md:gap-x-16 items-start md:items-center relative"
           style={{ y: heroContentY, opacity: heroContentOpacity }}
         >
-          <HeroCrossMark className="left-[42px] top-[42px]" index={0} />
-          <HeroCrossMark className="right-[42px] top-[42px]" index={1} />
+          <HeroCrossMark className="hidden md:block left-[42px] top-[42px]" index={0} />
+          <HeroCrossMark className="hidden md:block right-[42px] top-[42px]" index={1} />
 
           {/* ── Left column ── */}
           <section className="flex flex-col justify-center">
@@ -634,8 +634,10 @@ export default function Home() {
             <Ctas />
           </section>
 
-          {/* ── Right column: Status panel ── */}
-          <ProjectStatusDial />
+          {/* ── Right column: Status panel — hidden on mobile ── */}
+          <div className="hidden md:block">
+            <ProjectStatusDial />
+          </div>
 
         </motion.main>
 
@@ -655,8 +657,8 @@ export default function Home() {
       <section className="relative">
         <div className="max-w-[1440px] mx-auto pt-2 pb-11">
           {/* Intro — bridges the mission section to the marquee */}
-          <div className="px-14 pb-9">
-            <h2 className="font-heading font-semibold text-[72px] leading-[.94] tracking-[-.02em] text-ink m-0">
+          <div className="px-5 md:px-14 pb-9">
+            <h2 className="font-heading font-semibold text-[36px] md:text-[72px] leading-[.94] tracking-[-.02em] text-ink m-0">
               <span className="text-maroon">&hellip;</span>and the companies that back our work
               <span
                 className="relative inline-block align-baseline"
@@ -664,10 +666,8 @@ export default function Home() {
                 aria-hidden="true"
               >
                 <svg
-                  width="80"
-                  height="110"
+                  className="absolute left-[8px] -top-[20px] w-10 h-[55px] md:left-[14px] md:-top-[38px] md:w-20 md:h-[110px] overflow-visible"
                   viewBox="0 0 80 110"
-                  style={{ position: 'absolute', left: 14, top: -38, overflow: 'visible' }}
                 >
                   <motion.path
                     d="M 0,18 L 14,18 Q 30,18 30,34 L 30,76"
@@ -677,7 +677,7 @@ export default function Home() {
                     strokeLinecap="round"
                     initial={{ pathLength: 0 }}
                     whileInView={{ pathLength: 1 }}
-                    viewport={{ once: true, margin: "-80px" }}
+                    viewport={{ once: true, amount: 0 }}
                     transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
                   />
                   <motion.path
@@ -689,7 +689,7 @@ export default function Home() {
                     strokeLinejoin="round"
                     initial={{ pathLength: 0, opacity: 0 }}
                     whileInView={{ pathLength: 1, opacity: 1 }}
-                    viewport={{ once: true, margin: "-80px" }}
+                    viewport={{ once: true, amount: 0 }}
                     transition={{
                       pathLength: { duration: 0.22, ease: "easeOut", delay: 0.85 },
                       opacity: { duration: 0.01, delay: 0.85 },
@@ -747,7 +747,7 @@ export default function Home() {
           </div>
 
           {/* Footer row */}
-          <div className="px-14 mt-9 flex items-center justify-center">
+          <div className="px-5 md:px-14 mt-9 flex items-center justify-center">
             <Link
               href="/sponsors"
               className="jtt-btn font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold no-underline text-ink"
@@ -759,110 +759,80 @@ export default function Home() {
       </section>
 
       {/* ══════════ CTA ══════════ */}
-      <section
-        className="relative bg-maroon"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #ffffff12 1px, transparent 1px), linear-gradient(to bottom, #ffffff12 1px, transparent 1px)",
-          backgroundSize: "80px 80px",
-          backgroundPosition: "-1px -1px",
-        }}
-      >
+      <section className="relative bg-bg">
         {/* Section header bar */}
-        <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-[#ffffffb8]">
-          <span className="inline-flex items-baseline gap-2.5 text-[#FAFAFA] font-medium">
-            <span className="text-amber font-medium">&sect; 04</span> CTA
+        <div className="max-w-[1440px] mx-auto px-5 md:px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-ink-3">
+          <span className="inline-flex items-baseline gap-2.5 text-ink font-medium">
+            <span className="text-maroon font-medium">&sect; 04</span> CTA
           </span>
-          <span className="flex-1 h-px bg-[#ffffff2e]" />
+          <span className="flex-1 h-px bg-rule-strong" />
         </div>
 
-        <div className="max-w-[1440px] mx-auto px-14 pt-8 pb-24">
-          {/* Unified split panel */}
-          <div className="grid grid-cols-2 border border-[#ffffff2e]">
-            {/* Panel head — spans both columns */}
-            <div className="col-span-2 grid grid-cols-[1.35fr_minmax(0,560px)] items-end gap-x-12 px-12 py-9 border-b border-[#ffffff2e]">
-              <h2 className="font-heading font-semibold text-[72px] leading-[1] tracking-[-.025em] m-0 text-[#FAFAFA]">
-                Two ways in<span className="text-amber">.</span>
-              </h2>
-              <p className="text-[17px] leading-relaxed text-[#F2E4CC] m-0 mb-2">
-              </p>
-            </div>
+        <div className="max-w-[1440px] mx-auto px-5 md:px-14 pt-8 pb-16 md:pb-24">
+          {/* Heading */}
+          <div className="mb-10 grid grid-cols-1 md:grid-cols-[1.35fr_minmax(0,560px)] items-end gap-y-4 gap-x-8 md:gap-x-12">
+            <h2 className="font-heading font-semibold text-[36px] md:text-[72px] leading-[1] tracking-[-.025em] m-0 text-ink">
+              Two ways in<span className="text-maroon">.</span>
+            </h2>
+          </div>
 
-            {/* Left column — See the rig */}
-            <Link
-              href="/engineering"
-              className="group flex flex-col gap-7 px-12 pt-9 pb-10 min-h-[420px] text-[#FAFAFA] no-underline"
-            >
-              <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#ffffffb8]">
-                <span className="font-medium text-[#FAFAFA]">
-                  01<span className="mx-1.5 text-[#ffffff59]">/</span>The Rig
-                </span>
-                <span className="text-amber">Technical</span>
-              </div>
+          {/* Two CTA buttons */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {/* Left — See the rig (maroon) */}
+            <Link href="/engineering" className="cta-btn cta-btn--maroon">
+              <div className="cta-btn-outer">
+                <div className="cta-btn-inner">
+                  <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#f2d8d8b8]">
+                    <span className="font-medium text-[#FAFAFA]">
+                      01<span className="mx-1.5 text-[#ffffff59]">/</span>The Rig
+                    </span>
+                    <span className="text-amber">Technical</span>
+                  </div>
 
-              <h3 className="font-heading font-semibold text-[44px] leading-none tracking-[-.015em] m-0 text-[#FAFAFA]">
-                See the rig<span className="text-amber">.</span>
-              </h3>
+                  <h3 className="font-heading font-semibold text-[32px] md:text-[44px] leading-none tracking-[-.015em] m-0 text-[#FAFAFA]">
+                    See the rig<span className="text-amber">.</span>
+                  </h3>
 
-              <ul className="list-none m-0 p-0 grid grid-cols-2 gap-x-10 gap-y-3.5">
-                {["System Architecture", "Sensor Stack", "Controls", "3D build render"].map((item) => (
-                  <li
-                    key={item}
-                    className="pb-3 border-b border-dashed border-[#ffffff33] font-mono text-[12px] tracking-[.18em] uppercase text-[#F2E4CC]"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-auto flex items-center justify-between pt-2">
-                <span className="font-heading text-[15px] font-semibold tracking-[.16em] uppercase text-[#FAFAFA]">
-                  See the Rig
-                </span>
-                <span className="w-[52px] h-[52px] shrink-0 border border-[#FAFAFA] text-[#FAFAFA] flex items-center justify-center transition-colors duration-150 group-hover:bg-[#FAFAFA] group-hover:text-maroon">
-                  <span className="relative inline-block w-5 h-px bg-current">
-                    <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
-                  </span>
-                </span>
+                  <ul className="list-none m-0 p-0 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-3.5">
+                    {["System Architecture", "Sensor Stack", "Controls", "3D build render"].map((item) => (
+                      <li
+                        key={item}
+                        className="pb-3 border-b border-dashed border-[#ffffff33] font-mono text-[12px] tracking-[.18em] uppercase text-[#F2E4CC]"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </Link>
 
-            {/* Right column — Join the team */}
-            <Link
-              href="/apply#apply-form"
-              className="group flex flex-col gap-7 px-12 pt-9 pb-10 min-h-[420px] text-[#FAFAFA] no-underline bg-ink border-l border-[#ffffff2e]"
-            >
-              <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#ffffffb8]">
-                <span className="font-medium text-[#FAFAFA]">
-                  02<span className="mx-1.5 text-[#ffffff59]">/</span>The Team
-                </span>
-                <span className="text-amber">Recruiting</span>
-              </div>
+            {/* Right — Join the team (deeper grey) */}
+            <Link href="/apply#apply-form" className="cta-btn cta-btn--grey">
+              <div className="cta-btn-outer">
+                <div className="cta-btn-inner">
+                  <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#1a1a1a99]">
+                    <span className="font-medium text-ink">
+                      02<span className="mx-1.5 text-[#1a1a1a66]">/</span>The Team
+                    </span>
+                    <span className="text-[#7a5810]">Recruiting</span>
+                  </div>
 
-              <h3 className="font-heading font-semibold text-[44px] leading-none tracking-[-.015em] m-0 text-[#FAFAFA]">
-                Join the team<span className="text-amber">.</span>
-              </h3>
+                  <h3 className="font-heading font-semibold text-[32px] md:text-[44px] leading-none tracking-[-.015em] m-0 text-ink">
+                    Join the team<span className="text-maroon">.</span>
+                  </h3>
 
-              <ul className="list-none m-0 p-0 grid grid-cols-2 gap-x-10 gap-y-3.5">
-                {["No prior experience needed", "Open to all majors", "hands-on", "2026 – 27 cycle"].map((item) => (
-                  <li
-                    key={item}
-                    className="pb-3 border-b border-dashed border-[#ffffff33] font-mono text-[12px] tracking-[.18em] uppercase text-[#F2E4CC]"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-auto flex items-center justify-between pt-2">
-                <span className="font-heading text-[15px] font-semibold tracking-[.16em] uppercase text-[#FAFAFA]">
-                  Join the Team
-                </span>
-                <span className="w-[52px] h-[52px] shrink-0 border border-[#FAFAFA] text-[#FAFAFA] flex items-center justify-center transition-colors duration-150 group-hover:bg-amber group-hover:border-amber group-hover:text-ink">
-                  <span className="relative inline-block w-5 h-px bg-current">
-                    <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
-                  </span>
-                </span>
+                  <ul className="list-none m-0 p-0 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-3.5">
+                    {["No prior experience needed", "Open to all majors", "hands-on", "2026 – 27 cycle"].map((item) => (
+                      <li
+                        key={item}
+                        className="pb-3 border-b border-dashed border-[#1a1a1a40] font-mono text-[12px] tracking-[.18em] uppercase text-ink-2"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </Link>
           </div>

@@ -18,7 +18,7 @@ export function FAQ() {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       {/* Section header bar */}
-      <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-white/75">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-white/75">
         <span className="inline-flex items-baseline gap-2.5 text-white font-medium">
           <span className="text-amber font-medium">&sect; 03</span>
           <span>&middot; FAQ</span>
@@ -28,13 +28,13 @@ export function FAQ() {
 
       <section
         id="faq"
-        className="relative max-w-[1440px] mx-auto px-14 pt-[88px] pb-24"
+        className="relative max-w-[1440px] mx-auto px-5 md:px-14 pt-14 md:pt-[88px] pb-16 md:pb-24"
       >
         {/* Intro */}
-        <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-x-16 items-end mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-y-6 gap-x-8 md:gap-x-16 items-end mb-10 md:mb-12">
           <div>
             <h2
-              className="font-heading font-semibold text-[56px] leading-[.98] tracking-[-.02em] m-0 text-white"
+              className="font-heading font-semibold text-[32px] md:text-[56px] leading-[.98] tracking-[-.02em] m-0 text-white"
               style={{ textWrap: "balance" }}
             >
               Before you apply<span className="text-amber">.</span>
@@ -61,12 +61,12 @@ export function FAQ() {
                   type="button"
                   onClick={() => toggle(faq.id)}
                   aria-expanded={isOpen}
-                  className="w-full grid grid-cols-[60px_1fr_32px] items-baseline gap-x-6 py-6 text-left cursor-pointer bg-transparent border-0 outline-none"
+                  className="w-full grid grid-cols-[40px_1fr_24px] md:grid-cols-[60px_1fr_32px] items-baseline gap-x-3 md:gap-x-6 py-5 md:py-6 text-left cursor-pointer bg-transparent border-0 outline-none"
                 >
                   <span className="font-mono text-[12px] tracking-[.2em] uppercase text-amber font-medium">
                     {faq.ref}
                   </span>
-                  <h3 className="font-heading font-semibold text-[22px] leading-[1.25] tracking-[-.005em] text-white m-0">
+                  <h3 className="font-heading font-semibold text-[17px] md:text-[22px] leading-[1.25] tracking-[-.005em] text-white m-0">
                     {faq.question}
                   </h3>
                   <span
@@ -85,7 +85,7 @@ export function FAQ() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <div className="grid grid-cols-[60px_1fr_32px] gap-x-6 pb-6">
+                    <div className="grid grid-cols-[40px_1fr_24px] md:grid-cols-[60px_1fr_32px] gap-x-3 md:gap-x-6 pb-5 md:pb-6">
                       <span className="font-mono text-[10.5px] tracking-[.2em] uppercase text-white/75 pt-1">
                         {faq.ref.replace("Q", "A")}
                       </span>

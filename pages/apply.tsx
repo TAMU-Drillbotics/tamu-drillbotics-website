@@ -67,10 +67,10 @@ export default function Apply() {
         }}
       >
         <GridReveal />
-        <OuterCross className="left-[42px] top-[42px]" />
-        <OuterCross className="right-[42px] top-[42px]" />
-        <OuterCross className="left-[42px] bottom-[42px]" />
-        <OuterCross className="right-[42px] bottom-[42px]" />
+        <OuterCross className="hidden md:block left-[42px] top-[42px]" />
+        <OuterCross className="hidden md:block right-[42px] top-[42px]" />
+        <OuterCross className="hidden md:block left-[42px] bottom-[42px]" />
+        <OuterCross className="hidden md:block right-[42px] bottom-[42px]" />
 
         <Hero />
         <Candidates />

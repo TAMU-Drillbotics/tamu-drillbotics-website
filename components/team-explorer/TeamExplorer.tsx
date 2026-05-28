@@ -1,8 +1,10 @@
 import { useState, useCallback } from 'react';
 import { Legend } from './Legend';
 import { Terminal } from './Terminal';
+import { TeamExplorerMobile } from './TeamExplorerMobile';
 import { dispatch, welcome, cmdTree } from './commands';
 import { HistoryEntry } from './types';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const initialEntries: HistoryEntry[] = [
   { kind: 'output', lines: welcome() },
@@ -11,6 +13,7 @@ const initialEntries: HistoryEntry[] = [
 ];
 
 export function TeamExplorer() {
+  const isMobile = useIsMobile();
   const [entries, setEntries] = useState<HistoryEntry[]>(initialEntries);
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
 
@@ -30,6 +33,10 @@ export function TeamExplorer() {
       setCmdHistory(prev => [...prev, raw]);
     }
   }, []);
+
+  if (isMobile) {
+    return <TeamExplorerMobile />;
+  }
 
   return (
     <section className="w-full">

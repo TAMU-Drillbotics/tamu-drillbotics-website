@@ -22,7 +22,7 @@ export function ApplicationForm() {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       {/* Section header bar */}
-      <div className="max-w-[1440px] mx-auto px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-white/75">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-white/75">
         <span className="inline-flex items-baseline gap-2.5 text-white font-medium">
           <span className="text-amber font-medium">&sect; 02</span>
           <span>&middot; APPLICATION</span>
@@ -33,13 +33,13 @@ export function ApplicationForm() {
       <section
         id="apply-form"
         tabIndex={-1}
-        className="relative max-w-[1440px] mx-auto px-14 pt-[88px] pb-24 scroll-mt-24 outline-none"
+        className="relative max-w-[1440px] mx-auto px-5 md:px-14 pt-14 md:pt-[88px] pb-16 md:pb-24 scroll-mt-24 outline-none"
       >
         {/* Intro */}
-        <div className="grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-x-16 items-end mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-y-6 gap-x-8 md:gap-x-16 items-end mb-10 md:mb-12">
           <div>
             <h2
-              className="font-heading font-semibold text-[56px] leading-[.98] tracking-[-.02em] m-0 text-white"
+              className="font-heading font-semibold text-[32px] md:text-[56px] leading-[.98] tracking-[-.02em] m-0 text-white"
               style={{ textWrap: "balance" }}
             >
               Tell us about yourself<span className="text-amber">.</span>
@@ -48,7 +48,7 @@ export function ApplicationForm() {
           <div className="max-w-[520px] pb-2">
             <p className="text-[16px] leading-[1.6] text-[#FAFAFA]/70 m-0">
               The form below is hosted on Tally. Short, structured, and
-              routed straight to the review pool. Plan on ~20 minutes.
+              routed straight to the review pool. Plan on ~20 minutes. <span className="text-amber">Tip: fill this out on a computer.</span>
             </p>
           </div>
         </div>

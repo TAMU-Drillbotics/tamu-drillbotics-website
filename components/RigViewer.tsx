@@ -2,8 +2,9 @@
 
 import { Suspense, useEffect, useRef, useState, type ComponentRef } from 'react';
 import * as THREE from 'three';
-import { Canvas, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Stage, useGLTF, Html, useProgress } from '@react-three/drei';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 // Draco decoder hosted by Google — required because the GLB was Draco-compressed
 // during the Fusion 360 → USDZ → Blender → glTF export pipeline.
@@ -52,6 +53,87 @@ function SaveInitialView() {
 // height (0 = no shift, 0.12 ≈ 12% up). The rig's bottom was being clipped.
 const FRAME_SHIFT = 0.04;
 
+// Capture mode (?capture=1): used by scripts/render-rig-video.mjs to drive
+// the rig through deterministic camera angles for offline video pre-rendering.
+// Disables auto-rotate and exposes window.__setRigAngle(rad) so Puppeteer
+// can advance frame-by-frame, plus window.__rigReady once the GLB has loaded
+// and the camera is in its Stage-framed starting pose.
+function CaptureController() {
+  const camera = useThree((s) => s.camera);
+  const initialRef = useRef<{ r: number; phase: number } | null>(null);
+  const readyRef = useRef(false);
+
+  useFrame(() => {
+    if (!initialRef.current) {
+      const x = camera.position.x;
+      const z = camera.position.z;
+      const r = Math.sqrt(x * x + z * z);
+      if (r < 0.01) return; // Stage hasn't framed yet
+      const phase = Math.atan2(z, x);
+      initialRef.current = { r, phase };
+    }
+    if (!readyRef.current && initialRef.current) {
+      readyRef.current = true;
+      (window as unknown as { __rigReady: boolean }).__rigReady = true;
+    }
+  });
+
+  useEffect(() => {
+    const win = window as unknown as {
+      __setRigAngle?: (delta: number) => boolean;
+      __rigReady?: boolean;
+    };
+    win.__setRigAngle = (deltaAngle: number) => {
+      if (!initialRef.current) return false;
+      const { r, phase } = initialRef.current;
+      const angle = phase + deltaAngle;
+      camera.position.x = r * Math.cos(angle);
+      camera.position.z = r * Math.sin(angle);
+      camera.lookAt(0, 0, 0);
+      return true;
+    };
+    return () => {
+      delete win.__setRigAngle;
+      delete win.__rigReady;
+    };
+  }, [camera]);
+
+  return null;
+}
+
+// Mobile-only camera auto-rotate. OrbitControls.connect() forcibly sets
+// `style.touchAction = 'none'` on the underlying <canvas> from inside three.js,
+// which overrides any CSS we try to apply and blocks vertical page scroll
+// whenever a finger lands on the rig. We sidestep that by skipping
+// OrbitControls entirely on mobile and orbiting the camera manually with
+// useFrame. No event listeners are attached to the canvas, so touch flows
+// through to the page.
+//
+// Clamping delta is critical on iOS Safari: when the user scrolls, the
+// browser pauses RAF for the entire scroll + post-scroll address-bar settle
+// window (often 200–1000ms). When RAF resumes, useFrame's `delta` reports
+// that whole gap as a single frame's worth of time. Without a clamp we
+// either snap forward by a huge angle (visible "skip") or — with the cos/sin
+// math — wrap past and look frozen until the next frame catches up. Clamping
+// to ~50ms makes the rig pick up from where it left off, eliminating both
+// the perceived pause and the jump.
+function MobileAutoRotate({ speed = 0.25 }: { speed?: number }) {
+  const camera = useThree((s) => s.camera);
+  useFrame((_, delta) => {
+    const dt = Math.min(delta, 0.05);
+    const angle = dt * speed;
+    const dx = camera.position.x;
+    const dz = camera.position.z;
+    const cosA = Math.cos(angle);
+    const sinA = Math.sin(angle);
+    // Orbit around the Y axis at origin (Stage centers the rig at the world origin).
+    camera.position.x = dx * cosA - dz * sinA;
+    camera.position.z = dx * sinA + dz * cosA;
+    camera.lookAt(0, 0, 0);
+  });
+  return null;
+}
+
 // Pushes the rendered image up within the black frame so the rig's bottom
 // (and its contact shadow) isn't clipped.
 //
@@ -87,7 +169,8 @@ function FrameShift() {
   return null;
 }
 
-export default function RigViewer() {
+export default function RigViewer({ captureMode = false }: { captureMode?: boolean } = {}) {
+  const isMobile = useIsMobile();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const controlsRef = useRef<OrbitControlsHandle | null>(null);
   const [isActive, setIsActive] = useState(false);
@@ -198,7 +281,10 @@ export default function RigViewer() {
         // by 50ms — and that timer resets on every frame of the resize, so the
         // drawing buffer only catches up once scroll/momentum fully settles
         // (the ~1s "clunky" lag). debounce:0 re-measures every frame instead.
-        resize={{ debounce: 0 }}
+        // On mobile there's no scroll-driven resize and the iOS address bar
+        // collapse fires constant resizes during scroll — debounce 200ms so
+        // those don't interrupt the auto-rotate frame loop.
+        resize={{ debounce: isMobile ? 200 : 0 }}
       >
         <Suspense fallback={<Loader />}>
           <Stage
@@ -220,7 +306,14 @@ export default function RigViewer() {
           <FrameShift />
         </Suspense>
 
-        <OrbitControls
+        {/* Mobile: skip OrbitControls (its connect() forces touch-action:none
+            on the canvas which blocks page scroll). Rotate via useFrame instead. */}
+        {!captureMode && isMobile && <MobileAutoRotate />}
+
+        {/* Capture mode: deterministic angle setter for offline video render. */}
+        {captureMode && <CaptureController />}
+
+        {!captureMode && !isMobile && <OrbitControls
           ref={controlsRef}
           makeDefault
           // Mark the camera dirty on any user-driven change. The isActive gate
@@ -233,12 +326,7 @@ export default function RigViewer() {
           }}
           enableDamping
           dampingFactor={0.05}
-          // Scroll-zoom is gated by the click-to-activate state.
           enableZoom={isActive}
-          // Pan is enabled and screen-aligned (more intuitive than world-aligned).
-          // OrbitControls automatically switches LEFT-drag → PAN when the user
-          // holds Ctrl (or Meta / Shift) during the gesture, as long as enablePan
-          // is true. RIGHT-drag always pans as a fallback for non-Ctrl muscle memory.
           enablePan
           // ── ADJUSTABLE: pan speed (1.0 default; lower = slower)
           panSpeed={1.0}
@@ -258,11 +346,11 @@ export default function RigViewer() {
           //    maxPolarAngle=Math.PI/1.8 prevents going below the ground plane
           minPolarAngle={0}
           maxPolarAngle={Math.PI / 1.8}
-        />
+        />}
       </Canvas>
 
-      {/* Controls legend (top-right, only when active) */}
-      {isActive && (
+      {/* Controls legend (top-right, only when active and on desktop) */}
+      {!isMobile && isActive && (
         <div
           aria-hidden="true"
           className="pointer-events-none absolute top-3 right-3 font-mono text-xs px-2 py-1 text-[#E0E0E0]/40 text-right leading-snug space-y-0.5"
@@ -274,12 +362,14 @@ export default function RigViewer() {
       )}
 
       {/* Activation hint (bottom-right) — pointer-events:none so it can't intercept clicks */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute bottom-3 right-3 font-mono text-xs px-2 py-1 text-[#E0E0E0]/40 transition-opacity duration-200"
-      >
-        {isActive ? 'Click outside to exit' : 'Click to activate'}
-      </div>
+      {!isMobile && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-3 right-3 font-mono text-xs px-2 py-1 text-[#E0E0E0]/40 transition-opacity duration-200"
+        >
+          {isActive ? 'Click outside to exit' : 'Click to activate'}
+        </div>
+      )}
     </div>
   );
 }

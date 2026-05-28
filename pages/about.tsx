@@ -49,9 +49,10 @@ const teams = [
     ],
   },
   {
-    name: "Marketing",
+    name: "Operations",
     subteams: [
-      { name: "TBD", focus: "Scope to be defined" },
+      { name: "Sponsorship", focus: "Sponsor outreach and retention, industry relationships, and team finance" },
+      { name: "Marketing", focus: "Brand identity, social media, content production, and outreach campaigns" },
     ],
   },
 ];
@@ -104,7 +105,7 @@ function AboutHeader() {
     { idx: "04", label: "Our Team", href: "#our-team" },
   ];
   return (
-    <header className="grid grid-cols-2 gap-x-16 items-end pb-10 border-b border-[#FAFAFA]/20">
+    <header className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8 md:gap-x-16 items-end pb-8 md:pb-10 border-b border-[#FAFAFA]/20">
       <div>
         <motion.div
           className="inline-flex items-center gap-3 font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA]/70 mb-6"
@@ -116,7 +117,7 @@ function AboutHeader() {
           <span className="inline-block w-[18px] h-px bg-amber align-middle" />
           <span>What we do</span>
         </motion.div>
-        <h1 className="font-heading font-semibold text-[96px] leading-[.9] tracking-[-.025em] m-0 text-[#FAFAFA]">
+        <h1 className="font-heading font-semibold text-[44px] md:text-[96px] leading-[.9] tracking-[-.025em] m-0 text-[#FAFAFA]">
           <motion.span
             className="inline-block"
             style={{ clipPath: "inset(0 100% 0 0)" }}
@@ -240,19 +241,19 @@ export default function About() {
 
       {/* ══════════ § 01 — ABOUT ══════════ */}
       <section className="relative">
-        <div className="max-w-[1440px] mx-auto px-14 pt-16 pb-24 relative">
-          <CrossMark className="left-[42px] top-6" light />
-          <CrossMark className="right-[42px] top-6" light />
-          <CrossMark className="left-[42px] bottom-8" light />
-          <CrossMark className="right-[42px] bottom-8" light />
+        <div className="max-w-[1440px] mx-auto px-5 md:px-14 pt-10 md:pt-16 pb-16 md:pb-24 relative">
+          <CrossMark className="hidden md:block left-[42px] top-6" light />
+          <CrossMark className="hidden md:block right-[42px] top-6" light />
+          <CrossMark className="hidden md:block left-[42px] bottom-8" light />
+          <CrossMark className="hidden md:block right-[42px] bottom-8" light />
 
           {/* About top: title + TOC */}
           <AboutHeader />
 
           {/* Two-column body */}
-          <div className="mt-16 grid grid-cols-[1fr_1px_1fr]">
+          <div className="mt-10 md:mt-16 grid grid-cols-1 md:grid-cols-[1fr_1px_1fr] gap-y-10">
             {/* ── LEFT: The Competition ── */}
-            <article className="pr-12 scroll-mt-20" id="competition">
+            <article className="md:pr-12 scroll-mt-20" id="competition">
               <ColumnHeader>
                 <div className="flex items-baseline justify-between gap-3.5 pb-3.5 border-b border-[#FAFAFA]/20 mb-7">
                   <span className="font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA] font-medium">
@@ -266,7 +267,7 @@ export default function About() {
                 </div>
               </ColumnHeader>
 
-              <ColumnTitle className="font-heading font-semibold text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
+              <ColumnTitle className="font-heading font-semibold text-[28px] md:text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
                 An international student drilling-rig competition<span className="text-amber">.</span>
               </ColumnTitle>
               <ColumnBody>
@@ -371,7 +372,7 @@ export default function About() {
             </div>
 
             {/* ── RIGHT: What We Do ── */}
-            <article className="pl-12 scroll-mt-20" id="what-we-do">
+            <article className="md:pl-12 scroll-mt-20" id="what-we-do">
               <ColumnHeader>
                 <div className="flex items-baseline justify-between gap-3.5 pb-3.5 border-b border-[#FAFAFA]/20 mb-7">
                   <span className="font-mono text-[11px] tracking-[.18em] uppercase text-[#FAFAFA] font-medium">
@@ -385,7 +386,7 @@ export default function About() {
                 </div>
               </ColumnHeader>
 
-              <ColumnTitle className="font-heading font-semibold text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
+              <ColumnTitle className="font-heading font-semibold text-[28px] md:text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
                 We build the rig (nearly) end to end<span className="text-amber">.</span>
               </ColumnTitle>
               <ColumnBody>
@@ -454,16 +455,16 @@ export default function About() {
 
       {/* ══════════ § 02 — TEAM EXPLORER ══════════ */}
       <motion.section {...REVEAL} className="relative scroll-mt-20" id="team">
-        <div className="max-w-[1440px] mx-auto px-14 py-24">
+        <div className="max-w-[1440px] mx-auto px-5 md:px-14 py-16 md:py-24">
           <TeamExplorer />
         </div>
       </motion.section>
 
       {/* ══════════ § 03 — OUR TEAM ══════════ */}
       <motion.section {...REVEAL} className="relative scroll-mt-20" id="our-team">
-        <div className="max-w-[1440px] mx-auto px-14 pt-16 pb-[120px] relative">
-          <CrossMark className="left-14 top-6" light />
-          <CrossMark className="right-14 top-6" light />
+        <div className="max-w-[1440px] mx-auto px-5 md:px-14 pt-10 md:pt-16 pb-20 md:pb-[120px] relative">
+          <CrossMark className="hidden md:block left-14 top-6" light />
+          <CrossMark className="hidden md:block right-14 top-6" light />
 
           {/* Section bar */}
           <div className="flex items-center gap-[18px] pb-[14px] font-mono text-[10px] tracking-[.18em] uppercase mb-14">
@@ -472,7 +473,7 @@ export default function About() {
           </div>
 
           {/* Pitch */}
-          <div className="grid grid-cols-[1.1fr_1.5fr] gap-16 mb-20 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-[1.1fr_1.5fr] gap-8 md:gap-16 mb-12 md:mb-20 items-start">
             <div>
               <div
                 className="text-[10px] tracking-[.18em] uppercase mb-3.5"
@@ -481,7 +482,7 @@ export default function About() {
                 LEADERSHIP
               </div>
               <h3
-                className="text-[48px] leading-[1.05] tracking-[-0.01em] m-0"
+                className="text-[28px] md:text-[48px] leading-[1.05] tracking-[-0.01em] m-0"
                 style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, color: "#E0E0E0" }}
               >
                 The people behind the rig<span className="text-amber">.</span>
@@ -586,8 +587,8 @@ export default function About() {
               const isTbd = !!tbd;
               return (
                 <li key={`${name}-${role}-${i}`} className="group">
-                  {/* Portrait frame */}
-                  <div className="relative w-full">
+                  {/* Portrait frame — smaller + centered on mobile */}
+                  <div className="relative w-full max-w-[200px] mx-auto md:max-w-none md:mx-0">
                     <div
                       className="relative aspect-[3/4] flex items-center justify-center overflow-hidden"
                       style={{ backgroundColor: "#222222" }}
@@ -617,7 +618,7 @@ export default function About() {
                   </div>
 
                   {/* Name + role */}
-                  <div className="mt-5">
+                  <div className="mt-5 text-center md:text-left">
                     <div
                       className="transition-colors duration-300"
                       style={{
@@ -681,61 +682,60 @@ export default function About() {
       </motion.section>
 
       {/* ══════════ § 04 — CTA ══════════ */}
-      <motion.section {...REVEAL} className="text-[#FAFAFA]">
-        <div className="max-w-[1440px] mx-auto px-14 pt-8 pb-[104px]">
-          <div className="grid grid-cols-2 gap-6">
+      <motion.section
+        {...REVEAL}
+        className="bg-[#1A1A1A]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)",
+          backgroundSize: "80px 80px",
+          backgroundPosition: "-1px -1px",
+        }}
+      >
+        <div className="max-w-[1440px] mx-auto px-5 md:px-14 pt-8 pb-16 md:pb-[104px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {/* Card 1 — maroon */}
-            <Link
-              href="/engineering"
-              className="p-14 pb-12 flex flex-col text-[#FAFAFA] no-underline min-h-[320px] bg-maroon border border-[#ffffff1f] group"
-              style={{
-                backgroundImage: "linear-gradient(to right, #ffffff08 1px, transparent 1px), linear-gradient(to bottom, #ffffff08 1px, transparent 1px)",
-                backgroundSize: "80px 80px",
-              }}
-            >
-              <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a] mb-10">
-                <span className="font-heading text-sm text-[#FAFAFA] tracking-[.04em] font-medium">01</span>
-                <span>The Rig</span>
+            <Link href="/engineering" className="cta-btn cta-btn--maroon">
+              <div className="cta-btn-outer">
+                <div className="cta-btn-inner">
+                  <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#f2d8d8b8]">
+                    <span className="font-medium text-[#FAFAFA]">
+                      01<span className="mx-1.5 text-[#ffffff59]">/</span>The Rig
+                    </span>
+                    <span className="text-amber">Technical</span>
+                  </div>
+
+                  <h3 className="font-heading font-semibold text-[28px] md:text-[40px] leading-[1.05] tracking-[-.015em] m-0 text-[#FAFAFA]">
+                    See what we&apos;re building<span className="text-amber">.</span>
+                  </h3>
+
+                  <p className="text-[15px] leading-[1.55] text-[#f2e4ccd0] m-0 max-w-[400px]">
+                    Full system breakdown. Mechanical, electrical, software, and ML &mdash; every subsystem documented.
+                  </p>
+                </div>
               </div>
-              <h3 className="font-heading font-semibold text-[40px] leading-[1.02] tracking-[-.012em] m-0 mb-4 text-[#FAFAFA]">
-                See what we&apos;re building<span className="text-amber">.</span>
-              </h3>
-              <p className="text-[16px] leading-[1.55] text-[#ffffffbf] m-0 mb-9 max-w-[400px]">
-                Full system breakdown. Mechanical, electrical, software, and ML &mdash; every subsystem documented.
-              </p>
-              <span className="oct-clip mt-auto self-start font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold px-[22px] py-3.5 bg-[#FAFAFA] text-maroon border border-[#FAFAFA] inline-flex items-center gap-3.5 group-hover:bg-amber group-hover:border-amber group-hover:text-ink">
-                See the Rig
-                <span className="inline-block w-[22px] h-px bg-current relative">
-                  <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
-                </span>
-              </span>
             </Link>
 
-            {/* Card 2 — dark */}
-            <Link
-              href="/apply#apply-form"
-              className="p-14 pb-12 flex flex-col text-[#FAFAFA] no-underline min-h-[320px] bg-[#222] border border-[#ffffff1f] group"
-              style={{
-                backgroundImage: "linear-gradient(to right, #ffffff08 1px, transparent 1px), linear-gradient(to bottom, #ffffff08 1px, transparent 1px)",
-                backgroundSize: "80px 80px",
-              }}
-            >
-              <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a] mb-10">
-                <span className="font-heading text-sm text-[#FAFAFA] tracking-[.04em] font-medium">02</span>
-                <span>The Team</span>
+            {/* Card 2 — grey */}
+            <Link href="/apply#apply-form" className="cta-btn cta-btn--grey">
+              <div className="cta-btn-outer">
+                <div className="cta-btn-inner">
+                  <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#1a1a1a99]">
+                    <span className="font-medium text-ink">
+                      02<span className="mx-1.5 text-[#1a1a1a66]">/</span>The Team
+                    </span>
+                    <span className="text-[#7a5810]">Recruiting</span>
+                  </div>
+
+                  <h3 className="font-heading font-semibold text-[28px] md:text-[40px] leading-[1.05] tracking-[-.015em] m-0 text-ink">
+                    Ready to build<span className="text-maroon">?</span>
+                  </h3>
+
+                  <p className="text-[15px] leading-[1.55] text-ink-2 m-0 max-w-[400px]">
+                    Applications for the 2026&ndash;27 cycle are open. Find your sub-team and start contributing.
+                  </p>
+                </div>
               </div>
-              <h3 className="font-heading font-semibold text-[40px] leading-[1.02] tracking-[-.012em] m-0 mb-4 text-[#FAFAFA]">
-                Ready to build<span className="text-amber">?</span>
-              </h3>
-              <p className="text-[16px] leading-[1.55] text-[#ffffffbf] m-0 mb-9 max-w-[400px]">
-                Applications for the 2026&ndash;27 cycle are open. Find your sub-team and start contributing.
-              </p>
-              <span className="oct-outline-light mt-auto self-start font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold px-[22px] py-3.5 text-[#FAFAFA] inline-flex items-center gap-3.5 group-hover:text-ink">
-                Apply Now
-                <span className="inline-block w-[22px] h-px bg-current relative">
-                  <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
-                </span>
-              </span>
             </Link>
           </div>
         </div>
