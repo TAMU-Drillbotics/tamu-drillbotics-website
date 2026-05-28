@@ -64,15 +64,12 @@ export default function Nav() {
     setMobileOpen(false);
   }, [pathname]);
 
-  // Lock body scroll while the mobile sheet is open.
-  useEffect(() => {
-    if (!mobileOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [mobileOpen]);
+  // No body-overflow:hidden scroll lock here: setting overflow on <body>
+  // turns it into a scroll container, which yanks the sticky nav's containing
+  // block out from under it — once you'd scrolled before opening the menu,
+  // the nav would jump back to the top of the document (off-screen). The
+  // sheet covers the viewport below the nav anyway, so accidental scroll-
+  // through is a minor cost compared to losing the nav.
 
   // On '/' the brand is always visible; on sub-pages it reveals on hover or via the auto-reveal timer.
   const showBrand = subdir === '' || hovered || autoReveal;
