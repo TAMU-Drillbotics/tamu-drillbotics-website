@@ -719,7 +719,7 @@ export default function Engineering() {
             <RoadmapChip />
           </div>
           <SecTitle>
-            Code that controls steel<span className="text-maroon">.</span>
+            Code that controls<span className="text-maroon">.</span>
           </SecTitle>
 
           <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-y-8 gap-x-8 md:gap-x-16 items-start pt-8 md:pt-12">
@@ -749,15 +749,8 @@ export default function Engineering() {
 
             <motion.div {...fadeUp(0.2)}>
               <div className="border border-rule-strong bg-white relative">
-                <div className="px-[18px] py-3.5 border-b border-rule flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-ink-3">
+                <div className="px-[18px] py-3.5 border-b border-rule flex items-center font-mono text-[10.5px] tracking-[.18em] uppercase text-ink-3">
                   <span className="text-ink">CTRL-LOOP</span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <span
-                      className="w-1.5 h-1.5 rounded-full bg-maroon"
-                      style={{ animation: "pulse-dot 1.6s ease-in-out infinite" }}
-                    />
-                    Active · 1 kHz
-                  </span>
                 </div>
 
                 <svg className="block w-full h-auto" viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg">
