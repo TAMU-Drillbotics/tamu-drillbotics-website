@@ -46,7 +46,21 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const onRouteChange = () => window.scrollTo(0, 0);
+    const onRouteChange = (url: string) => {
+      // Preserve in-page hash targets (e.g. /apply#apply-form) — those need
+      // to scroll to the element, not the top.
+      if (url.includes('#')) return;
+      // Lenis manages its own scroll state separate from window.scrollY.
+      // Calling window.scrollTo doesn't sync Lenis's internal target/animated
+      // values, so the page visually stays at the previous offset. Drive
+      // Lenis directly when it's available; fall back to window otherwise.
+      const lenis = window.__lenis;
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: true, force: true });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    };
     router.events.on('routeChangeComplete', onRouteChange);
     return () => router.events.off('routeChangeComplete', onRouteChange);
   }, [router.events]);
