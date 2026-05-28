@@ -748,12 +748,11 @@ export default function Home() {
 
           {/* Footer row */}
           <div className="px-14 mt-9 flex items-center justify-center">
-            <Link href="/sponsors" className="sb-btn">
-              <span className="sb-fill" />
-              <span className="sb-content">
-                <span className="sb-text-black">Become a Sponsor<span className="sb-arrow">&rarr;</span></span>
-                <span className="sb-text-white">Become a Sponsor<span className="sb-arrow">&rarr;</span></span>
-              </span>
+            <Link
+              href="/sponsors"
+              className="jtt-btn font-heading text-[12.5px] tracking-[.16em] uppercase font-semibold no-underline text-ink"
+            >
+              Become a Sponsor
             </Link>
           </div>
         </div>
