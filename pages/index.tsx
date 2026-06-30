@@ -763,7 +763,7 @@ export default function Home() {
         {/* Section header bar */}
         <div className="max-w-[1440px] mx-auto px-5 md:px-14 py-3.5 flex items-center gap-[18px] font-mono text-[11px] tracking-[.18em] uppercase text-ink-3">
           <span className="inline-flex items-baseline gap-2.5 text-ink font-medium">
-            <span className="text-maroon font-medium">&sect; 04</span> CTA
+            <span className="text-maroon font-medium">&sect; 02</span> CTA
           </span>
           <span className="flex-1 h-px bg-rule-strong" />
         </div>
@@ -784,7 +784,7 @@ export default function Home() {
                 <div className="cta-btn-inner">
                   <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#f2d8d8b8]">
                     <span className="font-medium text-[#FAFAFA]">
-                      01<span className="mx-1.5 text-[#ffffff59]">/</span>The Rig
+                      The Rig
                     </span>
                     <span className="text-amber">Technical</span>
                   </div>
@@ -813,7 +813,7 @@ export default function Home() {
                 <div className="cta-btn-inner">
                   <div className="flex items-baseline justify-between font-mono text-[12px] tracking-[.22em] uppercase text-[#1a1a1a99]">
                     <span className="font-medium text-ink">
-                      02<span className="mx-1.5 text-[#1a1a1a66]">/</span>The Team
+                      The Team
                     </span>
                     <span className="text-[#7a5810]">Recruiting</span>
                   </div>
