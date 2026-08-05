@@ -41,6 +41,23 @@
   to { stroke-dashoffset: -24; }
 }
 
+/* Marching-ants flow arrows (§ 04 control-loop schematic).
+   `stroke-dashoffset` is not a compositable property — every frame of this
+   animation is a main-thread re-raster of the whole SVG, and the browser does
+   NOT pause it when the diagram scrolls out of view. `data-paused` is driven
+   by an IntersectionObserver so it only runs while it's actually visible. */
+.flow-dash {
+  animation: flow-dash 1.4s linear infinite;
+}
+.flow-dash[data-paused='true'] {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow-dash {
+    animation: none;
+  }
+}
+
 
 .subs-scroll {
   scrollbar-width: none;

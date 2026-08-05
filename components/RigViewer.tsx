@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useRef, useState, type ComponentRef } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Stage, useGLTF, Html, useProgress } from '@react-three/drei';
+import { OrbitControls, Stage, useGLTF, Html, useProgress, type StageProps } from '@react-three/drei';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 // Draco decoder hosted by Google — required because the GLB was Draco-compressed
@@ -11,6 +11,21 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 useGLTF.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
 
 const RIG_URL = '/models/rig.glb';
+
+// Turns off the `observe` on the <Bounds> that <Stage> wraps the model in.
+//
+// With `observe` on, every canvas resize runs a full Box3.setFromObject()
+// traversal of the entire model — inside a useLayoutEffect, i.e. synchronously
+// between scroll and paint. The hero's scroll-driven collapse animates the
+// render frame's `top`, and the Canvas below re-measures with debounce 0, so
+// that traversal was running on every single scroll frame. The initial fit is
+// unaffected: <Stage>'s own <Refit> still fits once the model is centered, and
+// Bounds always refreshes on first mount regardless of `observe`.
+//
+// Passed untyped because drei's <Stage> forwards its rest props to <Bounds>
+// (core/Stage.js) but declares that rest as <group> props, so `observe` isn't
+// in StageProps. Verified against @react-three/drei 10.7.x.
+const DISABLE_BOUNDS_OBSERVE = { observe: false } as unknown as Partial<StageProps>;
 
 // Pull the underlying three OrbitControls instance type off the drei component
 // — gives us reset() / saveState() without adding a `three-stdlib` import.
@@ -134,14 +149,51 @@ function MobileAutoRotate({ speed = 0.25 }: { speed?: number }) {
   return null;
 }
 
+// Nothing in this scene ever moves: the rig is a static GLB, and only the
+// camera is animated. three, however, re-renders the spotlight's 1024²
+// shadow map on EVERY frame, re-submitting the whole model's geometry each
+// time. Let the scene settle — <Stage> repositions its lights once <Center>
+// reports the model's radius, which takes a few frames — then freeze the
+// shadow map. The camera orbiting doesn't invalidate it; shadow maps are
+// rendered from the light, not the viewer.
+function FreezeShadowMap({ settleFrames = 90 }: { settleFrames?: number }) {
+  const frames = useRef(0);
+  const shadowMap = useRef<THREE.WebGLRenderer['shadowMap'] | null>(null);
+
+  // Reads the renderer off the frame state rather than closing over
+  // useThree()'s value — same object, but it keeps the mutation out of a
+  // captured hook result.
+  useFrame((state) => {
+    shadowMap.current = state.gl.shadowMap;
+    if (frames.current < settleFrames) {
+      frames.current++;
+      return;
+    }
+    if (state.gl.shadowMap.autoUpdate) {
+      state.gl.shadowMap.autoUpdate = false;
+      state.gl.shadowMap.needsUpdate = true; // one final pass, then never again
+    }
+  });
+
+  // This subtree sits under <Suspense>; if it ever re-suspends, hand shadow
+  // updates back so the reloaded scene gets a correct map before we re-freeze.
+  useEffect(
+    () => () => {
+      if (shadowMap.current) shadowMap.current.autoUpdate = true;
+    },
+    [],
+  );
+
+  return null;
+}
+
 // Pushes the rendered image up within the black frame so the rig's bottom
 // (and its contact shadow) isn't clipped.
 //
 // Earlier attempts moved the camera or the model — both failed because
-// <Stage> wraps the rig in drei's <Bounds observe>, which RE-FRAMES the rig
-// (moving the camera + OrbitControls target) on every canvas resize. The
-// engineering page resizes the canvas constantly while scrolling, so any
-// transform-based nudge gets continuously overwritten.
+// <Stage> wraps the rig in drei's <Bounds>, which RE-FRAMES the rig (moving
+// the camera + OrbitControls target) whenever it re-fits, overwriting any
+// transform-based nudge.
 //
 // This instead uses the camera's *view offset* — part of the projection
 // matrix, not the camera transform. <Bounds> never touches it, so the shift
@@ -183,6 +235,26 @@ export default function RigViewer({ captureMode = false }: { captureMode?: boole
   // Tracks the previous isActive value so the deactivation effect below can
   // detect a true → false edge without firing on initial mount.
   const prevActiveRef = useRef(false);
+
+  // Is the viewer anywhere near the screen?
+  //
+  // A <Canvas> does NOT pause itself when scrolled away. Left alone, this one
+  // renders three full traversals of the rig's geometry on every frame, for
+  // the entire life of the page — the spotlight's shadow map, ContactShadows'
+  // depth pass (plus four fullscreen blurs), and the scene itself, at up to
+  // 2× DPR with MSAA. That is the whole frame budget on an integrated GPU,
+  // which is why scrolling stutters *page-wide* — including down in § 04/§ 05
+  // where the rig is thousands of pixels off screen. Gate the loop instead.
+  const [inView, setInView] = useState(true);
+  useEffect(() => {
+    const wrap = wrapperRef.current;
+    if (!wrap) return;
+    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), {
+      rootMargin: '200px', // resume just before it scrolls back in
+    });
+    io.observe(wrap);
+    return () => io.disconnect();
+  }, []);
 
   // Click-to-activate: scroll only zooms when the user explicitly engages,
   // so passing the cursor through the canvas mid-page-scroll doesn't hijack scroll.
@@ -285,6 +357,12 @@ export default function RigViewer({ captureMode = false }: { captureMode?: boole
         // collapse fires constant resizes during scroll — debounce 200ms so
         // those don't interrupt the auto-rotate frame loop.
         resize={{ debounce: isMobile ? 200 : 0 }}
+        // 'never' halts the loop entirely while off screen (the canvas keeps
+        // its last drawn frame, and the scene is static, so there is nothing
+        // to catch up on when it resumes). Capture mode always renders — the
+        // Puppeteer script in scripts/render-rig-video.mjs steps the camera
+        // frame by frame and needs the loop running to draw each angle.
+        frameloop={captureMode || inView ? 'always' : 'never'}
       >
         <Suspense fallback={<Loader />}>
           <Stage
@@ -294,9 +372,15 @@ export default function RigViewer({ captureMode = false }: { captureMode?: boole
             environment="warehouse"
             // ── ADJUSTABLE: lighting intensity (0–2 typical)
             intensity={0.4}
-            shadows={{ type: 'contact', opacity: 0.5, blur: 2 }}
+            // `frames` caps drei's ContactShadows, which otherwise re-renders
+            // its depth pass + four fullscreen blurs on every single frame,
+            // forever. The rig never moves and the shadow is cast from a fixed
+            // overhead orthographic camera, so it is identical on frame 60 and
+            // frame 60,000 — render it while the scene settles, then stop.
+            shadows={{ type: 'contact', opacity: 0.5, blur: 2, frames: 60 }}
             // ── ADJUSTABLE: padding around the model (1.0 = tight, 2.0 = loose)
             adjustCamera={1.2}
+            {...DISABLE_BOUNDS_OBSERVE}
           >
             <Rig />
           </Stage>
@@ -304,6 +388,8 @@ export default function RigViewer({ captureMode = false }: { captureMode?: boole
           <SaveInitialView />
           {/* Lifts the rendered rig up in the frame so its bottom isn't clipped. */}
           <FrameShift />
+          {/* Stops re-rendering the spotlight's shadow map once it's settled. */}
+          <FreezeShadowMap />
         </Suspense>
 
         {/* Mobile: skip OrbitControls (its connect() forces touch-action:none

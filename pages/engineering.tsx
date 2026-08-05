@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { TimelineOrchestrator, useTimelineBeat } from "@/components/TimelineOrchestrator";
 import { ENGINEERING_HERO_TIMELINE } from "@/lib/engineeringHeroTimeline";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { useInView } from "@/hooks/useInView";
 
 // 3D rig viewer — client-only (three.js + WebGL). Pulsing skeleton matches the
 // viewer's dimensions so layout doesn't jump while the chunk + GLB load.
@@ -35,6 +36,15 @@ const fadeUp = (delay = 0) => ({
 // Variants for the § 05 DATA section. The grid wrapper triggers the whole
 // sequence via whileInView; children inherit and animate from their own
 // variants so the chained delays preserve the desktop timing on mobile too.
+//
+// Keep the chained delays below tight. `pathLength` animates via
+// stroke-dasharray/dashoffset, which repaints on the main thread — so the
+// length of this ladder is literally how long the section competes with
+// scrolling for main-thread time. The trigger fires at amount: 0.05, i.e.
+// while the user is still scrolling toward the section, so a four-second
+// ladder (the original) spent all four seconds repainting three SVGs during
+// the scroll that brought it into view. ~2s total reads the same and costs
+// half as much.
 const DATA_CARD_VARIANTS = (delay: number) => ({
   hidden: { opacity: 0, y: 18 },
   visible: {
@@ -166,6 +176,127 @@ function RoadmapChip() {
       />
       <span>Planned &middot; Not yet deployed</span>
     </motion.div>
+  );
+}
+
+/* ════════ § 04 — control-loop schematic ════════
+   Split out of the page body so the marching-ants flow arrows can be gated on
+   visibility. They animate `stroke-dashoffset`, which the compositor can't
+   take: each frame is a main-thread re-raster of this whole 640×420 SVG,
+   pattern-filled background grid and all. CSS animations aren't paused when
+   they scroll off screen, so left alone this burns paint time for the entire
+   life of the page — including while the user is scrolling somewhere else.
+   `contain: paint` keeps the repaints from invalidating the surrounding card. */
+function CtrlLoopDiagram() {
+  const [ref, inView] = useInView<HTMLDivElement>({ rootMargin: "150px" });
+
+  return (
+    <div ref={ref} style={{ contain: "paint" }}>
+      <svg className="block w-full h-auto" viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker
+            id="loop-arrow"
+            viewBox="0 0 10 10"
+            refX="9"
+            refY="5"
+            markerWidth="8"
+            markerHeight="8"
+            orient="auto-start-reverse"
+          >
+            <path d="M0,0 L10,5 L0,10 Z" fill="#500000" />
+          </marker>
+          <marker
+            id="loop-arrow-amber"
+            viewBox="0 0 10 10"
+            refX="9"
+            refY="5"
+            markerWidth="8"
+            markerHeight="8"
+            orient="auto-start-reverse"
+          >
+            <path d="M0,0 L10,5 L0,10 Z" fill="#C8963E" />
+          </marker>
+          <pattern id="loop-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M40 0H0V40" fill="none" stroke="#1a1a1a09" strokeWidth="1" />
+          </pattern>
+        </defs>
+
+        <rect width="640" height="420" fill="url(#loop-grid)" />
+
+        <text x="320" y="220" textAnchor="middle" fontFamily="Chakra Petch" fontSize="20" fontWeight="600" fill="#1A1A1A">
+          1 kHz
+        </text>
+        <text x="320" y="260" textAnchor="middle" fontFamily="JetBrains Mono" fontSize="9" fill="#a5a5a5" letterSpacing="3">
+          CLOSED · DETERMINISTIC
+        </text>
+
+        {/* nodes */}
+        {[
+          { x: 50, y: 40, stage: "01", title: "SENSORS", sub: "7 CH · ACQ", maroonBorder: false, amber: false },
+          { x: 240, y: 20, stage: "02", title: "CONDITION", sub: "FILTER · SCALE", maroonBorder: false, amber: false },
+          { x: 430, y: 40, stage: "03", title: "P.I.D CORE", sub: "3-AXIS · COUPLED", maroonBorder: false, amber: false },
+          { x: 430, y: 320, stage: "04", title: "M.L INFERENCE", sub: "ADVISORY · TRIM", maroonBorder: false, amber: true },
+          { x: 240, y: 340, stage: "05", title: "COMMANDS", sub: "CAN · DISPATCH", maroonBorder: false, amber: false },
+          { x: 50, y: 320, stage: "06", title: "DRILL", sub: "PHYSICAL · WORLD", maroonBorder: true, amber: false },
+        ].map((n) => {
+          const stroke = n.amber ? "#C8963E" : n.maroonBorder ? "#500000" : "#1A1A1A";
+          const strokeWidth = n.maroonBorder ? 2 : 1.5;
+          const stageFill = n.amber ? "#a07217" : "#500000";
+          return (
+            <g key={n.stage}>
+              <rect x={n.x} y={n.y} width="160" height="60" fill="#fff" stroke={stroke} strokeWidth={strokeWidth} />
+              <text x={n.x + 10} y={n.y + 18} fontFamily="JetBrains Mono" fontSize="9" fill={stageFill} letterSpacing="2">
+                STAGE · {n.stage}
+              </text>
+              <text x={n.x + 10} y={n.y + 42} fontFamily="Chakra Petch" fontSize="16" fontWeight="600" fill="#1A1A1A">
+                {n.title}
+              </text>
+              <text x={n.x + 10} y={n.y + 56} fontFamily="JetBrains Mono" fontSize="8" fill="#6b6b6b" letterSpacing="2">
+                {n.sub}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* flow arcs */}
+        {[
+          "M210,70 L240,50",
+          "M400,50 L430,70",
+          "M510,100 L510,320",
+          "M430,360 L400,370",
+          "M240,370 L210,370",
+          "M130,320 L130,100",
+        ].map((d, i) => (
+          <path
+            key={i}
+            d={d}
+            fill="none"
+            stroke="#500000"
+            strokeWidth="1.5"
+            strokeDasharray="6 6"
+            markerEnd="url(#loop-arrow)"
+            className="flow-dash"
+            data-paused={!inView}
+          />
+        ))}
+
+        {/* ML advisory arc */}
+        <path
+          d="M430,340 C 380,280 380,180 430,100"
+          fill="none"
+          stroke="#C8963E"
+          strokeWidth="1.2"
+          strokeDasharray="3 3"
+          markerEnd="url(#loop-arrow-amber)"
+        />
+        <text x="20" y="412" fontFamily="JetBrains Mono" fontSize="9" fill="#a5a5a5" letterSpacing="2">
+          DWG · CL-001
+        </text>
+        <text x="540" y="412" fontFamily="JetBrains Mono" fontSize="9" fill="#a5a5a5" letterSpacing="2">
+          REV A
+        </text>
+      </svg>
+    </div>
   );
 }
 
@@ -753,109 +884,7 @@ export default function Engineering() {
                   <span className="text-ink">CTRL-LOOP</span>
                 </div>
 
-                <svg className="block w-full h-auto" viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <marker
-                      id="loop-arrow"
-                      viewBox="0 0 10 10"
-                      refX="9"
-                      refY="5"
-                      markerWidth="8"
-                      markerHeight="8"
-                      orient="auto-start-reverse"
-                    >
-                      <path d="M0,0 L10,5 L0,10 Z" fill="#500000" />
-                    </marker>
-                    <marker
-                      id="loop-arrow-amber"
-                      viewBox="0 0 10 10"
-                      refX="9"
-                      refY="5"
-                      markerWidth="8"
-                      markerHeight="8"
-                      orient="auto-start-reverse"
-                    >
-                      <path d="M0,0 L10,5 L0,10 Z" fill="#C8963E" />
-                    </marker>
-                    <pattern id="loop-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                      <path d="M40 0H0V40" fill="none" stroke="#1a1a1a09" strokeWidth="1" />
-                    </pattern>
-                  </defs>
-
-                  <rect width="640" height="420" fill="url(#loop-grid)" />
-
-                  <text x="320" y="220" textAnchor="middle" fontFamily="Chakra Petch" fontSize="20" fontWeight="600" fill="#1A1A1A">
-                    1 kHz
-                  </text>
-                  <text x="320" y="260" textAnchor="middle" fontFamily="JetBrains Mono" fontSize="9" fill="#a5a5a5" letterSpacing="3">
-                    CLOSED · DETERMINISTIC
-                  </text>
-
-                  {/* nodes */}
-                  {[
-                    { x: 50, y: 40, stage: "01", title: "SENSORS", sub: "7 CH · ACQ", maroonBorder: false, amber: false },
-                    { x: 240, y: 20, stage: "02", title: "CONDITION", sub: "FILTER · SCALE", maroonBorder: false, amber: false },
-                    { x: 430, y: 40, stage: "03", title: "P.I.D CORE", sub: "3-AXIS · COUPLED", maroonBorder: false, amber: false },
-                    { x: 430, y: 320, stage: "04", title: "M.L INFERENCE", sub: "ADVISORY · TRIM", maroonBorder: false, amber: true },
-                    { x: 240, y: 340, stage: "05", title: "COMMANDS", sub: "CAN · DISPATCH", maroonBorder: false, amber: false },
-                    { x: 50, y: 320, stage: "06", title: "DRILL", sub: "PHYSICAL · WORLD", maroonBorder: true, amber: false },
-                  ].map((n) => {
-                    const stroke = n.amber ? "#C8963E" : n.maroonBorder ? "#500000" : "#1A1A1A";
-                    const strokeWidth = n.maroonBorder ? 2 : 1.5;
-                    const stageFill = n.amber ? "#a07217" : "#500000";
-                    return (
-                      <g key={n.stage}>
-                        <rect x={n.x} y={n.y} width="160" height="60" fill="#fff" stroke={stroke} strokeWidth={strokeWidth} />
-                        <text x={n.x + 10} y={n.y + 18} fontFamily="JetBrains Mono" fontSize="9" fill={stageFill} letterSpacing="2">
-                          STAGE · {n.stage}
-                        </text>
-                        <text x={n.x + 10} y={n.y + 42} fontFamily="Chakra Petch" fontSize="16" fontWeight="600" fill="#1A1A1A">
-                          {n.title}
-                        </text>
-                        <text x={n.x + 10} y={n.y + 56} fontFamily="JetBrains Mono" fontSize="8" fill="#6b6b6b" letterSpacing="2">
-                          {n.sub}
-                        </text>
-                      </g>
-                    );
-                  })}
-
-                  {/* flow arcs */}
-                  {[
-                    "M210,70 L240,50",
-                    "M400,50 L430,70",
-                    "M510,100 L510,320",
-                    "M430,360 L400,370",
-                    "M240,370 L210,370",
-                    "M130,320 L130,100",
-                  ].map((d, i) => (
-                    <path
-                      key={i}
-                      d={d}
-                      fill="none"
-                      stroke="#500000"
-                      strokeWidth="1.5"
-                      strokeDasharray="6 6"
-                      markerEnd="url(#loop-arrow)"
-                      style={{ animation: "flow-dash 1.4s linear infinite" }}
-                    />
-                  ))}
-
-                  {/* ML advisory arc */}
-                  <path
-                    d="M430,340 C 380,280 380,180 430,100"
-                    fill="none"
-                    stroke="#C8963E"
-                    strokeWidth="1.2"
-                    strokeDasharray="3 3"
-                    markerEnd="url(#loop-arrow-amber)"
-                  />
-                  <text x="20" y="412" fontFamily="JetBrains Mono" fontSize="9" fill="#a5a5a5" letterSpacing="2">
-                    DWG · CL-001
-                  </text>
-                  <text x="540" y="412" fontFamily="JetBrains Mono" fontSize="9" fill="#a5a5a5" letterSpacing="2">
-                    REV A
-                  </text>
-                </svg>
+                <CtrlLoopDiagram />
 
                 <div className="grid grid-cols-2 md:grid-cols-4 border-t border-rule">
                   {[
@@ -913,7 +942,7 @@ export default function Engineering() {
           >
             {/* D-01 */}
             <motion.div
-              variants={DATA_CARD_VARIANTS(0.1)}
+              variants={DATA_CARD_VARIANTS(0.06)}
               className="border border-rule-strong bg-white p-6 flex flex-col"
             >
               <div className="font-mono text-[10px] tracking-[.22em] uppercase text-maroon mb-3.5">D-01 · Sensor Fusion</div>
@@ -925,23 +954,24 @@ export default function Engineering() {
                 vector — denoised, time-aligned, and physically-constrained. The fused estimate, not raw sensors, is what
                 the controller and ML layer see.
               </p>
-              <div className="mt-auto border border-rule bg-[#fafafa] h-[160px] relative flex items-center justify-center">
+              <div className="mt-auto border border-rule bg-[#fafafa] h-[160px] relative flex items-center justify-center"
+                style={{ contain: "paint" }}>
                 <svg viewBox="0 0 320 140" className="w-[88%] h-[88%]" xmlns="http://www.w3.org/2000/svg">
                   <g fill="none" strokeWidth="1">
                     <motion.path
                       d="M0 80 Q 40 30 80 75 T 160 70 T 240 80 T 320 75"
                       stroke="#1a1a1a26"
-                      variants={DATA_PATH_VARIANTS(0.45)}
+                      variants={DATA_PATH_VARIANTS(0.25, 0.7)}
                     />
                     <motion.path
                       d="M0 95 Q 40 60 80 90 T 160 85 T 240 95 T 320 90"
                       stroke="#C8963E55"
-                      variants={DATA_PATH_VARIANTS(0.45)}
+                      variants={DATA_PATH_VARIANTS(0.25, 0.7)}
                     />
                     <motion.path
                       d="M0 65 Q 40 100 80 60 T 160 55 T 240 70 T 320 60"
                       stroke="#1a1a1a44"
-                      variants={DATA_PATH_VARIANTS(0.45)}
+                      variants={DATA_PATH_VARIANTS(0.25, 0.7)}
                     />
                   </g>
                   <motion.path
@@ -949,7 +979,7 @@ export default function Engineering() {
                     stroke="#500000"
                     strokeWidth="1.8"
                     fill="none"
-                    variants={DATA_PATH_VARIANTS(1, 0.8)}
+                    variants={DATA_PATH_VARIANTS(0.5, 0.6)}
                   />
                   <g fontFamily="JetBrains Mono" fontSize="8" fill="#6b6b6b" letterSpacing="2">
                     <text x="6" y="14">RAW STREAMS</text>
@@ -959,7 +989,7 @@ export default function Engineering() {
             </motion.div>
 
             {/* D-02 */}
-            <motion.div variants={DATA_CARD_VARIANTS(0.18)} className="border border-rule-strong bg-white p-6 flex flex-col">
+            <motion.div variants={DATA_CARD_VARIANTS(0.12)} className="border border-rule-strong bg-white p-6 flex flex-col">
               <div className="font-mono text-[10px] tracking-[.22em] uppercase text-maroon mb-3.5">D-02 · Model Training</div>
               <h3 className="font-heading font-semibold text-[24px] text-ink m-0 mb-3.5 tracking-[.01em] leading-[1.05]">
                 Offline, dataset-driven, reproducible.
@@ -969,13 +999,14 @@ export default function Engineering() {
                 checkpointed to a registry. Each release ships with a model card, hyperparameter manifest, and evaluation
                 harness.
               </p>
-              <div className="mt-auto border border-rule bg-[#fafafa] h-[160px] relative flex items-center justify-center">
+              <div className="mt-auto border border-rule bg-[#fafafa] h-[160px] relative flex items-center justify-center"
+                style={{ contain: "paint" }}>
                 <svg viewBox="0 0 320 140" className="w-[88%] h-[88%]" xmlns="http://www.w3.org/2000/svg">
                   {/* connectors */}
                   {[
-                    { d: "M70 70 L90 70", delay: 1.9 },
-                    { d: "M150 70 L170 70", delay: 2.1 },
-                    { d: "M230 70 L250 70", delay: 2.3 },
+                    { d: "M70 70 L90 70", delay: 0.6 },
+                    { d: "M150 70 L170 70", delay: 0.7 },
+                    { d: "M230 70 L250 70", delay: 0.8 },
                   ].map((c) => (
                     <motion.path
                       key={c.d}
@@ -988,10 +1019,10 @@ export default function Engineering() {
                   ))}
                   {/* boxes */}
                   {[
-                    { x: 10, label: "RUN CSV", delay: 1.8, accent: false },
-                    { x: 90, label: "TRAIN", delay: 2.0, accent: false },
-                    { x: 170, label: "EVAL", delay: 2.2, accent: false },
-                    { x: 250, label: "CKPT", delay: 2.4, accent: true },
+                    { x: 10, label: "RUN CSV", delay: 0.55, accent: false },
+                    { x: 90, label: "TRAIN", delay: 0.65, accent: false },
+                    { x: 170, label: "EVAL", delay: 0.75, accent: false },
+                    { x: 250, label: "CKPT", delay: 0.85, accent: true },
                   ].map((b) => (
                     <motion.g
                       key={b.label}
@@ -1028,7 +1059,7 @@ export default function Engineering() {
             </motion.div>
 
             {/* D-03 */}
-            <motion.div variants={DATA_CARD_VARIANTS(0.26)} className="border border-rule-strong bg-white p-6 flex flex-col">
+            <motion.div variants={DATA_CARD_VARIANTS(0.18)} className="border border-rule-strong bg-white p-6 flex flex-col">
               <div className="font-mono text-[10px] tracking-[.22em] uppercase text-maroon mb-3.5">D-03 · Real-Time Inference</div>
               <h3 className="font-heading font-semibold text-[24px] text-ink m-0 mb-3.5 tracking-[.01em] leading-[1.05]">
                 On-rig, low-latency, advisory.
@@ -1037,13 +1068,14 @@ export default function Engineering() {
                 Quantized models run on a dedicated CUDA-accelerated edge module beside the controller. The inference
                 pipeline is hard-budgeted: drop a frame, miss a deadline, fall through to PID-only — never block the loop.
               </p>
-              <div className="mt-auto border border-rule bg-[#fafafa] h-[160px] relative flex items-center justify-center">
+              <div className="mt-auto border border-rule bg-[#fafafa] h-[160px] relative flex items-center justify-center"
+                style={{ contain: "paint" }}>
                 <svg viewBox="0 0 320 140" className="w-[88%] h-[88%]" xmlns="http://www.w3.org/2000/svg">
                   {/* connectors */}
                   {[
-                    { d: "M70 70 L90 70", delay: 2.7 },
-                    { d: "M150 70 L170 70", delay: 2.9 },
-                    { d: "M230 70 L250 70", delay: 3.1 },
+                    { d: "M70 70 L90 70", delay: 1.0 },
+                    { d: "M150 70 L170 70", delay: 1.1 },
+                    { d: "M230 70 L250 70", delay: 1.2 },
                   ].map((c) => (
                     <motion.path
                       key={c.d}
@@ -1056,10 +1088,10 @@ export default function Engineering() {
                   ))}
                   {/* boxes */}
                   {[
-                    { x: 10, label: "FRAME IN", delay: 2.6, accent: "none" as const },
-                    { x: 90, label: "CUDA INF", delay: 2.8, accent: "amber" as const },
-                    { x: 170, label: "TRIM OUT", delay: 3.0, accent: "none" as const },
-                    { x: 250, label: "PID", delay: 3.2, accent: "none" as const },
+                    { x: 10, label: "FRAME IN", delay: 0.95, accent: "none" as const },
+                    { x: 90, label: "CUDA INF", delay: 1.05, accent: "amber" as const },
+                    { x: 170, label: "TRIM OUT", delay: 1.15, accent: "none" as const },
+                    { x: 250, label: "PID", delay: 1.25, accent: "none" as const },
                   ].map((b) => {
                     const stroke =
                       b.accent === "amber" ? "#C8963E" : "#1a1a1a";
@@ -1102,7 +1134,7 @@ export default function Engineering() {
                     strokeWidth="1"
                     strokeDasharray="3 3"
                     fill="none"
-                    variants={DATA_PATH_VARIANTS(3.45, 0.55)}
+                    variants={DATA_PATH_VARIANTS(1.35, 0.4)}
                   />
                   <text x="6" y="14" fontFamily="JetBrains Mono" fontSize="8" fill="#a07217" letterSpacing="2">
                     PIPELINE · IN-001
@@ -1115,7 +1147,7 @@ export default function Engineering() {
                     fontSize="8"
                     fill="#a07217"
                     letterSpacing="2"
-                    variants={DATA_FADE_VARIANTS(4.0)}
+                    variants={DATA_FADE_VARIANTS(1.55)}
                   >
                     BUDGET · &lt; 800µs
                   </motion.text>
