@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { Chakra_Petch, Barlow, JetBrains_Mono, Outfit, Space_Grotesk, DM_Sans } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
 import { NAV_HEIGHT_PX } from "@/components/Nav";
+import { Analytics } from "@vercel/analytics/next";
 
 const chakraPetch = Chakra_Petch({
   variable: "--font-chakra-petch",
@@ -76,6 +77,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <SmoothScroll>
         <Component {...pageProps} />
       </SmoothScroll>
+      <Analytics />
     </div>
   );
 }
