@@ -1,22 +1,12 @@
 import Link from "next/link";
-import dynamic from "next/dynamic";
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import RigStage from "@/components/RigStage";
 import { TimelineOrchestrator, useTimelineBeat } from "@/components/TimelineOrchestrator";
 import { ENGINEERING_HERO_TIMELINE } from "@/lib/engineeringHeroTimeline";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useInView } from "@/hooks/useInView";
-
-// 3D rig viewer — client-only (three.js + WebGL). Pulsing skeleton matches the
-// viewer's dimensions so layout doesn't jump while the chunk + GLB load.
-const RigViewer = dynamic(() => import("@/components/RigViewer"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full bg-[#0A0A0A] rounded-lg overflow-hidden border border-[#500000]/20 animate-pulse" />
-  ),
-});
 
 /* ════════ shared motion presets ════════ */
 const REVEAL = {
@@ -347,56 +337,44 @@ const actuators: ActuatorRow[] = [
 
 
 /* ═══════════════════════════════════════════════════════
-   § 01 hero — orchestrated entrance + scroll-driven collapse
+   § 01 hero — orchestrated entrance
    ═══════════════════════════════════════════════════════
 
    Layout strategy:
-   - The outer wrapper is 150dvh tall, giving the sticky stage 50dvh of
-     scroll travel to consume before it releases and § 03 flows in.
-   - The sticky stage pins at top: var(--nav-height), exactly the viewport
-     minus the nav, so it is the only thing on screen while pinned.
-   - The headline holds the stage's top 28vh; the render frame fills the
-     rest. Scroll progress drives the headline up by -28vh while the render
-     frame's top shrinks 28vh → 0, expanding into the freed space. Fully
-     reversible by scrolling back up.
+   - One static viewport-height stage: headline on top, render panel filling
+     the rest. No sticky pin and no scroll travel to consume.
    - The entrance (headline wipe, render-frame fade) is a one-shot
      orchestrated sequence, independent of scroll.
-   - prefers-reduced-motion: the entrance shows its final state at once;
-     the scroll-driven collapse still works, being user-initiated. */
+   - prefers-reduced-motion: the entrance shows its final state at once.
 
-const HEADLINE_VH = 28;
+   This section used to be a 150dvh wrapper with a sticky stage, where scroll
+   progress slid the headline up by -28vh while the render frame's `top`
+   shrank 28vh → 0 to expand into the freed space. That was removed because
+   `top` is a layout property: animating it resized the render panel — and
+   therefore the <Canvas> inside it — on every scroll frame. Each of those
+   resizes ran a full WebGLRenderer.setSize(), reallocating the MSAA drawing
+   buffer and shadow render targets at up to 2x DPR, plus a camera
+   setViewOffset()/updateProjectionMatrix(). A GPU buffer reallocation per
+   wheel tick is what the remaining scroll stutter actually was. A static
+   panel never resizes, so that cost is structurally gone rather than
+   optimized down. */
 
-// The sticky stage stays pinned for the first 50dvh of the 150dvh wrapper's
-// scroll travel — scrollYProgress 0 → 1/3. The collapse completes within that
-// window so the headline is fully cleared right as the stage releases.
-const COLLAPSE_END = 1 / 3;
+// Height of the headline band above the render panel. Whatever this does not
+// use, the panel takes — and because the turntable footage is square and
+// letterboxed, giving the panel height makes the rig bigger in BOTH axes, not
+// just taller.
+//
+// A clamp rather than a bare vh: the band is bottom-aligned, so at 28vh most
+// of it was empty space above the type. The lower bound keeps the 148px
+// headline (127px line box) clear of the registration marks at y=42 on short
+// viewports, where a bare 20vh would collide.
+const HEADLINE_BAND = "clamp(190px, 20vh, 280px)";
 
 function RigHero() {
   const isMobile = useIsMobile();
   const headlineBeat = useTimelineBeat("headlineReveal");
   const frameBeat = useTimelineBeat("renderFrame");
   const reducedMotion = headlineBeat.reducedMotion;
-
-  // Scroll-driven collapse. scrollYProgress (0 → 1) over the 150dvh wrapper
-  // drives the headline out and the render frame up. Raw motion values bound
-  // straight to style — no spring/smoothing layer (per spec; the resulting
-  // wheel-step lag is a known issue, addressed separately).
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: wrapperRef,
-    offset: ["start start", "end start"],
-  });
-  const headlineY = useTransform(
-    scrollYProgress,
-    [0, COLLAPSE_END],
-    ["0vh", `-${HEADLINE_VH}vh`],
-  );
-  const headlineOpacity = useTransform(scrollYProgress, [0, COLLAPSE_END], [1, 0]);
-  const renderFrameTop = useTransform(
-    scrollYProgress,
-    [0, COLLAPSE_END],
-    [`${HEADLINE_VH}vh`, "0vh"],
-  );
 
   if (isMobile) {
     return (
@@ -416,30 +394,16 @@ function RigHero() {
               The Rig<span className="text-maroon">.</span>
             </motion.span>
           </h1>
-          {/* Mobile: pre-rendered turntable video instead of live WebGL.
-              The full RigViewer (13 MB Draco-compressed GLB + warehouse HDRI
-              + per-frame shading) was unplayably heavy on phones; this is the
-              same camera path baked into a 2.9 MB MP4 / 5.1 MB WebM that costs
-              the device almost nothing to play. Generated by
-              scripts/render-rig-video.mjs. */}
+          {/* Mobile: baked turntable only, no switch. The live viewer was
+              unplayably heavy on phones — that is why the video exists — so
+              there is nothing worth offering to opt into here. */}
           <motion.div
-            className="w-full h-[60svh] bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#500000]/20"
+            className="w-full h-[60svh]"
             initial={{ opacity: 0 }}
             animate={{ opacity: frameBeat.hasFired ? 1 : 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeOut" }}
           >
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              className="block w-full h-full object-contain"
-              aria-label="Autonomous drilling rig 3D model, turntable view"
-            >
-              <source src="/models/rig-loop.webm" type="video/webm" />
-              <source src="/models/rig-loop.mp4" type="video/mp4" />
-            </video>
+            <RigStage showSwitch={false} />
           </motion.div>
         </div>
       </section>
@@ -447,22 +411,17 @@ function RigHero() {
   }
 
   return (
-    <section ref={wrapperRef} className="relative" style={{ height: "150dvh" }}>
-      <div className="sticky top-[var(--nav-height)] h-[calc(100dvh-var(--nav-height))] max-w-[1440px] mx-auto px-5 md:px-14 pb-6">
-        <div className="relative w-full h-full overflow-hidden">
-          {/* Headline — slides up and fades out with scroll progress. A
-              SIBLING of the render frame; its motion never touches the frame. */}
-          <motion.div
-            className="absolute left-0 right-0 top-0 flex flex-col justify-end"
-            style={{
-              height: `${HEADLINE_VH}vh`,
-              y: headlineY,
-              opacity: headlineOpacity,
-            }}
+    <section className="relative">
+      <div className="h-[calc(100dvh-var(--nav-height))] max-w-[1440px] mx-auto px-5 md:px-14 pb-6">
+        <div className="relative w-full h-full flex flex-col overflow-hidden">
+          {/* Headline — fixed 28vh band above the render panel. Static: the
+              only motion here is the one-shot entrance wipe below. */}
+          <div
+            className="relative flex-none flex flex-col justify-end"
+            style={{ height: HEADLINE_BAND }}
           >
             {/* Registration crosses above the headline — same corner marks
-                used to frame the § sections. Inside the headline wrapper, so
-                they slide + fade out with it on scroll. */}
+                used to frame the § sections. */}
             <Reg pos="tl" />
             <Reg pos="tr" />
             <h1 className="font-heading font-bold text-[56px] md:text-[148px] leading-[.86] tracking-[-.025em] uppercase m-0 text-ink">
@@ -479,18 +438,20 @@ function RigHero() {
                 The Rig<span className="text-maroon">.</span>
               </motion.span>
             </h1>
-          </motion.div>
+          </div>
 
-          {/* Render frame — always mounted. `top` shrinks 28vh → 0 with scroll;
-              opacity fades in once on the renderFrame beat, then holds at 1. */}
+          {/* Render panel — fills the remaining height and never changes size.
+              opacity fades in once on the renderFrame beat, then holds at 1.
+              min-h-0 is required: without it the flex item's auto min-height
+              lets the panel push past the stage and the canvas grows past the
+              viewport. */}
           <motion.div
-            className="absolute left-0 right-0 bottom-0"
-            style={{ top: renderFrameTop }}
+            className="flex-1 min-h-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: frameBeat.hasFired ? 1 : 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.4, ease: "easeOut" }}
           >
-            <RigViewer />
+            <RigStage />
           </motion.div>
         </div>
       </div>
@@ -549,7 +510,7 @@ export default function Engineering() {
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
                 Vertical motion comes from two <strong className="text-ink font-semibold">NEMA-32 stepper motors </strong>
                 driving lead screws; sharing the load gives a lift capacity near 700 lb and sets weight-on-bit through the
-                elevator platform. (tbd)
+                elevator platform.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0">
                 Steering uses a hydraulically actuated <strong className="text-ink font-semibold">push-the-bit rotary

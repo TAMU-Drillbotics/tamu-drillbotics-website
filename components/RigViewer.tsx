@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Stage, useGLTF, Html, useProgress, type StageProps } from '@react-three/drei';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { GRID_PX } from '@/lib/rigCapture';
 
 // Draco decoder hosted by Google — required because the GLB was Draco-compressed
 // during the Fusion 360 → USDZ → Blender → glTF export pipeline.
@@ -16,9 +17,9 @@ const RIG_URL = '/models/rig.glb';
 //
 // With `observe` on, every canvas resize runs a full Box3.setFromObject()
 // traversal of the entire model — inside a useLayoutEffect, i.e. synchronously
-// between scroll and paint. The hero's scroll-driven collapse animates the
-// render frame's `top`, and the Canvas below re-measures with debounce 0, so
-// that traversal was running on every single scroll frame. The initial fit is
+// between scroll and paint. The hero no longer animates the panel's size, so
+// this is no longer per-frame, but it still fires on every window resize for
+// no benefit: the rig is static and already framed. The initial fit is
 // unaffected: <Stage>'s own <Refit> still fits once the model is centered, and
 // Bounds always refreshes on first mount regardless of `observe`.
 //
@@ -225,16 +226,6 @@ export default function RigViewer({ captureMode = false }: { captureMode?: boole
   const isMobile = useIsMobile();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const controlsRef = useRef<OrbitControlsHandle | null>(null);
-  const [isActive, setIsActive] = useState(false);
-
-  // Has the user touched the camera since the last reset/activation?
-  // Set by OrbitControls' onChange (gated on isActive — see comment there).
-  // Cleared after any programmatic reset() call.
-  const isDirtyRef = useRef(false);
-
-  // Tracks the previous isActive value so the deactivation effect below can
-  // detect a true → false edge without firing on initial mount.
-  const prevActiveRef = useRef(false);
 
   // Is the viewer anywhere near the screen?
   //
@@ -256,35 +247,37 @@ export default function RigViewer({ captureMode = false }: { captureMode?: boole
     return () => io.disconnect();
   }, []);
 
-  // Click-to-activate: scroll only zooms when the user explicitly engages,
-  // so passing the cursor through the canvas mid-page-scroll doesn't hijack scroll.
-  useEffect(() => {
-    const onMouseDown = (e: MouseEvent) => {
-      const wrap = wrapperRef.current;
-      if (!wrap) return;
-      setIsActive(wrap.contains(e.target as Node));
-    };
-    document.addEventListener('mousedown', onMouseDown);
-    return () => document.removeEventListener('mousedown', onMouseDown);
-  }, []);
-
-  // Wheel capture: gate page scroll based on the active state. MUST be a
-  // native listener with { passive: false } — React's synthetic onWheel is
-  // passive by default and silently ignores preventDefault(). This sits in
-  // ADDITION to OrbitControls' enableZoom={isActive}: enableZoom decides
-  // whether the wheel zooms the camera; this listener decides whether the
-  // wheel also scrolls the page.
+  // Wheel routing: plain wheel scrolls the page, Ctrl/Cmd + wheel zooms.
+  //
+  // This replaces the old click-to-activate gate. Entering live 3D is now an
+  // explicit choice made on the mode switch, so a second in-canvas activation
+  // step is redundant — but the underlying conflict it solved is not: with
+  // zoom simply left on, scrolling the page with the cursor over the canvas
+  // would dolly the camera instead, trapping the user in the hero.
+  //
+  // Drag is unambiguous and stays unconditional; only the wheel is arbitrated,
+  // by modifier, the same convention embedded maps use:
+  //   - unmodified → stopPropagation() in the CAPTURE phase, so the event
+  //     never reaches OrbitControls' listener on the canvas. preventDefault is
+  //     NOT called, so the page scrolls normally.
+  //   - Ctrl/Cmd    → preventDefault() to suppress the browser's page-zoom,
+  //     then let it through to OrbitControls untouched.
+  //
+  // MUST be a native listener with { passive: false } — React's synthetic
+  // onWheel is passive by default and silently ignores preventDefault().
   useEffect(() => {
     const wrap = wrapperRef.current;
     if (!wrap) return;
     const onWheel = (e: WheelEvent) => {
-      if (!isActive) return; // inactive → let page scroll normally
-      e.preventDefault();
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        return;
+      }
       e.stopPropagation();
     };
-    wrap.addEventListener('wheel', onWheel, { passive: false });
-    return () => wrap.removeEventListener('wheel', onWheel);
-  }, [isActive]);
+    wrap.addEventListener('wheel', onWheel, { passive: false, capture: true });
+    return () => wrap.removeEventListener('wheel', onWheel, { capture: true });
+  }, []);
 
   // Reset camera when the viewer re-enters the viewport after being scrolled out.
   useEffect(() => {
@@ -297,7 +290,6 @@ export default function RigViewer({ captureMode = false }: { captureMode?: boole
       ([entry]) => {
         if (entry.isIntersecting && !wasIntersecting) {
           controlsRef.current?.reset();
-          isDirtyRef.current = false; // any reset zeros the dirty flag
         }
         wasIntersecting = entry.isIntersecting;
       },
@@ -307,36 +299,31 @@ export default function RigViewer({ captureMode = false }: { captureMode?: boole
     return () => io.disconnect();
   }, []);
 
-  // Reset camera on the active → inactive transition, but only if the user
-  // actually moved the camera. Activate-then-deactivate with no manipulation
-  // leaves the framing alone.
-  useEffect(() => {
-    if (prevActiveRef.current && !isActive) {
-      if (isDirtyRef.current) {
-        controlsRef.current?.reset();
-        isDirtyRef.current = false;
-      }
-    }
-    prevActiveRef.current = isActive;
-  }, [isActive]);
-
   return (
     <div
       ref={wrapperRef}
-      className={`relative w-full h-full bg-[#1A1A1A] rounded-lg overflow-hidden border transition-colors duration-200 ${
-        isActive ? 'border-[#500000]/60' : 'border-[#500000]/20'
+      // The border and corner rounding are chrome for the live viewer, and
+      // must NOT be drawn in capture mode: /capture-rig renders this component
+      // edge-to-edge at 1080x1080, so a 1px maroon border lands on the outer
+      // pixel column/row of every captured frame and gets baked into the
+      // turntable video — which then shows two maroon lines floating at the
+      // letterbox seams once the video is letterboxed into a wider panel.
+      className={`relative w-full h-full bg-[#1A1A1A] ${
+        captureMode ? '' : 'rounded-lg overflow-hidden border border-[#500000]/60'
       }`}
     >
       {/* Engineering grid — faint background layer behind the 3D model.
           Sits before the (transparent, alpha:true) Canvas in DOM order so the
-          canvas paints over it; line spacing ~matches the site's coarse grid. */}
+          canvas paints over it; line spacing ~matches the site's coarse grid.
+          RigStage's video panel re-derives its own grid from GRID_PX so the
+          baked grid and the CSS one line up — keep them in sync. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
             'linear-gradient(to right, rgba(250,250,250,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(250,250,250,0.04) 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
+          backgroundSize: `${GRID_PX}px ${GRID_PX}px`,
         }}
       />
 
@@ -348,15 +335,16 @@ export default function RigViewer({ captureMode = false }: { captureMode?: boole
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
         shadows
-        // The render frame resizes continuously (animated CSS `top` in
-        // RigHero). R3F's default resize config debounces the ResizeObserver
-        // by 50ms — and that timer resets on every frame of the resize, so the
-        // drawing buffer only catches up once scroll/momentum fully settles
-        // (the ~1s "clunky" lag). debounce:0 re-measures every frame instead.
-        // On mobile there's no scroll-driven resize and the iOS address bar
-        // collapse fires constant resizes during scroll — debounce 200ms so
-        // those don't interrupt the auto-rotate frame loop.
-        resize={{ debounce: isMobile ? 200 : 0 }}
+        // The panel is a fixed-size box now, so the only resizes left are real
+        // ones: window resize, and on iOS the address-bar collapse firing a
+        // burst of them mid-scroll. Debounce absorbs the burst — each resize
+        // costs a full WebGLRenderer.setSize(), i.e. reallocating the MSAA
+        // drawing buffer and shadow targets.
+        //
+        // This was debounce:0 while the hero animated the panel's `top`; that
+        // forced a re-measure every scroll frame, which is precisely the cost
+        // the static layout removes. Do not reintroduce a size animation here.
+        resize={{ debounce: 200 }}
         // 'never' halts the loop entirely while off screen (the canvas keeps
         // its last drawn frame, and the scene is static, so there is nothing
         // to catch up on when it resumes). Capture mode always renders — the
@@ -402,17 +390,12 @@ export default function RigViewer({ captureMode = false }: { captureMode?: boole
         {!captureMode && !isMobile && <OrbitControls
           ref={controlsRef}
           makeDefault
-          // Mark the camera dirty on any user-driven change. The isActive gate
-          // is the key filter: the user can only manipulate the camera when
-          // active, so onChange events fired during programmatic reset() (which
-          // we only call after deactivation or on intersection re-entry, both
-          // typically isActive=false) are filtered out automatically.
-          onChange={() => {
-            if (isActive) isDirtyRef.current = true;
-          }}
           enableDamping
           dampingFactor={0.05}
-          enableZoom={isActive}
+          // Always on. The wheel-routing listener on the wrapper decides
+          // whether OrbitControls ever sees a wheel event at all (Ctrl/Cmd
+          // held), so this no longer needs to gate scroll behaviour itself.
+          enableZoom
           enablePan
           // ── ADJUSTABLE: pan speed (1.0 default; lower = slower)
           panSpeed={1.0}
@@ -435,25 +418,21 @@ export default function RigViewer({ captureMode = false }: { captureMode?: boole
         />}
       </Canvas>
 
-      {/* Controls legend (top-right, only when active and on desktop) */}
-      {!isMobile && isActive && (
+      {/* Controls legend (top-right, desktop only). Always shown now — there
+          is no activation step left to discover, so the legend is the only
+          thing telling the user the wheel needs Ctrl/Cmd to zoom.
+          `!captureMode` is load-bearing: /capture-rig renders this component
+          at desktop width, so anything drawn here gets burned into every
+          frame of the baked turntable video. The old activation hint was not
+          gated and is visible in the currently-shipped rig-loop.mp4. */}
+      {!captureMode && !isMobile && (
         <div
           aria-hidden="true"
           className="pointer-events-none absolute top-3 right-3 font-mono text-xs px-2 py-1 text-[#E0E0E0]/40 text-right leading-snug space-y-0.5"
         >
           <div>Drag: orbit</div>
-          <div>Ctrl+Drag: pan</div>
-          <div>Scroll: zoom</div>
-        </div>
-      )}
-
-      {/* Activation hint (bottom-right) — pointer-events:none so it can't intercept clicks */}
-      {!isMobile && (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute bottom-3 right-3 font-mono text-xs px-2 py-1 text-[#E0E0E0]/40 transition-opacity duration-200"
-        >
-          {isActive ? 'Click outside to exit' : 'Click to activate'}
+          <div>Right-drag: pan</div>
+          <div>Ctrl+Scroll: zoom</div>
         </div>
       )}
     </div>

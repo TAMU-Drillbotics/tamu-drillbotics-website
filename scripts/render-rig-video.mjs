@@ -3,11 +3,18 @@
 // mobile rig display (heavy WebGL is too slow on phones).
 //
 // Prerequisites:
-//   1. Dev server running on http://localhost:3000 (npm run dev).
+//   1. A PRODUCTION server running (npm run build && npm run start).
+//      Do NOT capture against `npm run dev` — the Next.js dev-tools indicator
+//      renders as a floating badge and gets burned into every frame. The
+//      shipped rig-loop.mp4 had exactly that, bottom-left.
 //   2. devDependencies installed: puppeteer, ffmpeg-static.
 //
 // Usage:
 //   node scripts/render-rig-video.mjs
+//   RIG_CAPTURE_URL=http://localhost:3197/capture-rig node scripts/render-rig-video.mjs
+//
+// Anything RigViewer draws over the canvas at desktop width lands in the
+// video, so overlays there must be gated on `captureMode`.
 //
 // Output:
 //   public/models/rig-loop.webm
@@ -25,7 +32,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..');
 
-const URL = 'http://localhost:3000/capture-rig';
+const URL = process.env.RIG_CAPTURE_URL ?? 'http://localhost:3000/capture-rig';
 const FRAMES = 240;             // 240 frames → 8 seconds at 30fps
 const FPS = 30;
 const WIDTH = 1080;             // square render — fits mobile aspect
