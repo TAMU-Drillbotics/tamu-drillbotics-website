@@ -32,7 +32,7 @@ export const faqs: FAQ[] = [
     ref: "Q4",
     question: "What can I expect in the interview?",
     answer:
-      "A 20 – 30 minute conversation with subteam leads. Bring questions; we'll ask about what you want to build.",
+      "A 20 – 30 minute conversation with subteam leads. Bring questions!",
   },
   {
     id: "q5",
@@ -44,8 +44,8 @@ export const faqs: FAQ[] = [
   {
     id: "q6",
     ref: "Q6",
-    question: "Is there a stipend?",
+    question: "Where can I reach out for general questions?",
     answer:
-      "No stipend, but the team covers expenses for travel, materials, and tools you need to ship your part of the project.",
+      "You can reach out to us at: tamudrillbotics@gmail.com",
   },
 ];
