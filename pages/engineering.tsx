@@ -676,15 +676,14 @@ export default function Engineering() {
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
                 The firmware layer runs priority-pinned tasks for sensor acquisition, control compute, and CAN dispatch.
-                <strong className="text-ink font-semibold"> PID controllers</strong> regulate the coupled drilling axes —
-                RPM, feed rate, and weight-on-bit — and drive the steering response that holds the bit on its commanded
+                <strong className="text-ink font-semibold"> PID controllers</strong> regulate the coupled drilling axes 
+                (RPM, feed rate, and weight-on-bit) and drive the steering response that holds the bit on its commanded
                 trajectory.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
                 An <strong className="text-ink font-semibold">ML interfacing layer</strong> pipes a downsampled sensor
                 frame over high-speed serial to a co-processor running inference, then receives gain-trim and setpoint
-                deltas back. The model never has direct authority — control authority always sits with the deterministic
-                PID core, with the ML layer recommending, not commanding.
+                deltas back. Control authority always sits with the deterministic PID core, with the ML layer recommending.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0">
                 Telemetry is broadcast over CAN to a <strong className="text-ink font-semibold">Raspberry Pi 4</strong>
@@ -766,8 +765,7 @@ export default function Engineering() {
               </h3>
               <p className="text-[15px] leading-[1.55] text-ink-2 m-0 mb-6">
                 A Kalman-style estimator combines pressure, torque, RPM, depth, and IMU streams into a single bit-state
-                vector — denoised, time-aligned, and physically-constrained. The fused estimate, not raw sensors, is what
-                the controller and ML layer see.
+                vector — denoised, time-aligned, and physically-constrained. The fused estimate is what the controller and ML layer see.
               </p>
               <div className="mt-auto border border-rule bg-[#fafafa] h-[160px] relative flex items-center justify-center"
                 style={{ contain: "paint" }}>
@@ -881,7 +879,7 @@ export default function Engineering() {
               </h3>
               <p className="text-[15px] leading-[1.55] text-ink-2 m-0 mb-6">
                 Quantized models run on a dedicated CUDA-accelerated edge module beside the controller. The inference
-                pipeline is hard-budgeted: drop a frame, miss a deadline, fall through to PID-only — never block the loop.
+                pipeline is hard-budgeted: drop a frame, miss a deadline, fall through to PID-only.
               </p>
               <div className="mt-auto border border-rule bg-[#fafafa] h-[160px] relative flex items-center justify-center"
                 style={{ contain: "paint" }}>
