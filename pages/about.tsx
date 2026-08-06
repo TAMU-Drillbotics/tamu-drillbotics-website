@@ -69,7 +69,7 @@ const teamLeads: Array<{ name: string; role: string; tbd?: boolean; photo?: stri
   { name: "Andres Gumucio",  role: "Embedded Software Lead",      photo: "/people/andres-gumucio.jpg" },
   { name: "Tej Nagasamudra", role: "Electronics Lead" },
   { name: "Ayden Alvarez",   role: "Hydraulics Lead",             photo: "/people/ayden-alvarez.jpg" },
-  { name: "Sammy",           role: "Business Development Lead" },
+  { name: "Samuel Ortega",           role: "Business Development Lead" },
   { name: "TBD",             role: "Marketing Lead",              tbd: true },
 ];
 
