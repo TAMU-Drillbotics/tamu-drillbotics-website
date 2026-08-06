@@ -319,7 +319,7 @@ const mechRef: { group: string; rows: [string, string][] }[] = [
       ["Drive Shaft", "17-7 PH SS"],
       ["Drill Pipe", "FLEXIBLE NYLON"],
       ["Hyd. Pressure", "≈ 2000 PSI"],
-      ["Bit", "TBD"],
+      ["Bit", "1.75\" PDC"],
     ],
   },
 ];
@@ -540,11 +540,11 @@ export default function Engineering() {
                 unknown rock block, then steer the bit through three target points with no human intervention.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-              <span className="text-amber">(tbd)</span> The frame is a modular tower of <strong className="text-ink font-semibold">6061-T6 aluminum 2-by-2-inch
-                T-slot extrusion</strong>, joined with aluminum corner brackets and thread-locked fasteners. Three stacked
-                platforms separate the subsystems — a top actuation deck, a mid-frame elevator carrying the bottom-hole
-                assembly, and a bottom platform for fluid handling and rock drilling— and the T-slot profile lets sensor and bracket
-                placement be reconfigured throughout the build.
+                The frame is a modular tower of <strong className="text-ink font-semibold">6061-T6 aluminum 2-by-2-inch
+                T-slot extrusion</strong>, joined with aluminum corner brackets and thread-locked fasteners. The modular T-slot 
+                profile allows for customizable sensor mounting and reconfiguration. Three platforms carry the subsystems — a top 
+                actuation deck, a mid-frame elevator carrying the drillstring and top-drive assembly, and a bottom platform for 
+                fluid and cutting collection.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
               <span className="text-amber">(tbd)</span> Vertical motion comes from two <strong className="text-ink font-semibold">NEMA-32 stepper motors </strong>
