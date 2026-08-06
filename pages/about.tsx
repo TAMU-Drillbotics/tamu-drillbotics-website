@@ -69,7 +69,7 @@ const teamLeads: Array<{ name: string; role: string; tbd?: boolean; photo?: stri
   { name: "Andres Gumucio",  role: "Embedded Software Lead",      photo: "/people/andres-gumucio.jpg" },
   { name: "Tej Nagasamudra", role: "Electronics Lead" },
   { name: "Ayden Alvarez",   role: "Hydraulics Lead",             photo: "/people/ayden-alvarez.jpg" },
-  { name: "Sammy",           role: "Treasury & Relations Chair" },
+  { name: "Sammy",           role: "Business Development Lead" },
   { name: "TBD",             role: "Marketing Lead",              tbd: true },
 ];
 
@@ -387,11 +387,11 @@ export default function About() {
               </ColumnHeader>
 
               <ColumnTitle className="font-heading font-semibold text-[28px] md:text-[44px] leading-[1.02] tracking-[-.012em] m-0 mb-3.5 text-[#FAFAFA]">
-                We build the rig (nearly) end to end<span className="text-amber">.</span>
+                We build the rig end to end<span className="text-amber">.</span>
               </ColumnTitle>
               <ColumnBody>
               <p className="text-[18px] leading-[1.55] text-[#FAFAFA]/80 m-0 mb-7">
-                While we outsource the machining and components, the research, assembly, and testing happen right here at A&amp;M.
+                We outsource the machining and components while the research, assembly, and testing happen right here at A&amp;M.
               </p>
 
               <div className="text-[15.5px] leading-[1.65] text-[#FAFAFA]/80">
