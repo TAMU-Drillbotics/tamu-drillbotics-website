@@ -28,7 +28,7 @@ export default function Footer() {
         {/* Social */}
         <div className="flex gap-2">
           <a
-            href="https://www.linkedin.com/in/tamu-drillbotics-74b135412/"
+            href="https://www.linkedin.com/company/tamu-drillbotics/"
             aria-label="LinkedIn"
             className="w-[34px] h-[34px] inline-flex items-center justify-center text-amber border border-amber/40 hover:text-amber hover:border-amber hover:bg-amber/10 transition-all"
           >
