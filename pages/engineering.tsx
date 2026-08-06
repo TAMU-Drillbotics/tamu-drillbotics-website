@@ -547,12 +547,12 @@ export default function Engineering() {
                 fluid and cutting collection.
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-              <span className="text-amber">(tbd)</span> Vertical motion comes from two <strong className="text-ink font-semibold">NEMA-32 stepper motors </strong>
+                Vertical motion comes from two <strong className="text-ink font-semibold">NEMA-32 stepper motors </strong>
                 driving lead screws; sharing the load gives a lift capacity near 700 lb and sets weight-on-bit through the
                 elevator platform. (tbd)
               </p>
               <p className="text-[17px] leading-[1.6] text-ink-2 m-0">
-              <span className="text-amber">(tbd)</span> Steering uses a hydraulically actuated <strong className="text-ink font-semibold">push-the-bit rotary
+                Steering uses a hydraulically actuated <strong className="text-ink font-semibold">push-the-bit rotary
                 steerable system</strong> — three independently controlled wings, each driven by a dedicated piston near
                 2000 psi, biasing the bit toward the commanded direction. Safety is built into the structure: a
                 polycarbonate enclosure contains debris, door interlocks gate operation, a hardware-and-software E-stop
