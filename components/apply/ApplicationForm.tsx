@@ -1,11 +1,92 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 
+// ── THE ONLY SWITCH ──────────────────────────────────────────────────────
+// Set to `true` to put the live Tally form back. Nothing else needs editing:
+// the embed, its env var and the scroll-to-form behaviour on /apply are all
+// still wired up below and merely wait on this flag.
+//
+// While false, the <iframe> is NOT rendered at all rather than covered with
+// an overlay. A hidden-but-present iframe still fetches from tally.so on every
+// page load, still counts as a live form, and — most importantly — is still
+// reachable by Tab and by screen readers, so a visitor could fill in and
+// submit a form nobody is reading. Swapping the element out avoids all three.
+const APPLICATIONS_OPEN = false;
+
+// Shown in the card header on both paths, so the cycle stays identifiable
+// whether or not the form is live.
+const CYCLE_LABEL = "APP-2026-27";
+// ─────────────────────────────────────────────────────────────────────────
+
+// Stands in for the embed while APPLICATIONS_OPEN is false.
+//
+// Occupies the same card the iframe would, so the page's rhythm is unchanged
+// and the "Join the Team" links that deep-link to #apply-form still land on
+// something that answers the question they were asking.
+//
+// The diagonal hatch is the drafting convention for a masked-off region,
+// which is the same technical-drawing vocabulary the rest of the site uses
+// (registration crosses, § numbering, dashed rules). The amber status chip is
+// lifted from the engineering page's RoadmapChip — the site already says
+// "planned, not yet live" that way, so this reads as the same idea.
+function FormNotOpenNotice() {
+  return (
+    <div className="relative overflow-hidden">
+      {/* Masked-off hatching. Sits behind the copy at low contrast so it reads
+          as a surface treatment rather than as content. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(45deg, rgba(26,26,26,0.045) 0px, rgba(26,26,26,0.045) 1px, transparent 1px, transparent 11px)",
+        }}
+      />
+
+      <div className="relative flex flex-col items-center text-center px-6 py-16 md:py-24">
+        {/* Status chip — mirrors RoadmapChip on the engineering page. */}
+        <div className="inline-flex items-center gap-2 border border-amber/60 px-2.5 py-1 font-mono text-[10px] tracking-[.22em] uppercase text-ink-2 mb-7">
+          <span
+            aria-hidden="true"
+            className="inline-block w-1.5 h-1.5 rounded-full bg-amber"
+            style={{
+              boxShadow:
+                "0 0 0 2px rgba(200,150,62,0.18), 0 0 6px rgba(200,150,62,0.55)",
+              animation: "amber-pulse 2.4s ease-in-out infinite",
+            }}
+          />
+          <span>Not yet open</span>
+        </div>
+
+        <p className="font-heading font-semibold text-[26px] md:text-[32px] leading-[1.05] tracking-[-.02em] m-0 text-ink max-w-[16ch]">
+          Applications open each fall<span className="text-maroon">.</span>
+        </p>
+
+        {/* The {" "} is load-bearing: JSX trims the whitespace between an
+            expression container and a following line break, which otherwise
+            renders as "2026-27form". */}
+        <p className="text-[15.5px] leading-[1.6] text-ink-2 m-0 mt-4 max-w-[46ch]">
+          The {CYCLE_LABEL.replace("APP-", "")}{" "}
+          form is being finalized and isn&apos;t accepting responses yet. Check
+          back at the start of the semester — this panel is where it will appear.
+        </p>
+
+        <div aria-hidden="true" className="w-full max-w-[320px] h-px bg-rule-strong mt-9 mb-4" />
+
+        <span className="font-mono text-[10px] tracking-[.22em] uppercase text-ink-4">
+          Form reserved &middot; {CYCLE_LABEL}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export function ApplicationForm() {
   const formId = process.env.NEXT_PUBLIC_TALLY_FORM_ID;
 
   useEffect(() => {
-    if (!formId) {
+    // Only worth warning about when the embed is actually meant to render.
+    if (APPLICATIONS_OPEN && !formId) {
       console.warn(
         "NEXT_PUBLIC_TALLY_FORM_ID not set — Tally embed will not load real form",
       );
@@ -46,10 +127,18 @@ export function ApplicationForm() {
             </h2>
           </div>
           <div className="max-w-[520px] pb-2">
-            <p className="text-[16px] leading-[1.6] text-[#FAFAFA]/70 m-0">
-              The form below is hosted on Tally. Short, structured, and
-              routed straight to the review pool. Plan on ~20 minutes. <span className="text-amber">Tip: fill this out on a computer.</span>
-            </p>
+            {APPLICATIONS_OPEN ? (
+              <p className="text-[16px] leading-[1.6] text-[#FAFAFA]/70 m-0">
+                The form below is hosted on Tally. Short, structured, and
+                routed straight to the review pool. Plan on ~20 minutes. <span className="text-amber">Tip: fill this out on a computer.</span>
+              </p>
+            ) : (
+              <p className="text-[16px] leading-[1.6] text-[#FAFAFA]/70 m-0">
+                The application for the next cycle isn&apos;t open yet. When it
+                is, it lands right here — short, structured, and routed straight
+                to the review pool. <span className="text-amber">Nothing to do until then.</span>
+              </p>
+            )}
           </div>
         </div>
 
@@ -64,31 +153,46 @@ export function ApplicationForm() {
           {/* Card top */}
           <div className="flex items-center justify-between px-[22px] py-3.5 border-b border-rule font-mono text-[11px] tracking-[.18em] uppercase text-ink-3">
             <span className="text-ink font-medium">
-              TALLY EMBED <span className="text-ink-4 mx-2">&middot;</span> APP-2026-27
+              {APPLICATIONS_OPEN ? "TALLY EMBED" : "APPLICATION"}{" "}
+              <span className="text-ink-4 mx-2">&middot;</span> {CYCLE_LABEL}
             </span>
-            <span className="text-maroon font-medium inline-flex items-center gap-2">
-              <span
-                aria-hidden="true"
-                className="inline-block w-2 h-2 rounded-full bg-maroon"
-                style={{
-                  boxShadow:
-                    "0 0 0 2px rgba(80,0,0,0.14), 0 0 6px rgba(80,0,0,0.5)",
-                  animation: "amber-pulse 1.8s ease-in-out infinite",
-                }}
-              />
-              ACTIVE
-            </span>
+            {APPLICATIONS_OPEN ? (
+              <span className="text-maroon font-medium inline-flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className="inline-block w-2 h-2 rounded-full bg-maroon"
+                  style={{
+                    boxShadow:
+                      "0 0 0 2px rgba(80,0,0,0.14), 0 0 6px rgba(80,0,0,0.5)",
+                    animation: "amber-pulse 1.8s ease-in-out infinite",
+                  }}
+                />
+                ACTIVE
+              </span>
+            ) : (
+              <span className="text-ink-3 font-medium inline-flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className="inline-block w-2 h-2 rounded-full bg-ink-4"
+                />
+                Closed
+              </span>
+            )}
           </div>
 
-          {/* Tally iframe */}
-          <iframe
-            src={src}
-            width="100%"
-            height={600}
-            loading="lazy"
-            title="TAMU Drillbotics Application"
-            className="block w-full border-0"
-          />
+          {APPLICATIONS_OPEN ? (
+            /* Tally iframe */
+            <iframe
+              src={src}
+              width="100%"
+              height={600}
+              loading="lazy"
+              title="TAMU Drillbotics Application"
+              className="block w-full border-0"
+            />
+          ) : (
+            <FormNotOpenNotice />
+          )}
 
         </div>
 
