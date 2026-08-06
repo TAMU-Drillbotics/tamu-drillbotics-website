@@ -23,7 +23,7 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.45, delay, ease: "easeOut" as const },
 });
 
-// Variants for the § 05 DATA section. The grid wrapper triggers the whole
+// Variants for the § 04 DATA section. The grid wrapper triggers the whole
 // sequence via whileInView; children inherit and animate from their own
 // variants so the chained delays preserve the desktop timing on mobile too.
 //
@@ -169,7 +169,7 @@ function RoadmapChip() {
   );
 }
 
-/* ════════ § 04 — control-loop schematic ════════
+/* ════════ § 03 — control-loop schematic ════════
    Split out of the page body so the marching-ants flow arrows can be gated on
    visibility. They animate `stroke-dashoffset`, which the compositor can't
    take: each frame is a main-thread re-raster of this whole 640×420 SVG,
@@ -312,27 +312,6 @@ const mechRef: { group: string; rows: [string, string][] }[] = [
       ["Bit", "1.75\" PDC"],
     ],
   },
-];
-
-/* ════════ § 03 — electronics ════════ */
-type SensorRow = { id: string; measure: string; component: string; detail: string };
-const sensors: SensorRow[] = [
-  { id: "IMU-01", measure: "Orientation", component: "TDK ICM-20948", detail: "9-axis, in BHA" },
-  { id: "DEP-01", measure: "Depth (TVD)", component: "LPPS-36B", detail: "Linear position" },
-  { id: "TRQ-01", measure: "Torque", component: "FUTEK TFF400", detail: "Inline rotary" },
-  { id: "RPM-01", measure: "Rotary Speed", component: "US Digital E6", detail: "Optical encoder" },
-  { id: "WOB-01", measure: "Weight-on-Bit", component: "FUTEK LSB200", detail: "Load cell" },
-  { id: "TMP-01", measure: "Temperature", component: "DS18B20", detail: "Thermal monitor" },
-  { id: "VIB-01", measure: "Vibration", component: "ADXL356", detail: "MEMS, high-g" },
-];
-
-type ActuatorRow = { id: string; subsystem: string; component: string; detail: string };
-const actuators: ActuatorRow[] = [
-  { id: "ROT-01", subsystem: "Bit Rotation", component: "Maxon EC-i 40 BLDC", detail: "High torque density, closed-loop" },
-  { id: "HST-01", subsystem: "Hoist · Z-Axis", component: "2× NEMA-23 + Ball Screw", detail: "Dual-motor synchronized lift" },
-  { id: "HYD-01", subsystem: "Hydraulic Control", component: "Danfoss PVG32 Monoblock", detail: "Proportional flow control" },
-  { id: "HYD-02", subsystem: "Wing Actuation", component: "3× Double-Acting Pistons", detail: "6 controllable ports" },
-  { id: "CLT-01", subsystem: "Coolant Loop", component: "Seaflo 12 V DC Pump", detail: "Continuous-duty centrifugal" },
 ];
 
 
@@ -672,134 +651,9 @@ export default function Engineering() {
         </div>
       </motion.section>
 
-      {/* ════════ § 03 — ELECTRONICS ════════ */}
+      {/* ════════ § 03 — SOFTWARE ════════ */}
       <motion.section {...REVEAL}>
-        <SectionBar num="03" label="ELECTRONICS" />
-
-        <div className="relative max-w-[1440px] mx-auto px-5 md:px-14 pt-12 md:pt-20 pb-16 md:pb-24">
-          <Reg pos="tl" />
-          <Reg pos="tr" />
-          <Reg pos="bl" />
-          <Reg pos="br" />
-
-          <SecTitle>
-            From signal to actuator<span className="text-maroon">.</span>
-          </SecTitle>
-
-          <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr] gap-y-8 gap-x-8 md:gap-x-16 items-start pt-8 md:pt-12">
-            <motion.div {...fadeUp(0.1)}>
-              <p className="text-[19px] leading-[1.55] text-ink font-medium m-0 mb-6">
-              Seven sensor channels turn the rig&apos;s physical behavior into a measured state — orientation, depth,
-                torque, speed, weight-on-bit, temperature, and vibration — feeding the drives that steer and advance the
-                bit.
-              </p>
-              <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-              <span className="text-amber">(tbd)</span> The <strong className="text-ink font-semibold">sensor stack</strong> centers on a 9-axis ICM-20948 IMU in
-                the bottom-hole assembly, an LPPS-36B linear sensor for true vertical depth, a FUTEK TFF400 inline torque
-                sensor and US Digital E6 encoder at the drill motor, and a FUTEK LSB200 load cell reading weight-on-bit
-                between the hoist and the string. A DS18B20 tracks temperature and an ADXL356 MEMS accelerometer catches
-                high-g shock and vibration.
-              </p>
-              <p className="text-[17px] leading-[1.6] text-ink-2 m-0 mb-[18px]">
-              <span className="text-amber">(tbd)</span> Actuation electronics close the loop around each motor. A <strong className="text-ink font-semibold">Maxon
-                EPOS4 Compact</strong> drive runs the rotary BLDC over EtherCAT, while Leadshine iCS-RS closed-loop drives
-                handle the hoist steppers. Hydraulic steering valves are positioned by a 16-bit ADC/DAC stage for
-                proportional solenoid current, with every solenoid channel opto-isolated from the logic side.
-              </p>   
-              <p className="text-[17px] leading-[1.6] text-ink-2 m-0">
-              <span className="text-amber">(tbd)</span> A <strong className="text-ink font-semibold">Raspberry Pi 4</strong> handles supervisory logging, UI, and
-                diagnostics alongside a GPU-equipped main computer, with a custom PCB carrying the IMU/ADC front-end and a
-                CAN-FD transceiver. Everything runs off a 24 V DC bus through isolated DC-DC modules, resettable fuses, and
-                transient suppression. An optional Semtech SX1276 LoRa link is under evaluation to thin the wiring down the
-                drillstring.
-              </p>
-            </motion.div>
-
-            <motion.div {...fadeUp(0.2)}>
-              <div className="flex items-baseline justify-between pb-3 font-mono text-[10px] tracking-[.22em] uppercase">
-                <span className="text-maroon">Sensors</span>
-                <span className="text-ink-3">7 Channels</span>
-              </div>
-              <table className="w-full border-separate border-spacing-0 border border-rule-strong bg-white font-mono">
-                <thead>
-                  <tr>
-                    {["ID", "Measurement", "Component", "Detail"].map((h) => (
-                      <th
-                        key={h}
-                        className="text-left px-3.5 py-3 text-[9.5px] tracking-[.22em] uppercase text-maroon bg-[#fafafa] border-b border-rule-strong font-medium"
-                      >
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {sensors.map((s, i) => (
-                    <tr key={i}>
-                      <td className="px-3.5 py-[11px] border-b border-dashed border-rule-strong last:border-b-0 font-heading text-[13px] font-medium text-ink tracking-[.04em] uppercase">
-                        {s.id}
-                      </td>
-                      <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
-                        {s.measure}
-                      </td>
-                      <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
-                        {s.component}
-                      </td>
-                      <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
-                        {s.detail}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </motion.div>
-          </div>
-
-          {/* actuators table — mirrors the sensors table (report Table 2) */}
-          <motion.div {...fadeUp(0.15)} className="mt-12">
-            <div className="flex items-baseline justify-between pb-3 font-mono text-[10px] tracking-[.22em] uppercase">
-              <span className="text-maroon">Actuators</span>
-              <span className="text-ink-3">5 Drive Channels</span>
-            </div>
-            <table className="w-full border-separate border-spacing-0 border border-rule-strong bg-white font-mono">
-              <thead>
-                <tr>
-                  {["ID", "Subsystem", "Component", "Detail"].map((h) => (
-                    <th
-                      key={h}
-                      className="text-left px-3.5 py-3 text-[9.5px] tracking-[.22em] uppercase text-maroon bg-[#fafafa] border-b border-rule-strong font-medium"
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {actuators.map((a, i) => (
-                  <tr key={i}>
-                    <td className="px-3.5 py-[11px] border-b border-dashed border-rule-strong last:border-b-0 font-heading text-[13px] font-medium text-ink tracking-[.04em] uppercase">
-                      {a.id}
-                    </td>
-                    <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
-                      {a.subsystem}
-                    </td>
-                    <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
-                      {a.component}
-                    </td>
-                    <td className="px-3.5 py-[11px] text-[11px] tracking-[.08em] uppercase border-b border-dashed border-rule-strong last:border-b-0 text-ink-2">
-                      {a.detail}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* ════════ § 04 — SOFTWARE ════════ */}
-      <motion.section {...REVEAL}>
-        <SectionBar num="04" label="SOFTWARE" />
+        <SectionBar num="03" label="SOFTWARE" />
 
         <div className="relative max-w-[1440px] mx-auto px-5 md:px-14 pt-12 md:pt-20 pb-16 md:pb-24">
           <Reg pos="tl" />
@@ -872,9 +726,9 @@ export default function Engineering() {
         </div>
       </motion.section>
 
-      {/* ════════ § 05 — DATA ════════ */}
+      {/* ════════ § 04 — DATA ════════ */}
       <motion.section {...REVEAL}>
-        <SectionBar num="05" label="DATA" />
+        <SectionBar num="04" label="DATA" />
 
         <div className="relative max-w-[1440px] mx-auto px-5 md:px-14 pt-12 md:pt-20 pb-16 md:pb-24">
           <Reg pos="tl" />
