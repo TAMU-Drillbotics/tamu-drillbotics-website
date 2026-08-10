@@ -1,7 +1,9 @@
-import { motion } from "framer-motion";
+import { useCallback, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import GridReveal from "@/components/GridReveal";
+import PacketToast from "@/components/PacketToast";
 
 /* ═══════════════════════════════════════════════════════
    CONFIG — edit data here, not layout code
@@ -267,6 +269,18 @@ function LogoBox({
    ═══════════════════════════════════════════════════════ */
 
 export default function Sponsors() {
+  // TEMPORARY — the sponsorship packet PDF is still being written, so the
+  // download button raises an advisory toast instead of 404-ing on a file that
+  // does not exist. Remove this state (and components/PacketToast.tsx) when the
+  // packet ships; see the note in that file.
+  //
+  // The counter is the toast's key rather than a boolean: re-clicking while the
+  // toast is already up remounts it, which restarts both the dismiss timer and
+  // the countdown rule. A plain boolean would leave a half-elapsed toast that
+  // vanishes mid-read.
+  const [packetToast, setPacketToast] = useState(0);
+  const dismissPacketToast = useCallback(() => setPacketToast(0), []);
+
   return (
     <div className="isolate flex flex-col">
       <GridReveal lineColor="rgba(26,26,26,0.16)" />
@@ -529,10 +543,14 @@ export default function Sponsors() {
               </span>
             </a>
 
-            <a
-              className="group p-7 pt-[30px] flex flex-col text-[#FAFAFA] no-underline min-h-[240px] border-l border-[#ffffff1f]"
-              href="#"
-              aria-label="Download sponsorship packet (PDF)"
+            {/* TEMPORARY — a <button> rather than an <a> while the packet is
+                still being written: there is no file to point at, and an
+                href="#" would yank the reader to the top of the page. Restore
+                the anchor when the PDF ships. */}
+            <button
+              type="button"
+              onClick={() => setPacketToast((n) => n + 1)}
+              className="group p-7 pt-[30px] flex flex-col text-left text-[#FAFAFA] no-underline min-h-[240px] border-l border-[#ffffff1f] cursor-pointer"
             >
               <div className="flex items-center justify-between font-mono text-[10.5px] tracking-[.18em] uppercase text-[#ffffff8a] mb-[30px]">
                 <span className="font-heading text-sm text-[#FAFAFA] tracking-[.04em] font-medium">02</span>
@@ -550,12 +568,19 @@ export default function Sponsors() {
                   <span className="absolute right-0 -top-[3px] w-[7px] h-[7px] border-t border-r border-current rotate-45" />
                 </span>
               </span>
-            </a>
+            </button>
           </motion.div>
         </div>
       </motion.section>
 
       <Footer />
+
+      {/* TEMPORARY — see the note on `packetToast` above. */}
+      <AnimatePresence>
+        {packetToast > 0 && (
+          <PacketToast key={packetToast} onDismiss={dismissPacketToast} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
