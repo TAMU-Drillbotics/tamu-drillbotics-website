@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -7,10 +8,13 @@ export default function Footer() {
       <div className="max-w-[1440px] mx-auto px-5 md:px-14 pt-9 pb-7 grid grid-cols-1 md:grid-cols-[1fr_auto_auto] items-start md:items-center gap-y-6 md:gap-x-12">
         {/* Brand */}
         <div className="flex items-center gap-3 font-heading font-semibold tracking-[.04em] text-sm uppercase text-[#FAFAFA]">
-          <span className="w-[18px] h-[18px] bg-maroon relative shrink-0" aria-hidden="true">
-            <span className="absolute inset-1 border-[1.5px] border-[#141414]" />
-            <span className="absolute left-1/2 top-0 bottom-0 w-[1.5px] bg-[#141414] -translate-x-1/2" />
-          </span>
+          <Image
+            src="/branding/logo-on-dark-256.png"
+            alt=""
+            width={256}
+            height={256}
+            className="w-[22px] h-[22px] shrink-0"
+          />
           <span>TAMU Drillbotics</span>
           <span className="text-[#ffffff52] font-normal mx-0.5">/</span>
           <span className="text-[#ffffff7a] font-normal tracking-[.08em]">Engineering</span>

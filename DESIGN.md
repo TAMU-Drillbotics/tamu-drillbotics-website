@@ -501,8 +501,9 @@ both its name and weight bar; Gold uses `metal-gold`, Silver `metal-silver`,
 Bronze `metal-bronze`. Logos sit on white plates with corner ticks.
 
 **Nav & footer.** A sticky nav that adapts its ground to the page theme
-(paper / maroon / ink), with a square brand mark built from a filled square, an
-inset border, and a center cut line. The footer is the darkest surface
+(paper / maroon / ink), carrying the team mark — a square-framed derrick set
+between the A&amp;M letters, flat maroon on light grounds and flat white on dark
+ones (`public/branding/logo-*.png`). The footer is the darkest surface
 (`#141414`), all-monospace in its lower row, carrying trademark and location
 marginalia.
 

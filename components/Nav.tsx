@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTimelineBeat } from '@/components/TimelineOrchestrator';
 
@@ -81,10 +82,8 @@ export default function Nav() {
       ? 'sticky top-0 z-50 bg-[rgba(26,26,26,0.92)] backdrop-blur-sm border-b border-white/[0.18]'
       : 'sticky top-0 z-50 bg-[#FAFAFA]/85 backdrop-blur-md border-b border-[#E6E6E6]';
 
-  // Brand mark cut color (the slot color inside the white square) matches the page's dark tone
-  const markCutBorder = theme === 'maroon' ? 'border-maroon' : theme === 'ink' ? 'border-ink' : 'border-bg';
-  const markCutFill = theme === 'maroon' ? 'bg-maroon' : theme === 'ink' ? 'bg-ink' : 'bg-bg';
-  const markSquare = isDark ? 'bg-white' : 'bg-maroon';
+  // The mark is flat-color art on transparency, so dark pages get the white cut.
+  const markSrc = isDark ? '/branding/logo-on-dark-256.png' : '/branding/logo-256.png';
 
   const hamburgerBarColor = isDark ? 'bg-white' : 'bg-ink';
 
@@ -108,13 +107,14 @@ export default function Nav() {
             isDark ? 'text-white' : 'text-ink'
           }`}
         >
-          <span
-            className={`w-[22px] h-[22px] relative shrink-0 ${markSquare}`}
-            aria-hidden="true"
-          >
-            <span className={`absolute inset-[5px] border-[1.5px] ${markCutBorder}`} />
-            <span className={`absolute left-1/2 top-0 bottom-0 w-[1.5px] -translate-x-1/2 ${markCutFill}`} />
-          </span>
+          <Image
+            src={markSrc}
+            alt=""
+            width={256}
+            height={256}
+            priority
+            className="w-[26px] h-[26px] shrink-0"
+          />
           <span className="inline-flex items-baseline">
             <span
               className={`overflow-hidden whitespace-nowrap inline-block align-baseline ${isDark ? 'text-white' : 'text-ink'}`}

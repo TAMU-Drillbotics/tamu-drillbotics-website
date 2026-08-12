@@ -51,10 +51,10 @@ export const SUBTEAMS: Record<SubteamKey, Subteam> = {
     short: 'sensors, motors / drivers, electronics box',
     focus: 'Sensor integration, motor drivers, and the central electronics box.',
     responsibilities: [
-      'Sensor selection and integration',
+      'Hardware/Sensor selection and integration',
       'Motor driver design',
-      'Electronics box assembly',
-      'PCB layout',
+      'Electronics box assembly (tbd)',
+      'PCB layout (future)',
     ],
     stack: ['KICAD', 'STM32', 'OSCILLOSCOPE'],
     status: 'ACTIVE',
