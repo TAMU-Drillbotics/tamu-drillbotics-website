@@ -1,23 +1,17 @@
-import { useEffect } from "react";
 import { motion } from "framer-motion";
+import Script from "next/script";
 import { APPLICATIONS_OPEN, CYCLE_LABEL, CYCLE_YEARS } from "@/lib/applications";
 
-// Stands in for the embed while APPLICATIONS_OPEN is false.
-//
-// Occupies the same card the iframe would, so the page's rhythm is unchanged
-// and the "Join the Team" links that deep-link to #apply-form still land on
-// something that answers the question they were asking.
-//
-// The diagonal hatch is the drafting convention for a masked-off region,
-// which is the same technical-drawing vocabulary the rest of the site uses
-// (registration crosses, § numbering, dashed rules). The amber status chip is
-// lifted from the engineering page's RoadmapChip — the site already says
-// "planned, not yet live" that way, so this reads as the same idea.
+const TALLY_FORM_URL =
+  "https://tally.so/embed/44zJyO?hideTitle=1&dynamicHeight=1";
+
+type TallyWindow = Window & {
+  Tally?: { loadEmbeds: () => void };
+};
+
 function FormNotOpenNotice() {
   return (
     <div className="relative overflow-hidden">
-      {/* Masked-off hatching. Sits behind the copy at low contrast so it reads
-          as a surface treatment rather than as content. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
@@ -28,7 +22,6 @@ function FormNotOpenNotice() {
       />
 
       <div className="relative flex flex-col items-center text-center px-6 py-16 md:py-24">
-        {/* Status chip — mirrors RoadmapChip on the engineering page. */}
         <div className="inline-flex items-center gap-2 border border-amber/60 px-2.5 py-1 font-mono text-[10px] tracking-[.22em] uppercase text-ink-2 mb-7">
           <span
             aria-hidden="true"
@@ -46,12 +39,9 @@ function FormNotOpenNotice() {
           Applications open each fall<span className="text-maroon">.</span>
         </p>
 
-        {/* The {" "} is load-bearing: JSX trims the whitespace between an
-            expression container and a following line break, which otherwise
-            renders as "2026-27form". */}
         <p className="text-[15.5px] leading-[1.6] text-ink-2 m-0 mt-4 max-w-[46ch]">
-          The {CYCLE_YEARS}{" "}
-          form is finalized and open! This should take you arond 30 minutes to complete and no AI (please). Check your email every day or so for an update to your application status.
+          The {CYCLE_YEARS} application will appear here when the next recruiting
+          cycle begins.
         </p>
 
         <div aria-hidden="true" className="w-full max-w-[320px] h-px bg-rule-strong mt-9 mb-4" />
@@ -65,19 +55,6 @@ function FormNotOpenNotice() {
 }
 
 export function ApplicationForm() {
-  const formId = process.env.NEXT_PUBLIC_TALLY_FORM_ID;
-
-  useEffect(() => {
-    // Only worth warning about when the embed is actually meant to render.
-    if (APPLICATIONS_OPEN && !formId) {
-      console.warn(
-        "NEXT_PUBLIC_TALLY_FORM_ID not set — Tally embed will not load real form",
-      );
-    }
-  }, [formId]);
-
-  const src = `https://tally.so/embed/${formId ?? "placeholder"}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -112,8 +89,9 @@ export function ApplicationForm() {
           <div className="max-w-[520px] pb-2">
             {APPLICATIONS_OPEN ? (
               <p className="text-[16px] leading-[1.6] text-[#FAFAFA]/70 m-0">
-                The form below is hosted on Tally. Short, structured, and
-                routed straight to the review pool. Plan on ~20 minutes. <span className="text-amber">Tip: fill this out on a computer.</span>
+                The {CYCLE_YEARS} form is open. Set aside about 30 minutes, and
+                please complete it without AI assistance. Check your email for
+                application updates. <span className="text-amber">Tip: fill this out on a computer.</span>
               </p>
             ) : (
               <p className="text-[16px] leading-[1.6] text-[#FAFAFA]/70 m-0">
@@ -164,15 +142,24 @@ export function ApplicationForm() {
           </div>
 
           {APPLICATIONS_OPEN ? (
-            /* Tally iframe */
-            <iframe
-              src={src}
-              width="100%"
-              height={600}
-              loading="lazy"
-              title="TAMU Drillbotics Application"
-              className="block w-full border-0"
-            />
+            <>
+              <iframe
+                data-tally-src={TALLY_FORM_URL}
+                loading="lazy"
+                width="100%"
+                height="2138"
+                frameBorder="0"
+                marginHeight={0}
+                marginWidth={0}
+                title="Member App."
+                className="block w-full border-0"
+              />
+              <Script
+                src="https://tally.so/widgets/embed.js"
+                strategy="afterInteractive"
+                onReady={() => (window as TallyWindow).Tally?.loadEmbeds()}
+              />
+            </>
           ) : (
             <FormNotOpenNotice />
           )}
