@@ -6,6 +6,7 @@ import GridReveal from "@/components/GridReveal";
 import { TeamExplorer } from "@/components/team-explorer";
 import { TimelineOrchestrator, useTimelineBeat } from "@/components/TimelineOrchestrator";
 import { ABOUT_TIMELINE } from "@/lib/aboutTimeline";
+import { APPLICATIONS_OPEN, CYCLE_YEARS } from "@/lib/applications";
 
 const FADE_UP_8 = { hidden: { opacity: 0, y: 8 }, shown: { opacity: 1, y: 0 } };
 const CLIP_WIPE = {
@@ -60,6 +61,10 @@ const teams = [
 const president = {
   name: "Jacob Pekala",
   role: "President & Mechanical Lead",
+  // Pre-cropped to the frame's 3:4 so object-cover has nothing left to trim —
+  // the full-body source is narrower than 3:4, and letting CSS center-crop it
+  // cut the shoes off.
+  photo: "/people/jacob-pekala.jpg",
   bio:
     "As a senior petroleum engineering student and president of the Texas A&M Drillbotics team, I oversee both the technical and business development efforts that keep our team moving forward. Currently, we are focused on manufacturing components for our drilling rig, expanding our sponsor network, and broadening our reach through outreach activities.",
 };
@@ -67,7 +72,7 @@ const president = {
 const teamLeads: Array<{ name: string; role: string; tbd?: boolean; photo?: string }> = [
   { name: "Shivam Sharma",   role: "Algorithm Lead",              photo: "/people/shivam.jpg" },
   { name: "Andres Gumucio",  role: "Embedded Software Lead",      photo: "/people/andres-gumucio.jpg" },
-  { name: "Tej Nagasamudra", role: "Electronics Lead" },
+  { name: "Tej Nagasamudra", role: "Electronics Lead",           photo: "/people/tej-nagasamudra.jpg" },
   { name: "Ayden Alvarez",   role: "Hydraulics Lead",             photo: "/people/ayden-alvarez.jpg" },
   { name: "Samuel Ortega",   role: "Business Development Lead",   photo: "/people/samuel-ortega.jpg" },
   { name: "TBD",             role: "Marketing Lead",              tbd: true },
@@ -503,21 +508,29 @@ export default function About() {
             {/* Portrait frame */}
             <div className="relative w-full max-w-[340px] mx-auto md:mx-0">
               <div
-                className="relative aspect-[3/4] flex items-center justify-center"
+                className="relative aspect-[3/4] flex items-center justify-center overflow-hidden"
                 style={{ backgroundColor: "#222222" }}
               >
-                <span
-                  className="uppercase"
-                  style={{
-                    fontFamily: "var(--font-space-grotesk)",
-                    fontWeight: 400,
-                    fontSize: "11px",
-                    letterSpacing: "0.18em",
-                    color: "rgba(224,224,224,0.3)",
-                  }}
-                >
-                  Photo
-                </span>
+                {president.photo ? (
+                  <img
+                    src={president.photo}
+                    alt={president.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <span
+                    className="uppercase"
+                    style={{
+                      fontFamily: "var(--font-space-grotesk)",
+                      fontWeight: 400,
+                      fontSize: "11px",
+                      letterSpacing: "0.18em",
+                      color: "rgba(224,224,224,0.3)",
+                    }}
+                  >
+                    Photo
+                  </span>
+                )}
               </div>
             </div>
 
@@ -724,7 +737,9 @@ export default function About() {
                     <span className="font-medium text-ink">
                       02<span className="mx-1.5 text-[#1a1a1a66]">/</span>The Team
                     </span>
-                    <span className="text-[#7a5810]">Recruiting</span>
+                    <span className="text-[#7a5810]">
+                      {APPLICATIONS_OPEN ? "Recruiting" : "Not yet open"}
+                    </span>
                   </div>
 
                   <h3 className="font-heading font-semibold text-[28px] md:text-[40px] leading-[1.05] tracking-[-.015em] m-0 text-ink">
@@ -732,7 +747,20 @@ export default function About() {
                   </h3>
 
                   <p className="text-[15px] leading-[1.55] text-ink-2 m-0 max-w-[400px]">
-                    Applications for the 2026&ndash;27 cycle are open. Find your sub-team and start contributing.
+                    {/* The {" "} is load-bearing: JSX trims the whitespace between
+                        an expression container and a following line break, which
+                        otherwise renders as "2026-27cycle". */}
+                    {APPLICATIONS_OPEN ? (
+                      <>
+                        Applications for the {CYCLE_YEARS}{" "}
+                        cycle are open. Find your sub-team and start contributing.
+                      </>
+                    ) : (
+                      <>
+                        Applications for the {CYCLE_YEARS}{" "}
+                        cycle aren&apos;t open yet &mdash; they open each fall. See the sub-teams and what we look for so you&apos;re ready when they do.
+                      </>
+                    )}
                   </p>
                 </div>
               </div>

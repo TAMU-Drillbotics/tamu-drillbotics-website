@@ -1,22 +1,6 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-
-// ── THE ONLY SWITCH ──────────────────────────────────────────────────────
-// Set to `true` to put the live Tally form back. Nothing else needs editing:
-// the embed, its env var and the scroll-to-form behaviour on /apply are all
-// still wired up below and merely wait on this flag.
-//
-// While false, the <iframe> is NOT rendered at all rather than covered with
-// an overlay. A hidden-but-present iframe still fetches from tally.so on every
-// page load, still counts as a live form, and — most importantly — is still
-// reachable by Tab and by screen readers, so a visitor could fill in and
-// submit a form nobody is reading. Swapping the element out avoids all three.
-const APPLICATIONS_OPEN = false;
-
-// Shown in the card header on both paths, so the cycle stays identifiable
-// whether or not the form is live.
-const CYCLE_LABEL = "APP-2026-27";
-// ─────────────────────────────────────────────────────────────────────────
+import { APPLICATIONS_OPEN, CYCLE_LABEL, CYCLE_YEARS } from "@/lib/applications";
 
 // Stands in for the embed while APPLICATIONS_OPEN is false.
 //
@@ -66,7 +50,7 @@ function FormNotOpenNotice() {
             expression container and a following line break, which otherwise
             renders as "2026-27form". */}
         <p className="text-[15.5px] leading-[1.6] text-ink-2 m-0 mt-4 max-w-[46ch]">
-          The {CYCLE_LABEL.replace("APP-", "")}{" "}
+          The {CYCLE_YEARS}{" "}
           form is being finalized and isn&apos;t accepting responses yet. Check
           back at the start of the semester — this panel is where it will appear.
         </p>

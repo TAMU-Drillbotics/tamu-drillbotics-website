@@ -7,6 +7,7 @@ import GridReveal from "@/components/GridReveal";
 import ProjectStatusDial from "@/components/ProjectStatusDial";
 import { TimelineOrchestrator, useTimelineBeat } from "@/components/TimelineOrchestrator";
 import { HERO_TIMELINE } from "@/lib/heroTimeline";
+import { APPLICATIONS_OPEN, CYCLE_YEARS } from "@/lib/applications";
 
 function CrossMark({ className, light }: { className: string; light?: boolean }) {
   const color = light ? "bg-[#ffffff6e]" : "bg-ink-4";
@@ -815,7 +816,9 @@ export default function Home() {
                     <span className="font-medium text-ink">
                       The Team
                     </span>
-                    <span className="text-[#7a5810]">Recruiting</span>
+                    <span className="text-[#7a5810]">
+                      {APPLICATIONS_OPEN ? "Recruiting" : "Not yet open"}
+                    </span>
                   </div>
 
                   <h3 className="font-heading font-semibold text-[32px] md:text-[44px] leading-none tracking-[-.015em] m-0 text-ink">
@@ -823,7 +826,16 @@ export default function Home() {
                   </h3>
 
                   <ul className="list-none m-0 p-0 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-3.5">
-                    {["No prior experience needed", "Open to all majors", "hands-on", "2026 – 27 cycle"].map((item) => (
+                    {[
+                      "No prior experience needed",
+                      "Open to all majors",
+                      "hands-on",
+                      APPLICATIONS_OPEN
+                        ? `${CYCLE_YEARS} cycle`
+                        : // "2026-27" → "Opens fall 2026", so the chip stays
+                          // correct when the cycle label rolls over.
+                          `Opens fall ${CYCLE_YEARS.split("-")[0]}`,
+                    ].map((item) => (
                       <li
                         key={item}
                         className="pb-3 border-b border-dashed border-[#1a1a1a40] font-mono text-[12px] tracking-[.18em] uppercase text-ink-2"
