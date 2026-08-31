@@ -51,8 +51,7 @@ function FormNotOpenNotice() {
             renders as "2026-27form". */}
         <p className="text-[15.5px] leading-[1.6] text-ink-2 m-0 mt-4 max-w-[46ch]">
           The {CYCLE_YEARS}{" "}
-          form is being finalized and isn&apos;t accepting responses yet. Check
-          back at the start of the semester — this panel is where it will appear.
+          form is finalized and open! This should take you arond 30 minutes to complete and no AI (please). Check your email every day or so for an update to your application status.
         </p>
 
         <div aria-hidden="true" className="w-full max-w-[320px] h-px bg-rule-strong mt-9 mb-4" />

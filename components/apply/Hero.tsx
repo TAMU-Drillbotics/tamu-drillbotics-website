@@ -8,10 +8,10 @@ const CLIP_WIPE = {
 };
 
 const PHASES = [
-  { n: "01", name: "Applications", date: "TBD" },
-  { n: "02", name: "Interviews", date: "TBD" },
-  { n: "03", name: "Decisions", date: "TBD" },
-  { n: "04", name: "Onboarding", date: "TBD" },
+  { n: "01", name: "Applications", date: "August 31st" },
+  { n: "02", name: "Interviews", date: "rolling basis" },
+  { n: "03", name: "Decisions", date: "rolling basis" },
+  { n: "04", name: "Onboarding", date: "September 21st" },
 ];
 
 export function Hero() {
@@ -99,7 +99,7 @@ export function Hero() {
                   animation: "amber-pulse 2.4s ease-in-out infinite",
                 }}
               />
-              Awaiting Dates
+              In Progress
             </span>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-4 md:gap-x-0">
